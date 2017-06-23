@@ -132,8 +132,9 @@
 			validate.throwException();
 			value.validateEdit(validate);
 			validate.throwException();
-			<xsl:value-of select="@class"/> entity = Mapper.to<xsl:value-of select="@class"/>(value);
-			em.persist(entity);
+			<xsl:value-of select="@class"/> entity = em.getReference(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
+		 Mapper.passRptParametro(value, entity);
+			em.merge(entity);
 			Mapper.pass<xsl:value-of select="$name"/>(entity, value);
 			return value;
 			}

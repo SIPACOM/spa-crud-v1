@@ -50,14 +50,14 @@
 			public class <xsl:value-of select="j:classExtend($name, $superClass)"/>  implements Serializable {
 
 			private static final long serialVersionUID = 1L;
-			<xsl:for-each select="jpa:attributes/*">
+			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				@XmlElement
 				private <xsl:value-of select="$type"/> 
 				<xsl:value-of select="$attr"/>;
 			</xsl:for-each>	
-			<xsl:for-each select="jpa:attributes/*">
+			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				public <xsl:value-of select="$type"/> get<xsl:value-of select="j:accName(@name)"/>(){
@@ -76,7 +76,7 @@
 			validate(validate);
 			}
 			public void validate(ValidationException validate) throws ValidationException {
-			<xsl:for-each select="jpa:attributes/*">
+			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				<xsl:variable name="column" select="./jpa:column"/>
@@ -110,23 +110,20 @@
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
-			import javax.xml.bind.annotation.XmlElement;
 			@XmlRootElement
-			@XmlAccessorType(XmlAccessType.NONE)
+			@XmlAccessorType(XmlAccessType.PROPERTY)
 			public class <xsl:value-of select="$name"/>Ftr extends MapFilter implements Serializable {
 
 			private static final long serialVersionUID = 1L;
-			<xsl:for-each select="jpa:attributes/*">
+			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, 'ValueFilter')"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
-				@XmlElement
 				@FilterElement
 				private <xsl:value-of select="$type"/> 
 				<xsl:value-of select="$attr"/>;
 			</xsl:for-each>
 	
-	
-			<xsl:for-each select="jpa:attributes/*">
+			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, 'ValueFilter')"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				public <xsl:value-of select="$type"/> get<xsl:value-of select="j:accName(@name)"/>(){

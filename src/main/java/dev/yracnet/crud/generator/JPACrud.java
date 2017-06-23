@@ -19,10 +19,10 @@ public class JPACrud {
 		crud.setTemplate("spa");
 		//crud.addXSLT("part.xsl");
 		//crud.addXSLT("view.xsl");
-		crud.addXSLT("ctrl.xsl");
+		//crud.addXSLT("ctrl.xsl");
 		//crud.addXSLT("rest.xsl");
 		//crud.addXSLT("serv.xsl");
-		//crud.addXSLT("impl.xsl");
+		crud.addXSLT("impl.xsl");
 		crud.setForceOverwriter(true);
 		CrudProcess process = new CrudProcess();
 		process.process(crud);

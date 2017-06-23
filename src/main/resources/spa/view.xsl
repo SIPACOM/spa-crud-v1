@@ -22,47 +22,12 @@
 	<xsl:template match="jpa:entity">
 		<xsl:variable name="name" select="j:className(@class)"/>		
 		<xsl:variable name="var" select="j:varName($name)"/>		
-		<x:file name="{$var}.html" dir="." layer="part">
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/info.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="view"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/form.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="form"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/filter.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="filter"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/table.html">
-				<table>
-					<tr>
-						<th></th>
-						<xsl:for-each select="jpa:attributes/*">
-							<th i18n="{@name}">
-								<xsl:value-of select="@name"/>
-							</th>
-						</xsl:for-each>
-					</tr>
-					<tr ng-repeat="row in _values">
-						<td></td>
-						<xsl:for-each select="jpa:attributes/*">
-							<td>{{row.<xsl:value-of select="@name"/>}}</td>
-						</xsl:for-each>
-					</tr>
-				</table>
-			</script>
-			
+		<x:file name="info.html" dir="{$var}" layer="part">		
+			<div uni-grid="">
+				<xsl:for-each select="jpa:attributes[j:process(@name)]">
+					<xsl:apply-templates mode="form"/>
+				</xsl:for-each>	
+			</div>
 		</x:file>
 		<x:file name="form.html" dir="{$var}" layer="part">		
 			<div uni-grid="">

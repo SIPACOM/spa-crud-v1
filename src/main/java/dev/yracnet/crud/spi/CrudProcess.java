@@ -103,9 +103,11 @@ public class CrudProcess {
 		boolean isCode = name.endsWith(".java") || name.endsWith(".js") || name.endsWith(".css");
 		String content = convertToString(xml, isCode);
 		if (isCode) {
-			String pack = dir.replace("/", ".");
-			content = "package " + pack + ";\n" + content;
-			content = content.replaceAll("\n([\\s]+)", "\n").replaceAll("\n\n", "\n");
+			if (name.endsWith(".java")) {
+				String pack = dir.replace("/", ".");
+				content = "package " + pack + ";\n" + content;
+			}
+			content = content.replaceAll("\n([\\s]+)", "\n").replaceAll("\n\n", "\n").trim();
 		}
 		try {
 			File file = new File(realPath);

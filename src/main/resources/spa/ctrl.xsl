@@ -27,7 +27,79 @@
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<x:file name="{$var}.js" dir="." layer="ctrl">
-			******
+			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http, $module) {
+			const module = new $module('<xsl:value-of select="$var"/>', '<xsl:value-of select="$mod"/>');
+			$scope.$param = module.createParam({tipo: 'tipo-parametro'});
+			$scope.$part = module.createPart();
+	
+			var $serv = module.createServ();
+			var $wrap = $scope.wrap = {
+			filter: {},
+			list: [],
+			value: {},
+			select: undefined,
+			parent: undefined
+			};
+			var $modal = $scope.$modal = module.createModal();
+			var $event = $scope.$event = {
+			select: function (value) {
+			if ($wrap.select &amp;&amp; $wrap.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
+			$wrap.select = undefined;
+			} else {
+			$wrap.select = angular.copy(value);
+			}
+			},
+			selected: function (value) {
+			return $wrap.select &amp;&amp; $wrap.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>;
+			},
+			disabled: function () {
+			return $wrap.select === undefined;
+			},
+			apply: function () {
+			console.log('filter--->', $wrap.filter, '-->', $serv.filter);
+			var call = $http.post($serv.filter, $wrap.filter);
+			call.success(function (data) {
+			$wrap.list = data;
+			});
+			call.error(function () {
+			$wrap.list = [];
+			});
+			},
+			clear: function () {
+			$wrap.list = [];
+			$wrap.filter = {};
+			}
+			};
+			var $action = $scope.$action = {
+			create: function () {
+			console.log('create--->', $wrap.value, '-->', $serv.create);
+			var call = $http.post($serv.create, $wrap.value);
+			call.success(function () {
+			$wrap.value = {};
+			$event.apply();
+			$modal.close('new');
+			});
+			},
+			update: function () {
+			console.log('update--->', $wrap.select, '-->', $serv.update);
+			var call = $http.post($serv.update, $wrap.select);
+			call.success(function () {
+			$wrap.select = undefined;
+			$event.apply();
+			$modal.close('edit');
+			});
+			},
+			remove: function () {
+			console.log('remove--->', $wrap.select, '-->', $serv.remove);
+			var call = $http.post($serv.remove, $wrap.select);
+			call.success(function () {
+			$wrap.select = undefined;
+			$event.apply();
+			$modal.close('delete');
+			});
+			}
+			};
+			});
 		</x:file>
 	</xsl:template>
 	

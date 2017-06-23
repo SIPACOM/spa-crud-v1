@@ -99,6 +99,10 @@ public class CrudUtil {
 		return name.toUpperCase().charAt(0) + name.substring(1);
 	}
 
+	public static boolean process(String name) {
+		return process(name, new ArrayList(), new ArrayList());
+	}
+
 	public static boolean process(String name, List include) {
 		return process(name, include, new ArrayList());
 	}
