@@ -19,67 +19,36 @@
 			<xsl:apply-templates/>
 		</x:files>
 	</xsl:template>
-	<xsl:template match="jpa:entity">
+	<xsl:template match="jpa:entity[j:process(@class, $include, $exclude)]">
 		<xsl:variable name="name" select="j:className(@class)"/>		
-		<xsl:variable name="var" select="j:varName($name)"/>		
-		<x:file name="{$var}.html" dir="." layer="part">
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/info.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="view"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/new.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="form"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/edit.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="form"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/filter.html">
-				<div uni-grid="">
-					<xsl:for-each select="jpa:attributes">
-						<xsl:apply-templates mode="filter"/>
-					</xsl:for-each>	
-				</div>
-			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/table.html">
-				<table>
-					<tr>
-						<th></th>
-						<xsl:for-each select="jpa:attributes/*">
-							<th i18n="{@name}">
-								<xsl:value-of select="@name"/>
-							</th>
-						</xsl:for-each>
-					</tr>
-					<tr ng-repeat="row in _values">
-						<td></td>
-						<xsl:for-each select="jpa:attributes/*">
-							<td>{{row.<xsl:value-of select="@name"/>}}</td>
-						</xsl:for-each>
-					</tr>
-				</table>
-			</script>
-			
+		<xsl:variable name="var" select="j:varName($name)"/>	
+		<x:file name="new.html" dir="{$var}" layer="part">
+			<div>
+				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
+				<xsl:for-each select="jpa:attributes">
+					<xsl:apply-templates mode="form"/>
+				</xsl:for-each>	
+			</div>
 		</x:file>
-		<x:file name="form.html" dir="{$var}" layer="part">		
-			<div uni-grid="">
+		<x:file name="edit.html" dir="{$var}" layer="part">
+			<div>
+				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
+				<xsl:for-each select="jpa:attributes">
+					<xsl:apply-templates mode="form"/>
+				</xsl:for-each>	
+			</div>
+		</x:file>
+		<x:file name="info.html" dir="{$var}" layer="part">
+			<div>
+				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
 					<xsl:apply-templates mode="form"/>
 				</xsl:for-each>	
 			</div>
 		</x:file>
 		<x:file name="filter.html" dir="{$var}" layer="part">		
-			<div uni-grid="">
+			<div>
+				<xsl:attribute name="uni-grid">{type:'table'}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
 					<xsl:apply-templates mode="filter"/>
 				</xsl:for-each>	
@@ -107,7 +76,7 @@
 		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-input="" ng-value="_filter.{@name}" readonly="true"/>
 	</xsl:template>	
 	<xsl:template mode="form" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
-		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-input="" ng-model="_pivot.{@name}"/>
+		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-input="" ng-model="_value.{@name}"/>
 	</xsl:template>
 	<xsl:template mode="filter" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
 		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-filter="" ng-model="_filter.{@name}"/>
