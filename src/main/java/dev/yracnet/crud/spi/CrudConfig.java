@@ -1,0 +1,174 @@
+package dev.yracnet.crud.spi;
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+public class CrudConfig {
+
+	private final String path;
+	private final String app;
+	private final String mod;
+	private final String project;
+	private final String basePath;
+	private final File root;
+	private String template = "entel";
+	private boolean forceOverwriter = false;
+	private String packageBase = "dev.yracnet.entel";
+	private final List<String> include = new ArrayList<>();
+	private final List<String> exclude = new ArrayList<>();
+	private final List<File> jpaModel = new ArrayList<>();
+	private final List<File> xsltFile = new ArrayList<>();
+
+	public CrudConfig(String path, String app, String mod) {
+		this.path = path;
+		this.app = app;
+		this.mod = mod;
+		this.project = app + "-" + mod;
+		this.basePath = this.path + "/" + this.project;
+		root = new File(this.basePath);
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public String getApp() {
+		return app;
+	}
+
+	public String getMod() {
+		return mod;
+	}
+
+	public String getProject() {
+		return project;
+	}
+
+	public void addJPAModel(String jpaName) {
+		if (!jpaName.startsWith("file:/")) {
+			jpaName = "file://" + basePath + "/" + jpaName;
+		}
+		System.out.println("addJPAModel: " + jpaName);
+		try {
+			//URL url = CrudConfig.class.getResource(jpaName);
+			URL url = new URL(jpaName);
+			File jpa;
+			jpa = new File(url.toURI());
+			jpaModel.add(jpa);
+		} catch (MalformedURLException | URISyntaxException ex) {
+			throw new CrudException("Error al adicionar el archivo JPA: " + jpaName, ex);
+		}
+	}
+
+	public String getPackageBase() {
+		return packageBase;
+	}
+
+	public void setPackageBase(String packageBase) {
+		this.packageBase = packageBase;
+	}
+
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
+	public List<File> getXsltFile() {
+		return xsltFile;
+	}
+
+	public void addXSLT(String xslName) throws CrudException {
+		try {
+			if (!xslName.startsWith("/")) {
+				xslName = "/" + template + "/" + xslName;
+			}
+			URL url = CrudConfig.class.getResource(xslName);
+			if (url != null) {
+				File xsl;
+				xsl = new File(url.toURI());
+				xsltFile.add(xsl);
+			} else {
+				throw new CrudException("Archivo XSLT NO EXISTE: " + xslName);
+			}
+		} catch (URISyntaxException ex) {
+			throw new CrudException("Error al adicionar el archivo XSLT: " + xslName, ex);
+		}
+	}
+
+	public Stream<File> streamXSLT() {
+		return xsltFile.stream();
+	}
+
+	public Stream<File> streamJPA() {
+		return jpaModel.stream();
+	}
+
+	public String getRealPath(String layer, String dir, String name) {
+		String mask = "$path/$project/error/$name";
+		if ("ctrl".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/main/webapp/ctrl/$name";
+		} else if ("view".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/main/webapp/view/$name";
+		} else if ("conf".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$name";
+		} else if ("part".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/main/webapp/part/$dir/$name";
+		} else if ("rest".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/main/java/$dir/$name";
+		} else if ("serv".endsWith(layer)) {
+			mask = "$path/$project/$project-serv/src/main/java/$dir/$name";
+		} else if ("data".endsWith(layer)) {
+			mask = "$path/$project/$project-serv/src/main/java/$dir/data/$name";
+		} else if ("filter".endsWith(layer)) {
+			mask = "$path/$project/$project-serv/src/main/java/$dir/filter/$name";
+		} else if ("impl".endsWith(layer)) {
+			mask = "$path/$project/$project-impl/src/main/java/$dir/$name";
+		} else if ("entity".endsWith(layer)) {
+			mask = "$path/$project/$project-impl/src/main/java/$dir/$name";
+		}
+
+		return mask.replace("$path", path).replace("$project", project).replace("$dir", dir).replace("$name", name);
+	}
+
+	public File createTempFile(String fileName) {
+		File file = new File(root, "/target/" + fileName + ".xml");
+		File parent = file.getParentFile();
+		if (!parent.exists()) {
+			parent.mkdirs();
+		}
+		return file;
+	}
+
+	public void setForceOverwriter(boolean b) {
+		forceOverwriter = b;
+	}
+
+	public boolean getForceOverwriter() {
+		return forceOverwriter;
+	}
+
+	public void include(String name) {
+		include.add(name);
+	}
+
+	public void exclude(String name) {
+		exclude.add(name);
+	}
+
+	public List<String> getInclude() {
+		return include;
+	}
+
+	public List<String> getExclude() {
+		return exclude;
+	}
+
+}
