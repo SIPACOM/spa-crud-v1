@@ -30,7 +30,14 @@
 					</xsl:for-each>	
 				</div>
 			</script>
-			<script type="text/ng-template" id="/cache/{$mod}/{$var}/form.html">
+			<script type="text/ng-template" id="/cache/{$mod}/{$var}/new.html">
+				<div uni-grid="">
+					<xsl:for-each select="jpa:attributes">
+						<xsl:apply-templates mode="form"/>
+					</xsl:for-each>	
+				</div>
+			</script>
+			<script type="text/ng-template" id="/cache/{$mod}/{$var}/edit.html">
 				<div uni-grid="">
 					<xsl:for-each select="jpa:attributes">
 						<xsl:apply-templates mode="form"/>
@@ -87,10 +94,9 @@
 						</th>
 					</xsl:for-each>
 				</tr>
-				<tr ng-repeat="value in _valueList" ng-click="_select(value)">
-					<td></td>
+				<tr ng-repeat="row in _list" ng-click="_select(row)">
 					<xsl:for-each select="jpa:attributes/*">
-						<td>{{value.<xsl:value-of select="@name"/>}}</td>
+						<td>{{row.<xsl:value-of select="@name"/>}}</td>
 					</xsl:for-each>
 				</tr>
 			</table>

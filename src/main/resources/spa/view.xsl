@@ -6,7 +6,7 @@
 																xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
 																xmlns:x="http://github.com/yracnet/xml/crud"
 																xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:j="dev.yracnet.crud.spi.CrudUtil">
+																xmlns:j="dev.yracnet.crud.spi.CrudUtil">
 	<xsl:param name="packageBase">dev.yracnet.crud</xsl:param>
 	<xsl:param name="project">tangram-seg</xsl:param>
 	<xsl:param name="path">/opt/out/</xsl:param>
@@ -21,54 +21,9 @@
 	</xsl:template>
 	<xsl:template match="jpa:entity">
 		<xsl:variable name="name" select="j:className(@class)"/>		
-		<xsl:variable name="var" select="j:varName($name)"/>		
-		<x:file name="info.html" dir="{$var}" layer="part">		
-			<div uni-grid="">
-				<xsl:for-each select="jpa:attributes[j:process(@name)]">
-					<xsl:apply-templates mode="form"/>
-				</xsl:for-each>	
-			</div>
-		</x:file>
-		<x:file name="form.html" dir="{$var}" layer="part">		
-			<div uni-grid="">
-				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="form"/>
-				</xsl:for-each>	
-			</div>
-		</x:file>
-		<x:file name="filter.html" dir="{$var}" layer="part">		
-			<div uni-grid="">
-				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="filter"/>
-				</xsl:for-each>	
-			</div>
-		</x:file>
-		<x:file name="table.html" dir="{$var}" layer="part">
-			<table uni-table="{}">
-				<tr>
-					<xsl:for-each select="jpa:attributes/*">
-						<th i18n="{@name}">
-							<xsl:value-of select="@name"/>
-						</th>
-					</xsl:for-each>
-				</tr>
-				<tr ng-repeat="value in _valueList" ng-click="_select(value)">
-					<xsl:for-each select="jpa:attributes/*">
-						<td>{{value.<xsl:value-of select="@name"/>}}</td>
-					</xsl:for-each>
-				</tr>
-			</table>
+		<xsl:variable name="var" select="j:varName($name)"/>
+		<x:file name="{$var}.html" dir="." layer="view">		
 		</x:file>
 	</xsl:template>
-	
-	<xsl:template mode="view" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
-		<input uni-input="" ng-value="_filter.{@name}" readonly="true"/>
-	</xsl:template>	
-	<xsl:template mode="form" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
-		<input uni-input="" ng-model="_pivot.{@name}"/>
-	</xsl:template>
-	<xsl:template mode="filter" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
-		<input uni-filter="" ng-model="_filter.{@name}"/>
-	</xsl:template>	
 	<xsl:template match="text()"/>
 </xsl:stylesheet>

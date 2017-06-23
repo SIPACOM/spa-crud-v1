@@ -71,6 +71,10 @@
 			}
 			};
 			var $action = $scope.$action = {
+			cancel: function (modal) {
+			console.log('cancel--->', $wrap.value || $wrap.select);
+			$modal.close(modal);
+			},
 			create: function () {
 			console.log('create--->', $wrap.value, '-->', $serv.create);
 			var call = $http.post($serv.create, $wrap.value);
