@@ -4,8 +4,7 @@
 																xmlns="http://www.w3.org/1999/xhtml"> 
 	<xsl:output method="xml" 
 													encoding="utf-8" 
-													indent="yes" 
-													standalone="no"
+													indent="yes"
 													media-type="text/html"/>
 	<xsl:template match="@*|node()">
 		<xsl:copy>

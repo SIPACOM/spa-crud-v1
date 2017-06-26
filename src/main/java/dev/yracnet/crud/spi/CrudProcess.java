@@ -117,16 +117,18 @@ public class CrudProcess {
 			}
 			if (file.exists() == false) {
 				System.out.println("WRITE--->" + realPath);
-				Files.write(Paths.get(realPath), content.getBytes(), StandardOpenOption.CREATE);
+				Files.write(Paths.get(realPath), content.getBytes("UTF-8"), StandardOpenOption.CREATE);
 			} else if (crud.getForceOverwriter() == true) {
 				System.out.println("OVER WRITE--->" + realPath);
 				file.delete();
-				Files.write(Paths.get(realPath), content.getBytes(), StandardOpenOption.CREATE);
+				Files.write(Paths.get(realPath), content.getBytes("UTF-8"), StandardOpenOption.CREATE);
 			} else {
 				System.out.println("WRITE STOP--->" + realPath);
 			}
 		} catch (IOException e) {
-			System.out.println("WRITE ERROR --->: " + realPath + " - <<" + content.replace("\n", "") + ">>");
+			System.out.println("WRITE ERROR PATH   --->: " + realPath);
+			System.out.println("WRITE ERROR CONTENT--->: <<" + content.replace("\n", "") + ">>");
+			System.out.println("WRITE ERROR CAUSE  --->: " + e);
 		}
 	}
 
