@@ -123,7 +123,7 @@
 			validate.throwException();
 			<xsl:value-of select="@class"/> entity = parseTo<xsl:value-of select="@class"/>(value);
 			em.persist(entity);
-			parseFromTo(entity, value);
+			parseTo<xsl:value-of select="$name"/>(entity, value);
 			return value;
 			}
 			@Override
@@ -134,9 +134,9 @@
 			value.validateEdit(validate);
 			validate.throwException();
 			<xsl:value-of select="@class"/> entity = em.getReference(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
-		 parseFromTo(value, entity);
+		 parseTo<xsl:value-of select="@class"/>(value, entity);
 			em.merge(entity);
-			parseFromTo(entity, value);
+			parseTo<xsl:value-of select="$name"/>(entity, value);
 			return value;
 			}
 			@Override
@@ -148,7 +148,7 @@
 			validate.throwException();
 			<xsl:value-of select="@class"/> entity = em.find(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
 			em.remove(entity);
-			parseFromTo(entity, value);
+			parseTo<xsl:value-of select="$name"/>(entity, value);
 			return value;
 			}
 			}
