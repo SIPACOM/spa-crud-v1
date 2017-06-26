@@ -53,6 +53,7 @@ public class CrudProcess {
 
 	private void process(CrudConfig crud, File model, File xsl) {
 		try {
+			System.out.println("Process: " + model.getName() + " with " + xsl.getName());
 			final TransformerFactory factory = TransformerFactory.newInstance();
 			final StreamSource styleSheet = new StreamSource(xsl);
 			final Transformer transformer = factory.newTransformer(styleSheet);

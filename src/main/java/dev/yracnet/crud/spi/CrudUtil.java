@@ -113,11 +113,20 @@ public class CrudUtil {
 		}
 		boolean all = includeList.isEmpty() && excludeList.isEmpty();
 		//System.out.println("all: " + name + " in " + all);
+		if (all) {
+			return true;
+		}
 		boolean include = includeList.contains(name);
 		//System.out.println("include: " + name + " in " + includeList + " = " + include);
+		if (include) {
+			return true;
+		}
 		boolean exclude = excludeList.contains(name);
 		//System.out.println("exclude: " + name + " in " + excludeList + " = " + exclude);
-		boolean resp = (all || (include && !exclude));
+		if (exclude) {
+			return false;
+		}
+		boolean resp = true;//(all || (include && !exclude));
 		//System.out.println("-->" + resp);
 		return resp;
 	}

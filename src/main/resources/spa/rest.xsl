@@ -44,7 +44,7 @@
 			</x:file>
 		</x:files>
 	</xsl:template>
-	<xsl:template match="jpa:entity">
+	<xsl:template match="jpa:entity[j:process(@class, $include, $exclude)]">
 		<xsl:variable name="name" select="j:className(@class)"/>
 		<xsl:variable name="var" select="j:varName($name)"/>
 		<xsl:variable name="typeList" select="j:varType($name, 'List')"/>
