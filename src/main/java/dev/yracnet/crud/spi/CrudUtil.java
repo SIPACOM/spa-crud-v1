@@ -140,4 +140,12 @@ public class CrudUtil {
 		return val1 == null || val1.isEmpty() ? val2 : val1;
 	}
 
+	public static String upper(String val) {
+		return val == null ? null : val.toUpperCase();
+	}
+
+	public static String lower(String val) {
+		return val == null ? null : val.toLowerCase();
+	}
+
 }

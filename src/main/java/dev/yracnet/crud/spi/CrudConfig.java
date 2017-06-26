@@ -119,6 +119,10 @@ public class CrudConfig {
 			mask = "$path/$project/$project-web/src/main/webapp/view/$name";
 		} else if ("conf".endsWith(layer)) {
 			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$name";
+		} else if ("web-inf".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$dir/$name";
+		} else if ("meta-inf".endsWith(layer)) {
+			mask = "$path/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
 		} else if ("part".endsWith(layer)) {
 			mask = "$path/$project/$project-web/src/main/webapp/part/$dir/$name";
 		} else if ("rest".endsWith(layer)) {
@@ -134,7 +138,6 @@ public class CrudConfig {
 		} else if ("entity".endsWith(layer)) {
 			mask = "$path/$project/$project-impl/src/main/java/$dir/$name";
 		}
-
 		return mask.replace("$path", path).replace("$project", project).replace("$dir", dir).replace("$name", name);
 	}
 
