@@ -75,7 +75,7 @@
 					}
 					<xsl:variable name="typeA" select="j:varType(@class, 'List')"/>
 					<xsl:variable name="typeB" select="j:varType($name, 'List')"/>
-					public static <xsl:value-of select="$typeA"/> to<xsl:value-of select="@class"/>List(<xsl:value-of select="$typeB"/> fromList){
+					public static <xsl:value-of select="$typeA"/> parseTo<xsl:value-of select="@class"/>List(<xsl:value-of select="$typeB"/> fromList){
 					<xsl:value-of select="$typeA"/> toList = new ArrayList();
 					fromList.stream().forEach(from -> {
 					<xsl:value-of select="@class"/> to = parseTo<xsl:value-of select="@class"/>(from);
@@ -83,7 +83,7 @@
 					});
 					return toList;
 					}
-					public static <xsl:value-of select="$typeB"/> to<xsl:value-of select="$name"/>List(<xsl:value-of select="$typeA"/> fromList){
+					public static <xsl:value-of select="$typeB"/> parseTo<xsl:value-of select="$name"/>List(<xsl:value-of select="$typeA"/> fromList){
 					<xsl:value-of select="$typeB"/> toList = new ArrayList();
 					fromList.stream().forEach(from -> {
 					<xsl:value-of select="$name"/> to = parseTo<xsl:value-of select="$name"/>(from);

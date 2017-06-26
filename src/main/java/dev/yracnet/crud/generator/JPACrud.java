@@ -23,8 +23,8 @@ public class JPACrud {
 		//crud.addXSLT("view.xsl");
 		//crud.addXSLT("ctrl.xsl");
 		//crud.addXSLT("rest.xsl");
-		crud.addXSLT("serv.xsl");
-		//crud.addXSLT("parser.xsl");
+		//crud.addXSLT("serv.xsl");
+		crud.addXSLT("parser.xsl");
 		//crud.addXSLT("impl.xsl");
 		//crud.addXSLT("conf.xsl");
 		crud.setForceOverwriter(true);
