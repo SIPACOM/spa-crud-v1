@@ -100,6 +100,10 @@ public class CrudProcess {
 		String name = element.getAttribute("name");
 		String dir = element.getAttribute("dir");
 		String layer = element.getAttribute("layer");
+		String ignore = element.getAttribute("ignore");
+		if (ignore != null && Boolean.valueOf(ignore)) {
+			return;
+		}
 		String realPath = crud.getRealPath(layer, dir, name);
 		boolean isCode = name.endsWith(".java") || name.endsWith(".js") || name.endsWith(".css");
 		String content = convertToString(xml, isCode);

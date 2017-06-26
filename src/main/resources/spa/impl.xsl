@@ -17,7 +17,7 @@
  
 	<xsl:template match="/">
 		<x:files>
-			<x:file name="Mapper.java" dir="{j:packagePath($packageBase)}" layer="impl">
+			<x:file name="Mapper.java" dir="{j:packagePath($packageBase)}" layer="impl" ignore="true">
 				import java.util.List;
 				import java.util.ArrayList;
 				import <xsl:value-of select="$packageBase"/>.data.*;
@@ -96,6 +96,7 @@
 			import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 			import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 			import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="@class"/>;
+			import static <xsl:value-of select="$packageBase"/>.parser.<xsl:value-of select="@class"/>Parser.*;
 			@Stateless
 			@Local(<xsl:value-of select="$name"/>Serv.class)
 			@TransactionManagement(TransactionManagementType.CONTAINER)
@@ -108,7 +109,7 @@
 			List<xsl:value-of select="j:template(@class)"/> fromList = QFilter.filter(em, <xsl:value-of select="@class"/>.class, filter);
 			<xsl:value-of select="$type"/> toList = new ArrayList();
 			fromList.stream().forEach(from -> {
-			<xsl:value-of select="$name"/> to = Mapper.to<xsl:value-of select="$name"/>(from);
+			<xsl:value-of select="$name"/> to = parseTo<xsl:value-of select="$name"/>(from);
 			toList.add(to);
 			});
 			return toList;
@@ -120,9 +121,9 @@
 			validate.throwException();
 			value.validateNew(validate);
 			validate.throwException();
-			<xsl:value-of select="@class"/> entity = Mapper.to<xsl:value-of select="@class"/>(value);
+			<xsl:value-of select="@class"/> entity = parseTo<xsl:value-of select="@class"/>(value);
 			em.persist(entity);
-			Mapper.pass<xsl:value-of select="$name"/>(entity, value);
+			parseFromTo(entity, value);
 			return value;
 			}
 			@Override
@@ -133,9 +134,9 @@
 			value.validateEdit(validate);
 			validate.throwException();
 			<xsl:value-of select="@class"/> entity = em.getReference(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
-		 Mapper.pass<xsl:value-of select="@class"/>(value, entity);
+		 parseFromTo(value, entity);
 			em.merge(entity);
-			Mapper.pass<xsl:value-of select="$name"/>(entity, value);
+			parseFromTo(entity, value);
 			return value;
 			}
 			@Override
@@ -147,7 +148,7 @@
 			validate.throwException();
 			<xsl:value-of select="@class"/> entity = em.find(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
 			em.remove(entity);
-			Mapper.pass<xsl:value-of select="$name"/>(entity, value);
+			parseFromTo(entity, value);
 			return value;
 			}
 			}
