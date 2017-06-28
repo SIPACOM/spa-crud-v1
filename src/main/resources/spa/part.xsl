@@ -55,7 +55,8 @@
 			</div>
 		</x:file>
 		<x:file name="table.html" dir="{$var}" layer="part">
-			<table uni-table="">
+			<table>
+				<xsl:attribute name="uni-table">{select: '_select', selected: '_selected'}</xsl:attribute>
 				<tr>
 					<xsl:for-each select="jpa:attributes/*">
 						<th i18n="{@name}">
@@ -63,7 +64,7 @@
 						</th>
 					</xsl:for-each>
 				</tr>
-				<tr ng-repeat="row in _list" ng-click="_select(row)">
+				<tr ng-repeat="row in _list">
 					<xsl:for-each select="jpa:attributes/*">
 						<td>{{row.<xsl:value-of select="@name"/>}}</td>
 					</xsl:for-each>
@@ -73,10 +74,15 @@
 	</xsl:template>
 	
 	<xsl:template mode="view" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
-		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-input="" ng-value="_filter.{@name}" readonly="true"/>
+		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input ng-value="_filter.{@name}" readonly="true"/>
 	</xsl:template>	
 	<xsl:template mode="form" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
-		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-input="" ng-model="_value.{@name}"/>
+		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label>
+		<input ng-model="_value.{@name}">
+			<xsl:if test="jpa:column/@nullable='false'">
+				<xsl:attribute name="required">true</xsl:attribute>
+			</xsl:if>
+		</input>
 	</xsl:template>
 	<xsl:template mode="filter" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
 		<label i18n="{@name}"><xsl:value-of select="j:literal(@name)"/></label><input uni-filter="" ng-model="_filter.{@name}"/>

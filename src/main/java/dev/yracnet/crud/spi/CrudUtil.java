@@ -116,17 +116,17 @@ public class CrudUtil {
 		if (all) {
 			return true;
 		}
-		boolean include = includeList.contains(name);
-		//System.out.println("include: " + name + " in " + includeList + " = " + include);
-		if (include) {
-			return true;
-		}
 		boolean exclude = excludeList.contains(name);
 		//System.out.println("exclude: " + name + " in " + excludeList + " = " + exclude);
 		if (exclude) {
 			return false;
 		}
-		boolean resp = true;//(all || (include && !exclude));
+		boolean include = includeList.contains(name);
+		//System.out.println("include: " + name + " in " + includeList + " = " + include);
+		if (include) {
+			return true;
+		}
+		boolean resp = false;//(all || (include && !exclude));
 		//System.out.println("-->" + resp);
 		return resp;
 	}

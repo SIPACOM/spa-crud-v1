@@ -29,8 +29,8 @@
 		<x:file name="{$var}.js" dir="." layer="ctrl">
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http, $module) {
 			const module = new $module('<xsl:value-of select="$var"/>', '<xsl:value-of select="$mod"/>');
-			$scope.$param = module.createParam({tipo: 'tipo-parametro'});
-			$scope.$part = module.createPart();
+			$scope.param = module.createParam({tipo: 'tipo-parametro'});
+			$scope.part = module.createPart();
 	
 			var $serv = module.createServ();
 			var $wrap = $scope.wrap = {
@@ -40,8 +40,8 @@
 			select: undefined,
 			parent: undefined
 			};
-			var $modal = $scope.$modal = module.createModal();
-			var $event = $scope.$event = {
+			var $modal = $scope.modal = module.createModal();
+			var $event = $scope.event = {
 			select: function (value) {
 			if ($wrap.select &amp;&amp; $wrap.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
 			$wrap.select = undefined;
@@ -70,9 +70,11 @@
 			$wrap.filter = {};
 			}
 			};
-			var $action = $scope.$action = {
+			var $action = $scope.action = {
 			cancel: function (modal) {
 			console.log('cancel--->', $wrap.value || $wrap.select);
+			$wrap.value = {};
+			$wrap.select = undefined;
 			$modal.close(modal);
 			},
 			create: function () {
