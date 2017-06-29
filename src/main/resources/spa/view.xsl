@@ -14,6 +14,7 @@
 	<xsl:param name="mod">seg</xsl:param>
 	<xsl:param name="include"/>
 	<xsl:param name="exclude"/>
+	<xsl:variable name="and"><![CDATA[&&]]></xsl:variable>
 	<xsl:template match="/">
 		<x:files>
 			<xsl:apply-templates/>
@@ -26,72 +27,92 @@
 			<div ng-controller="{$mod}${$var}">
 				<div uni-pager="" 
 									config="wrap.filter.$config"
-									click-apply="$event.apply(wrap.filter)" 
-									click-clear="$event.clear(wrap.filter)">
-					<div ng-include="$part.filter">
-						<xsl:attribute name="uni-mapper">{_filter: wrap.filter}</xsl:attribute>
+									click-apply="event.apply()" 
+									click-clear="event.clear()">
+					<div uni-part="part.filter">
+						<xsl:attribute name="replace">{_filter: 'wrap.filter'}</xsl:attribute>
 					</div>
 				</div>
 				<div uni-action="">
-					<button ng-click="$modal.open('new')">Nuevo</button>
-					<button ng-disabled="$event.disabled()" 
-													ng-click="$modal.open('edit')">Editar</button>
-					<button ng-disabled="$event.disabled()" 
-													ng-click="$modal.open('info')">Datos</button>
-					<button ng-disabled="$event.disabled()"
-													ng-click="$modal.open('delete')">Eliminar</button>
+					<button ng-click="modal.open('new')">Nuevo</button>
+					<button ng-disabled="event.disabled()" 
+													ng-click="modal.open('edit')">Editar</button>
+					<button ng-disabled="event.disabled()" 
+													ng-click="modal.open('info')">Datos</button>
+					<button ng-disabled="event.disabled()"
+													ng-click="modal.open('delete')">Eliminar</button>
+					<button ng-disabled="event.disabled()"
+													uni-confirm="remove"
+													ng-click="action.remove()">Eliminar</button>
 				</div>
-				<div ng-include="$part.table">
-						<xsl:attribute name="uni-mapper">{_list: wrap.list, _select: $event.select, _selected: $event.selected}</xsl:attribute>
+				<div uni-part="part.table">
+					<xsl:attribute name="replace">{_list: 'wrap.list', _select: 'event.select', _selected: 'event.selected'}</xsl:attribute>
 				</div>
-				<div ng-show="$modal.show('new')">
+				<div ng-show="modal.show('new')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
 					<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
-					<div ng-include="$part.new">
-						<xsl:attribute name="uni-mapper">{_value: wrap.value}</xsl:attribute>
-					</div>
+					<form name="f1" uni-validator="">
+						<div uni-part="part.new">
+							<xsl:attribute name="replace">{_value: 'wrap.value'}</xsl:attribute>
+						</div>
+					</form>
 					<footer>
-						<button uni-badge=""
-														ng-click="$action.create()">Guardar</button>
-						<button uni-badge=""
-														ng-click="$action.cancel('new')">Cancelar</button>
+						<button uni-badge="" uni-confirm="create">
+							<xsl:attribute name="ng-click">f1.$validate() _AND_ action.create()</xsl:attribute>
+							Guardar
+						</button>
+						<button uni-badge="" uni-confirm="cancel">
+							<xsl:attribute name="ng-click">action.cancel('new')</xsl:attribute>
+							Cancelar
+						</button>
 					</footer>
 				</div>
-				<div ng-show="$modal.show('edit')">
+				<div ng-show="modal.show('edit')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
 					<header i18n="edit,{$var}">Editar <xsl:value-of select="$name"/></header>
-					<div ng-include="$part.edit">
-						<xsl:attribute name="uni-mapper">{_value: wrap.select}</xsl:attribute>
-					</div>
+					<form name="f2" uni-validator="">
+						<div uni-part="part.edit">
+							<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
+						</div>
+					</form>
 					<footer>
-						<button uni-badge=""
-														ng-click="$action.update()">Actualizar</button>
-						<button uni-badge=""
-														ng-click="$action.cancel('edit')">Cancelar</button>
+						<button uni-badge="" uni-confirm="update">
+							<xsl:attribute name="ng-click">f2.$validate() _AND_ action.update()</xsl:attribute>
+							Actualizar
+						</button>
+						<button uni-badge="" uni-confirm="cancel">
+							<xsl:attribute name="ng-click">action.cancel('edit')</xsl:attribute>
+							Cancelar
+						</button>
 					</footer>
 				</div>
-				<div ng-show="$modal.show('info')">
+				<div ng-show="modal.show('info')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
 					<header i18n="info,{$var}">Datos <xsl:value-of select="$name"/></header>
-					<div ng-include="$part.info">
-						<xsl:attribute name="uni-mapper">{_value: wrap.select}</xsl:attribute>
+					<div uni-part="part.info">
+						<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
 					</div>
 					<footer>
-						<button uni-badge=""
-														ng-click="$action.cancel('info')">Cancelar</button>
+						<button uni-badge="">
+							<xsl:attribute name="ng-click">action.cancel('info')</xsl:attribute>
+							Cancelar
+						</button>
 					</footer>
 				</div>
-				<div ng-show="$modal.show('delete')">
+				<div ng-show="modal.show('delete')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
 					<header i18n="info,{$var}">Datos <xsl:value-of select="$name"/></header>
-					<div ng-include="$part.info">
-						<xsl:attribute name="uni-mapper">{_value: wrap.select}</xsl:attribute>
+					<div uni-part="part.info">
+						<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
 					</div>
 					<footer>
 						<button uni-badge=""
-														ng-click="$action.remove()">Eliminar</button>
-						<button uni-badge=""
-														ng-click="$action.cancel('delete')">Cancelar</button>
+														uni-confirm="remove"
+														ng-click="action.remove()">Eliminar</button>
+						<button uni-badge="">
+							<xsl:attribute name="ng-click">action.cancel('delete')</xsl:attribute>
+							Cancelar
+						</button>
 					</footer>
 				</div>
 			</div>			

@@ -113,7 +113,11 @@ public class CrudProcess {
 				content = "package " + pack + ";\n" + content;
 			}
 			content = content.replaceAll("\n([\\s]+)", "\n").replaceAll("\n\n", "\n").trim();
+		} else {
+			content = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
+			content = content.replaceAll("\n([\\s]+)", "\n").replaceAll("\n\n", "\n").trim();
 		}
+		content = content.replaceAll("_AND_", "&&");
 		try {
 			File file = new File(realPath);
 			File parent = file.getParentFile();
