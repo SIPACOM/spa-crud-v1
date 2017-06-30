@@ -42,7 +42,7 @@
 			<div>
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="form"/>
+					<xsl:apply-templates mode="view"/>
 				</xsl:for-each>	
 			</div>
 		</x:file>
@@ -83,7 +83,6 @@
 			</table>
 		</x:file>
 	</xsl:template>
-	
 	<xsl:template name="form" mode="form" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
 		<xsl:choose>
 			<xsl:when test="name(.) = 'jpa:basic'">
@@ -130,7 +129,6 @@
 			</xsl:otherwise>
 		</xsl:choose> 
 	</xsl:template>
-	
 	<xsl:template name="view" mode="view" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
 		<xsl:choose>
 			<xsl:when test="name(.) = 'jpa:basic' and jpa:column/@length > 99">
