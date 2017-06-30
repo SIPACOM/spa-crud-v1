@@ -69,6 +69,7 @@
 				import javax.ws.rs.Path;
 				import javax.ws.rs.Produces;
 				import javax.ws.rs.core.MediaType;
+				import bo.union.web.HTTPStatic;
 				import bo.union.lang.ServiceException;
 				@Path("<xsl:value-of select="$var"/>")
 				@Consumes(MediaType.APPLICATION_JSON)
@@ -92,17 +93,23 @@
 				@POST
 				@Path("create")
 				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
-				return serv.create<xsl:value-of select="$name"/>(value);
+				value = serv.create<xsl:value-of select="$name"/>(value);
+				HTTPStatic.info("Se ha guardado el registro: " + value.getCodigo());
+				return value;
 				}
 				@POST
 				@Path("update")
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
-				return serv.update<xsl:value-of select="$name"/>(value);
+				value = serv.update<xsl:value-of select="$name"/>(value);
+				HTTPStatic.info("Se ha actualizado el registro: " + value.getCodigo());
+				return value;
 				}
 				@POST
 				@Path("remove")
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
-				return serv.remove<xsl:value-of select="$name"/>(value);
+				value = serv.remove<xsl:value-of select="$name"/>(value);
+				HTTPStatic.info("Se ha eliminado el registro: " + value.getCodigo());
+				return value;
 				}
 				}
 			</x:file>
