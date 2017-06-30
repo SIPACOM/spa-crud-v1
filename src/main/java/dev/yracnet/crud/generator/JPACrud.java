@@ -2,18 +2,22 @@ package dev.yracnet.crud.generator;
 
 import dev.yracnet.crud.spi.CrudConfig;
 import dev.yracnet.crud.spi.CrudProcess;
+import dev.yracnet.crud.spi.CrudUtil;
 
 public class JPACrud {
 
 	public static void main(String[] args) {
-		String path = "/work/dev/CORE-13/manager/";
-		String app = "manager";
-		String mod = "report";
+		String path = "/mnt/D/work/dev/CORE-13/laika/";
+		String app = "laika";
+		String mod = "app";
 		CrudConfig crud = new CrudConfig(path, app, mod);
-		crud.addJPAModel("manager-report-impl/src/main/java/bo/com/bancounion/manager/jpamodel/reporteJPADiagram.jpa");
-		crud.setPackageBase("bo.com.bancounion.manager.report");
-		crud.exclude("RptBase");
-		crud.include("RptParametro");
+		crud.addJPAModel("laika-app-impl/src/main/design/app.jpa");
+		crud.setPackageBase("dev.laika.app");
+		//CrudUtil.addRemovePrefix("Rpt");
+		CrudUtil.addRemovePrefix("Lka");
+		crud.include("LkaPersona");
+		//crud.exclude("RptBase");
+		//crud.include("RptParametro");
 		//crud.include("RptValor");
 		//crud.exclude("RptRecurso");
 		//crud.include("RptReporte");
@@ -21,14 +25,14 @@ public class JPACrud {
 		//crud.exclude("*");
 		//crud.searchJPAModel("reporteJPADiagram.jpa");
 		crud.setTemplate("spa");
+		//crud.addXSLT("serv.xsl");
+		//crud.addXSLT("dto.xsl");
+		//crud.addXSLT("parser.xsl");
+		//crud.addXSLT("impl.xsl");
 		crud.addXSLT("view.xsl");
 		//crud.addXSLT("ctrl.xsl");
 		//crud.addXSLT("part.xsl");
-		//crud.addXSLT("dto.xsl");
-		//crud.addXSLT("parser.xsl");
-		//crud.addXSLT("serv.xsl");
 		//crud.addXSLT("rest.xsl");
-		//crud.addXSLT("impl.xsl");
 		//crud.addXSLT("conf.xsl");
 		crud.setForceOverwriter(true);
 		CrudProcess process = new CrudProcess();

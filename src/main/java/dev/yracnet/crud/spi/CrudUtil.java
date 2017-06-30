@@ -7,6 +7,9 @@ package dev.yracnet.crud.spi;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.xml.dtm.ref.DTMNodeIterator;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 /**
  *
@@ -14,8 +17,28 @@ import java.util.List;
  */
 public class CrudUtil {
 
+	private static final List<String> prefixList = new ArrayList();
+
+	static {
+		prefixList.add("Seg");
+		prefixList.add("Par");
+		prefixList.add("Xxx");
+	}
+
+	public static void addRemovePrefix(String prefix) {
+		prefixList.add(prefix);
+	}
+
 	public static String removePrefix(String name) {
-		return name == null ? null : name.replace("Rpt", "").replace("rpt", "");
+		if (name != null) {
+			for (String prefix : prefixList) {
+				if (name.startsWith(prefix)) {
+					name = name.replace(prefix, "");
+					break;
+				}
+			}
+		}
+		return name;
 	}
 
 	public static String className(String name) {
@@ -146,6 +169,55 @@ public class CrudUtil {
 
 	public static String lower(String val) {
 		return val == null ? null : val.toLowerCase();
+	}
+
+	public static String log(String a) {
+		System.out.println("LOG=>" + a);
+		return "";
+	}
+
+	public static boolean compare(String a, String b) {
+		System.out.println("=>" + a + "==" + b);
+		if (a != null && b != null) {
+			return a.equals(b);
+		}
+		return false;
+	}
+
+	public static boolean generate(String name, Object dom) {
+		if (name == null) {
+			System.out.println("NO SUPORT-->" + name + " : " + dom);
+			return false;
+		}
+		Element elem = null;
+		if (dom instanceof DTMNodeIterator) {
+			DTMNodeIterator a = (DTMNodeIterator) dom;
+			elem = (Element) a.getRoot();
+		}
+		if (elem == null) {
+			System.out.println("NO SUPORT-->" + name + " : " + dom);
+			return false;
+		}
+		String _class = elem.getAttribute("class");
+		String _abs = elem.getAttribute("abs");
+		String _superclassId = elem.getAttribute("superclassId");
+		//System.out.println("===============================" + name);
+		//System.out.println("class: " + _class);
+		//System.out.println("superclassId: " + _superclassId);
+		//System.out.println("abs: " + _abs);
+		switch (name) {
+			case "IMPL-ABS":
+			case "SERV-ABS":
+			case "REST-ABS":
+				return "true".equals(_abs);
+			case "IMPL":
+			case "SERV":
+			case "REST":
+				return _superclassId.isEmpty() && "false".equals(_abs);
+			case "LOCAL":
+				return "false".equals(_abs);
+		}
+		return false;
 	}
 
 }
