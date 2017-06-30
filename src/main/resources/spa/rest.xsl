@@ -31,7 +31,12 @@
 
 				static {
 				<xsl:for-each select="jpa:entity-mappings/jpa:entity">
-					classSet.add(<xsl:value-of select="j:className(@class)"/>Rest.class);
+					<xsl:if test="j:generate('REST', current())">
+						classSet.add(<xsl:value-of select="j:className(@class)"/>Rest.class);
+					</xsl:if>
+					<xsl:if test="j:generate('REST-ABS', current())">
+						classSet.add(<xsl:value-of select="j:className(@class)"/>Rest.class);
+					</xsl:if>
 				</xsl:for-each>
 				}
 
@@ -50,12 +55,12 @@
 		<xsl:variable name="typeList" select="j:varType($name, 'List')"/>
 		<xsl:variable name="id" select="@id"/>
 		<xsl:variable name="superClassId" select="@superclassId"/>
+		<xsl:variable name="entityChildren"  select="../jpa:entity[@superclassId = $id]"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<xsl:if test="j:generate('REST', current())">
 			<x:file name="{$name}Rest.java" dir="{j:packagePath($packageBase)}" layer="rest">
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
-				import <xsl:value-of select="$packageBase"/>.wrapper.<xsl:value-of select="$name"/>Wrap;
 				import java.util.List;
 				import javax.ejb.EJB;
 				import javax.ws.rs.Consumes;
@@ -98,36 +103,6 @@
 				@Path("remove")
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
 				return serv.remove<xsl:value-of select="$name"/>(value);
-				}
-
-				@POST
-				@Path("xfilter")
-				public <xsl:value-of select="$name"/>Wrap filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$typeList"/> valueList = serv.filter<xsl:value-of select="$name"/>(wrap.getFilter());
-				wrap.setValueList(valueList);
-				//wrap.setValueCount(-1L);
-				return wrap;
-				}
-				@POST
-				@Path("xcreate")
-				public <xsl:value-of select="$name"/>Wrap create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$name"/> value = serv.create<xsl:value-of select="$name"/>(wrap.getValue());
-				wrap.setValue(value);
-				return wrap;
-				}
-				@POST
-				@Path("xupdate")
-				public <xsl:value-of select="$name"/>Wrap update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$name"/> value = serv.update<xsl:value-of select="$name"/>(wrap.getValue());
-				wrap.setValue(value);
-				return wrap;
-				}
-				@POST
-				@Path("xremove")
-				public <xsl:value-of select="$name"/>Wrap remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$name"/> value = serv.remove<xsl:value-of select="$name"/>(wrap.getValue());
-				wrap.setValue(value);
-				return wrap;
 				}
 				}
 			</x:file>
@@ -135,8 +110,11 @@
 		<xsl:if test="j:generate('REST-ABS', current())">
 			<x:file name="{$name}Rest.java" dir="{j:packagePath($packageBase)}" layer="rest">
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
-				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
-				import <xsl:value-of select="$packageBase"/>.wrapper.<xsl:value-of select="$name"/>Wrap;
+				<xsl:for-each select="$entityChildren">
+					<xsl:variable name="nameChild" select="j:className(@class)"/>
+					import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$nameChild"/>;
+					import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$nameChild"/>Ftr;
+				</xsl:for-each>
 				import java.util.List;
 				import javax.ejb.EJB;
 				import javax.ws.rs.Consumes;
@@ -160,60 +138,35 @@
 				return "Info Service: " + this + " by " + serv;
 				}
 
-				@POST
-				@Path("filter")
-				public <xsl:value-of select="$typeList"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter) throws ServiceException {
-				return serv.filter<xsl:value-of select="$name"/>(filter);
-				}
-				@POST
-				@Path("create")
-				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
-				return serv.create<xsl:value-of select="$name"/>(value);
-				}
-				@POST
-				@Path("update")
-				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
-				return serv.update<xsl:value-of select="$name"/>(value);
-				}
+				<xsl:for-each select="$entityChildren">
+					<xsl:variable name="nameChild" select="j:className(@class)"/>
+					<xsl:variable name="varChild" select="j:varName($nameChild)"/>
+					<xsl:variable name="typeChild" select="j:varType($nameChild, 'List')"/>
+					@POST
+					@Path("filter/<xsl:value-of select="$varChild"/>")
+					public <xsl:value-of select="$typeChild"/> filter<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/>Ftr filter) throws ServiceException{
+					return serv.filter<xsl:value-of select="$nameChild"/>(filter);
+					}
+					@POST
+					@Path("create/<xsl:value-of select="$varChild"/>")
+					public <xsl:value-of select="$nameChild"/> create<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/> value) throws ServiceException{
+					return serv.create<xsl:value-of select="$nameChild"/>(value);
+					}
+					@POST
+					@Path("update/<xsl:value-of select="$varChild"/>")
+					public <xsl:value-of select="$nameChild"/> update<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/> value) throws ServiceException{
+					return serv.update<xsl:value-of select="$nameChild"/>(value);
+					}
+				</xsl:for-each>
 				@POST
 				@Path("remove")
-				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
+				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
 				return serv.remove<xsl:value-of select="$name"/>(value);
-				}
-
-				@POST
-				@Path("xfilter")
-				public <xsl:value-of select="$name"/>Wrap filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$typeList"/> valueList = serv.filter<xsl:value-of select="$name"/>(wrap.getFilter());
-				wrap.setValueList(valueList);
-				//wrap.setValueCount(-1L);
-				return wrap;
-				}
-				@POST
-				@Path("xcreate")
-				public <xsl:value-of select="$name"/>Wrap create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$name"/> value = serv.create<xsl:value-of select="$name"/>(wrap.getValue());
-				wrap.setValue(value);
-				return wrap;
-				}
-				@POST
-				@Path("xupdate")
-				public <xsl:value-of select="$name"/>Wrap update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$name"/> value = serv.update<xsl:value-of select="$name"/>(wrap.getValue());
-				wrap.setValue(value);
-				return wrap;
-				}
-				@POST
-				@Path("xremove")
-				public <xsl:value-of select="$name"/>Wrap remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Wrap wrap) throws ServiceException {
-				<xsl:value-of select="$name"/> value = serv.remove<xsl:value-of select="$name"/>(wrap.getValue());
-				wrap.setValue(value);
-				return wrap;
 				}
 				}
 			</x:file>
 		</xsl:if>
-		<x:file name="{$name}Wrap.java" dir="{j:packagePath($packageBase, 'wrapper')}" layer="rest">
+		<x:file name="{$name}Wrap.java" dir="{j:packagePath($packageBase, 'wrapper')}" layer="rest" ignore="true">
 			import java.io.Serializable;
 			import java.util.List;
 			import javax.xml.bind.annotation.XmlAccessType;

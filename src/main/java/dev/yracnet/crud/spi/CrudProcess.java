@@ -118,6 +118,9 @@ public class CrudProcess {
 			content = content.replaceAll("\n([\\s]+)", "\n").replaceAll("\n\n", "\n").trim();
 		}
 		content = content.replaceAll("_AND_", "&&");
+		content = content.replaceAll("_COMMENT_START_", "<!--");
+		content = content.replaceAll("_COMMENT_END_", "-->");
+		
 		try {
 			File file = new File(realPath);
 			File parent = file.getParentFile();

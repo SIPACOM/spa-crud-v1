@@ -32,7 +32,7 @@ public class CrudUtil {
 	public static String removePrefix(String name) {
 		if (name != null) {
 			for (String prefix : prefixList) {
-				if (name.startsWith(prefix)) {
+				if (name.matches("^" + prefix + "[A-Z].*")) {
 					name = name.replace(prefix, "");
 					break;
 				}
@@ -180,6 +180,14 @@ public class CrudUtil {
 		System.out.println("=>" + a + "==" + b);
 		if (a != null && b != null) {
 			return a.equals(b);
+		}
+		return false;
+	}
+
+	public static boolean showUI(String name) {
+		if (name != null) {
+			System.out.println("--->" + name);
+			return !name.endsWith("List") && !name.endsWith("Ref");
 		}
 		return false;
 	}

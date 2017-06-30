@@ -27,6 +27,7 @@
 		<xsl:variable name="id" select="@id"/>
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
+		<xsl:variable name="entityChildren"  select="../jpa:entity[@superclassId = $id]"/>
 		<xsl:if test="j:generate('SERV', current())">
 			<x:file name="{$name}Serv.java" dir="{j:packagePath($packageBase)}" layer="serv">
 				import java.util.List;
@@ -49,13 +50,13 @@
 				import bo.union.lang.ServiceException;
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
-				<xsl:for-each select="../jpa:entity[@superclassId = $id]">
+				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$nameChild"/>;
 					import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$nameChild"/>Ftr;
 				</xsl:for-each>
 				public interface <xsl:value-of select="$name"/>Serv {
-				<xsl:for-each select="../jpa:entity[@superclassId = $id]">
+				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					<xsl:variable name="typeChild" select="j:varType($nameChild, 'List')"/>
 					public <xsl:value-of select="$typeChild"/> filter<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/>Ftr filter) throws ServiceException;

@@ -19,7 +19,7 @@
 			<x:file name="module.xml" dir="union" layer="web-inf">		
 				<module version="1.0.0">
 					<name>
-						<xsl:value-of select="$app"/>-<xsl:value-of select="$mod"/>
+						<xsl:value-of select="j:upper($app)"/>::<xsl:value-of select="j:upper($mod)"/>
 					</name>
 					<xsl:for-each select="jpa:entity-mappings/jpa:entity">
 						<xsl:variable name="name" select="j:className(@class)"/>		

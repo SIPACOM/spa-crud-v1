@@ -38,12 +38,14 @@
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<x:file name="{$name}.java" dir="{j:packagePath($packageBase,'data')}" layer="serv">
 			import java.io.Serializable;
-			import bo.union.comp.code.CodeString;
 			import bo.union.lang.ValidationException;
+			import bo.union.comp.code.CodeString;
+			import bo.union.comp.adapter.DateAdapter;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
 			import javax.xml.bind.annotation.XmlElement;
+			import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 			@XmlRootElement
 			@XmlAccessorType(XmlAccessType.NONE)
 			public class <xsl:value-of select="j:classExtend($name, $superClass)"/>  implements Serializable {
@@ -53,6 +55,9 @@
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				@XmlElement
+				<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">
+					@XmlJavaTypeAdapter(DateAdapter.class)
+				</xsl:if>
 				private <xsl:value-of select="$type"/> 
 				<xsl:value-of select="$attr"/>;
 			</xsl:for-each>	
@@ -67,11 +72,15 @@
 				}
 			</xsl:for-each>	
 			public void validateNew(ValidationException validate) throws ValidationException {
-			validate.isNotNull(id<xsl:value-of select="$name"/>, "id");
+			<xsl:for-each select="jpa:attributes/jpa:id">
+				validate.isNotNull(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
+			</xsl:for-each>
 			validate(validate);
 			}
 			public void validateEdit(ValidationException validate) throws ValidationException {
-			validate.isNullOrEmpty(id<xsl:value-of select="$name"/>, "id");
+			<xsl:for-each select="jpa:attributes/jpa:id">
+				validate.isNullOrEmpty(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
+			</xsl:for-each>
 			validate(validate);
 			}
 			public void validate(ValidationException validate) throws ValidationException {
@@ -81,6 +90,8 @@
 				<xsl:variable name="column" select="./jpa:column"/>
 				<xsl:if test="$column/@nullable='false'">
 					<xsl:choose>
+						<xsl:when test="name(.) = 'jpa:id'">
+						</xsl:when>
 						<xsl:when test="@attribute-type = 'String'">
 							validate.isNullOrNotTextOrLength(<xsl:value-of select="$attr"/>, <xsl:value-of select="j:eval($column/@min, 3)"/>, <xsl:value-of select="j:eval($column/@length, $column/@max, 50)"/>, "<xsl:value-of select="j:literal($attr)"/>");
 						</xsl:when>

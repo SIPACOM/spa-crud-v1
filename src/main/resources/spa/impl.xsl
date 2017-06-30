@@ -25,6 +25,7 @@
 		<xsl:variable name="var" select="j:varName($name)"/>
 		<xsl:variable name="id" select="@id"/>
 		<xsl:variable name="superClassId" select="@superclassId"/>
+		<xsl:variable name="entityChildren"  select="../jpa:entity[@superclassId = $id]"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>		
 		<xsl:if test="j:generate('LOCAL', current() )">
 			<x:file name="{$name}Local.java" dir="{j:packagePath($packageBase)}/internal" layer="impl">
@@ -158,7 +159,7 @@
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 				import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="@class"/>;
-				<xsl:for-each select="../jpa:entity[@superclassId = $id]">
+				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$nameChild"/>;
 					import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$nameChild"/>Ftr;
@@ -168,13 +169,13 @@
 				@Local(<xsl:value-of select="$name"/>Serv.class)
 				@TransactionManagement(TransactionManagementType.CONTAINER)
 				public class <xsl:value-of select="$name"/>Impl implements  <xsl:value-of select="$name"/>Serv{
-				<xsl:for-each select="../jpa:entity[@superclassId = $id]">
+				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					<xsl:variable name="varChild" select="j:varName($nameChild)"/>
 					@EJB
 					private <xsl:value-of select="$nameChild"/>Local <xsl:value-of select="$varChild"/>;
 				</xsl:for-each>
-				<xsl:for-each select="../jpa:entity[@superclassId = $id]">
+				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					<xsl:variable name="varChild" select="j:varName($nameChild)"/>
 					<xsl:variable name="typeChild" select="j:varType($nameChild, 'List')"/>
@@ -199,7 +200,7 @@
 				if(value == null){
 				throw new ValidationException("Valores no validos");
 				} else
-				<xsl:for-each select="../jpa:entity[@superclassId = $id]">
+				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					<xsl:variable name="varChild" select="j:varName($nameChild)"/>
 					if (value instanceof <xsl:value-of select="$nameChild"/>){

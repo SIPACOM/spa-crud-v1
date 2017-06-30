@@ -49,7 +49,7 @@
 					<xsl:attribute name="replace">{_list: 'wrap.list', _select: 'event.select', _selected: 'event.selected'}</xsl:attribute>
 				</div>
 				<div ng-show="modal.show('new')">
-					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
+					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'primary'}</xsl:attribute>
 					<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
 					<form name="f1" uni-validator="">
 						<div uni-part="part.new">
@@ -68,8 +68,13 @@
 					</footer>
 				</div>
 				<div ng-show="modal.show('edit')">
-					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
-					<header i18n="edit,{$var}">Editar <xsl:value-of select="$name"/></header>
+					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'success'}</xsl:attribute>
+					<header i18n="edit,{$var}">
+						Editar <xsl:value-of select="$name"/>
+						<xsl:for-each select="jpa:attributes/jpa:id">
+							<b>#{{wrap.select.<xsl:value-of select="@name"/>}} </b>
+						</xsl:for-each>
+					</header>
 					<form name="f2" uni-validator="">
 						<div uni-part="part.edit">
 							<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
@@ -87,8 +92,13 @@
 					</footer>
 				</div>
 				<div ng-show="modal.show('info')">
-					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
-					<header i18n="info,{$var}">Datos <xsl:value-of select="$name"/></header>
+					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'success'}</xsl:attribute>
+					<header i18n="info,{$var}">
+						Datos <xsl:value-of select="$name"/>
+						<xsl:for-each select="jpa:attributes/jpa:id">
+							<b>#{{wrap.select.<xsl:value-of select="@name"/>}} </b>
+						</xsl:for-each>
+					</header>
 					<div uni-part="part.info">
 						<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
 					</div>
@@ -100,8 +110,13 @@
 					</footer>
 				</div>
 				<div ng-show="modal.show('delete')">
-					<xsl:attribute name="uni-panel">{type:'modal', size:'lg'}</xsl:attribute>
-					<header i18n="info,{$var}">Datos <xsl:value-of select="$name"/></header>
+					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'danger'}</xsl:attribute>
+					<header i18n="info,{$var}">
+						Datos <xsl:value-of select="$name"/>
+						<xsl:for-each select="jpa:attributes/jpa:id">
+							<b>#{{wrap.select.<xsl:value-of select="@name"/>}} </b>
+						</xsl:for-each>
+					</header>
 					<div uni-part="part.info">
 						<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
 					</div>

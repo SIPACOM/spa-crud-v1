@@ -49,15 +49,37 @@
 					public final class <xsl:value-of select="@class"/>Parser {
 					
 					public static void parseTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
-					to.setId<xsl:value-of select="$name"/>(from.getId<xsl:value-of select="$name"/>());
-					<xsl:for-each select="jpa:attributes/*">
+					<xsl:for-each select="jpa:attributes/jpa:id">
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:basic">
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:one-to-many">
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:many-to-many">
 						<xsl:variable name="name" select="j:accName(@name)"/>
 						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
 					</xsl:for-each>
 					}
 					public static void parseTo<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> from, <xsl:value-of select="$name"/> to){
-					to.setId<xsl:value-of select="$name"/>(from.getId<xsl:value-of select="$name"/>());
-					<xsl:for-each select="jpa:attributes/*">
+					<xsl:for-each select="jpa:attributes/jpa:id">
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:basic">
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:one-to-many">
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:many-to-many">
 						<xsl:variable name="name" select="j:accName(@name)"/>
 						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
 					</xsl:for-each>
