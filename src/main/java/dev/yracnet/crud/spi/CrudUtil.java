@@ -10,6 +10,7 @@ import java.util.List;
 import org.apache.xml.dtm.ref.DTMNodeIterator;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  *
@@ -208,6 +209,7 @@ public class CrudUtil {
 			System.out.println("NO SUPORT-->" + name + " : " + dom);
 			return false;
 		}
+		NodeList idList = elem.getElementsByTagNameNS("http://java.sun.com/xml/ns/persistence/orm", "id");
 		String _class = elem.getAttribute("class");
 		String _abs = elem.getAttribute("abs");
 		String _superclassId = elem.getAttribute("superclassId");
@@ -219,11 +221,11 @@ public class CrudUtil {
 			case "IMPL-ABS":
 			case "SERV-ABS":
 			case "REST-ABS":
-				return "true".equals(_abs);
+				return idList.getLength() == 0 && "true".equals(_abs);
 			case "IMPL":
 			case "SERV":
 			case "REST":
-				return _superclassId.isEmpty() && "false".equals(_abs);
+				return idList.getLength() != 0 || (_superclassId.isEmpty() && "false".equals(_abs));
 			case "LOCAL":
 				return "false".equals(_abs);
 		}
