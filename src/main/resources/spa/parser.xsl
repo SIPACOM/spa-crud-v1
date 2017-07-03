@@ -46,7 +46,7 @@
 					import java.util.ArrayList;
 					import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 					import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="@class"/>;
-					public final class <xsl:value-of select="@class"/>Parser {
+					public final class <xsl:value-of select="$name"/>Parser {
 					
 					public static void parseTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
 					<xsl:for-each select="jpa:attributes/jpa:id">
