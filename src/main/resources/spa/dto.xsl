@@ -39,12 +39,13 @@
 		<x:file name="{$name}.java" dir="{j:packagePath($packageBase,'data')}" layer="serv">
 			import java.io.Serializable;
 			import bo.union.lang.ValidationException;
-			import bo.union.comp.code.CodeString;
-			import bo.union.comp.adapter.DateAdapter;
+			import bo.union.police.PoliceBase;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
 			import javax.xml.bind.annotation.XmlElement;
+			import bo.union.comp.code.CodeString;
+			import bo.union.comp.adapter.DateAdapter;
 			import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 			@XmlRootElement
 			@XmlAccessorType(XmlAccessType.NONE)

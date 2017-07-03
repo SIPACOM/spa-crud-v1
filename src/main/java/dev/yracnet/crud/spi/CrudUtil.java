@@ -110,6 +110,8 @@ public class CrudUtil {
 		other = removePrefix(other);
 		if (other != null && !other.isEmpty()) {
 			name = name + " extends " + other;
+		} else {
+			name = name + " extends PoliceBase ";
 		}
 		return name;
 	}

@@ -15,7 +15,7 @@ public class JPACrud {
 		crud.setPackageBase("dev.laika.app");
 		//CrudUtil.addRemovePrefix("Rpt");
 		CrudUtil.addRemovePrefix("Lka");
-		crud.include("LkaParam");
+		//crud.include("LkaParam");
 		//crud.exclude("RptBase");
 		//crud.include("RptParametro");
 		//crud.include("RptValor");
@@ -27,8 +27,8 @@ public class JPACrud {
 		crud.setTemplate("spa");
 //		crud.addXSLT("serv.xsl");
 //		crud.addXSLT("dto.xsl");
-		crud.addXSLT("parser.xsl");
-		crud.addXSLT("impl.xsl");
+		crud.addXSLT("mapper.xsl");
+//		crud.addXSLT("impl.xsl");
 //		crud.addXSLT("ctrl.xsl");
 //		crud.addXSLT("view.xsl");
 //		crud.addXSLT("part.xsl");

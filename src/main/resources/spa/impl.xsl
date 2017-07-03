@@ -41,7 +41,7 @@
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 				import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="@class"/>;
-				import static <xsl:value-of select="$packageBase"/>.parser.<xsl:value-of select="$name"/>Parser.*;
+				import static <xsl:value-of select="$packageBase"/>.mapper.<xsl:value-of select="$name"/>Mapper.*;
 				@Stateless
 				@LocalBean
 				public class <xsl:value-of select="$name"/>Local {
@@ -52,7 +52,7 @@
 				List<xsl:value-of select="j:template(@class)"/> fromList = QFilter.filter(em, <xsl:value-of select="@class"/>.class, filter);
 				<xsl:value-of select="$type"/> toList = new ArrayList();
 				fromList.stream().forEach(from -> {
-				<xsl:value-of select="$name"/> to = parseTo<xsl:value-of select="$name"/>(from);
+				<xsl:value-of select="$name"/> to = mapperTo<xsl:value-of select="$name"/>(from);
 				toList.add(to);
 				});
 				return toList;
@@ -60,18 +60,18 @@
 				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
 				ValidationException validate = new ValidationException("Registro <xsl:value-of select="j:literal($name)"/>");
 				validateCreate<xsl:value-of select="$name"/>(value, validate);
-				<xsl:value-of select="@class"/> entity = parseTo<xsl:value-of select="@class"/>(value);
+				<xsl:value-of select="@class"/> entity = mapperTo<xsl:value-of select="@class"/>(value);
 				em.persist(entity);
-				parseTo<xsl:value-of select="$name"/>(entity, value);
+				mapperTo<xsl:value-of select="$name"/>(entity, value);
 				return value;
 				}
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
 				ValidationException validate = new ValidationException("Actualizar <xsl:value-of select="j:literal($name)"/>");
 				validateUpdate<xsl:value-of select="$name"/>(value, validate);
 				<xsl:value-of select="@class"/> entity = em.getReference(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
-				parseTo<xsl:value-of select="@class"/>(value, entity);
+				mapperTo<xsl:value-of select="@class"/>(value, entity);
 				em.merge(entity);
-				parseTo<xsl:value-of select="$name"/>(entity, value);
+				mapperTo<xsl:value-of select="$name"/>(entity, value);
 				return value;
 				}
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
@@ -79,7 +79,7 @@
 				validateRemove<xsl:value-of select="$name"/>(value, validate);
 				<xsl:value-of select="@class"/> entity = em.find(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
 				em.remove(entity);
-				parseTo<xsl:value-of select="$name"/>(entity, value);
+				mapperTo<xsl:value-of select="$name"/>(entity, value);
 				return value;
 				}
 				public void validateCreate<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
