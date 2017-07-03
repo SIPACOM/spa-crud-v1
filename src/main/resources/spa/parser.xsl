@@ -40,8 +40,8 @@
 			</x:file>
 			-->
 			<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]">
-				<x:file name="{@class}Parser.java" dir="{j:packagePath($packageBase)}/parser" layer="impl">
-					<xsl:variable name="name" select="j:className(@class)"/>
+				<xsl:variable name="name" select="j:className(@class)"/>
+				<x:file name="{$name}Parser.java" dir="{j:packagePath($packageBase)}/parser" layer="impl">
 					import java.util.List;
 					import java.util.ArrayList;
 					import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;

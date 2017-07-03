@@ -115,8 +115,6 @@
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 				import <xsl:value-of select="$packageBase"/>.internal.<xsl:value-of select="$name"/>Local;
-				import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="@class"/>;
-				import static <xsl:value-of select="$packageBase"/>.parser.<xsl:value-of select="@class"/>Parser.*;
 				@Stateless
 				@Local(<xsl:value-of select="$name"/>Serv.class)
 				@TransactionManagement(TransactionManagementType.CONTAINER)
