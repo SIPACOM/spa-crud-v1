@@ -48,7 +48,11 @@
 				@PersistenceContext(unitName = "store-<xsl:value-of select="$mod"/>")
 				private EntityManager em;
 				<xsl:variable name="type" select="j:varType($name, 'List')"/>
-				public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter) throws ServiceException{
+				public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter, ValidationException validate) throws ServiceException{
+				validate.isNull(filter, "<xsl:value-of select="j:literal($name)"/>");
+				validate.throwException();
+				filter.validate(validate);
+				validate.throwException();
 				List<xsl:value-of select="j:template(@class)"/> fromList = QFilter.filter(em, <xsl:value-of select="@class"/>.class, filter);
 				<xsl:value-of select="$type"/> toList = new ArrayList();
 				fromList.stream().forEach(from -> {
@@ -57,16 +61,14 @@
 				});
 				return toList;
 				}
-				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				ValidationException validate = new ValidationException("Registro <xsl:value-of select="j:literal($name)"/>");
+				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
 				validateCreate<xsl:value-of select="$name"/>(value, validate);
 				<xsl:value-of select="@class"/> entity = mapperTo<xsl:value-of select="@class"/>(value);
 				em.persist(entity);
 				mapperTo<xsl:value-of select="$name"/>(entity, value);
 				return value;
 				}
-				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				ValidationException validate = new ValidationException("Actualizar <xsl:value-of select="j:literal($name)"/>");
+				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
 				validateUpdate<xsl:value-of select="$name"/>(value, validate);
 				<xsl:value-of select="@class"/> entity = em.getReference(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
 				mapperTo<xsl:value-of select="@class"/>(value, entity);
@@ -74,8 +76,7 @@
 				mapperTo<xsl:value-of select="$name"/>(entity, value);
 				return value;
 				}
-				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				ValidationException validate = new ValidationException("Eliminar <xsl:value-of select="j:literal($name)"/>");
+				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
 				validateRemove<xsl:value-of select="$name"/>(value, validate);
 				<xsl:value-of select="@class"/> entity = em.find(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
 				em.remove(entity);
@@ -112,6 +113,7 @@
 				import javax.ejb.TransactionManagement;
 				import javax.ejb.TransactionManagementType;
 				import bo.union.lang.ServiceException;
+				import bo.union.lang.ValidationException;
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 				import <xsl:value-of select="$packageBase"/>.internal.<xsl:value-of select="$name"/>Local;
@@ -124,22 +126,23 @@
 				<xsl:variable name="type" select="j:varType($name, 'List')"/>
 				@Override
 				public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter) throws ServiceException{
-				//local.controlFilter<xsl:value-of select="$name"/>(filter);
-				return local.filter<xsl:value-of select="$name"/>(filter);
+				ValidationException validate = new ValidationException("Listado <xsl:value-of select="j:literal($name)"/>");
+				return local.filter<xsl:value-of select="$name"/>(filter, validate);
 				}
 				@Override
 				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				//local.validateCreate<xsl:value-of select="$name"/>(value);
-				return local.create<xsl:value-of select="$name"/>(value);
+				ValidationException validate = new ValidationException("Registro <xsl:value-of select="j:literal($name)"/>");
+				return local.create<xsl:value-of select="$name"/>(value, validate);
 				}
 				@Override
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				//local.validateUpdate<xsl:value-of select="$name"/>(value);
-				return local.update<xsl:value-of select="$name"/>(value);
+				ValidationException validate = new ValidationException("Actualizar <xsl:value-of select="j:literal($name)"/>");
+				return local.update<xsl:value-of select="$name"/>(value, validate);
 				}
 				@Override
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				return local.remove<xsl:value-of select="$name"/>(value);
+				ValidationException validate = new ValidationException("Eliminar <xsl:value-of select="j:literal($name)"/>");
+				return local.remove<xsl:value-of select="$name"/>(value, validate);
 				}
 				}
 			</x:file>		
@@ -179,34 +182,37 @@
 					<xsl:variable name="typeChild" select="j:varType($nameChild, 'List')"/>
 					@Override
 					public <xsl:value-of select="$typeChild"/> filter<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/>Ftr filter) throws ServiceException{
-					//<xsl:value-of select="$varChild"/>.controlFilter<xsl:value-of select="$nameChild"/>(filter);
-					return <xsl:value-of select="$varChild"/>.filter<xsl:value-of select="$nameChild"/>(filter);
+					ValidationException validate = new ValidationException("Listado <xsl:value-of select="j:literal($nameChild)"/>");
+					return <xsl:value-of select="$varChild"/>.filter<xsl:value-of select="$nameChild"/>(filter, validate);
 					}
 					@Override
 					public <xsl:value-of select="$nameChild"/> create<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/> value) throws ServiceException{
-					//<xsl:value-of select="$varChild"/>.validateCreate<xsl:value-of select="$nameChild"/>(value);
-					return <xsl:value-of select="$varChild"/>.create<xsl:value-of select="$nameChild"/>(value);
+					ValidationException validate = new ValidationException("Registro <xsl:value-of select="j:literal($nameChild)"/>");
+					return <xsl:value-of select="$varChild"/>.create<xsl:value-of select="$nameChild"/>(value, validate);
 					}
 					@Override
 					public <xsl:value-of select="$nameChild"/> update<xsl:value-of select="$nameChild"/>(<xsl:value-of select="$nameChild"/> value) throws ServiceException{
-					//<xsl:value-of select="$varChild"/>.validateUpdate<xsl:value-of select="$nameChild"/>(value);
-					return <xsl:value-of select="$varChild"/>.update<xsl:value-of select="$nameChild"/>(value);
+					ValidationException validate = new ValidationException("Actualizar <xsl:value-of select="j:literal($nameChild)"/>");
+					return <xsl:value-of select="$varChild"/>.update<xsl:value-of select="$nameChild"/>(value, validate);
 					}
 				</xsl:for-each>
 				@Override
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				if(value == null){
-				throw new ValidationException("Valores no validos");
-				} else
+				ValidationException validate = new ValidationException("Eliminar <xsl:value-of select="j:literal($name)"/>");
+				validate.isNull(value, "<xsl:value-of select="j:literal($name)"/>");
+				validate.throwException();
+				validate.isNullOrEmpty(value.getId<xsl:value-of select="$name"/>(), "Id");
+				validate.throwException();
 				<xsl:for-each select="$entityChildren">
 					<xsl:variable name="nameChild" select="j:className(@class)"/>
 					<xsl:variable name="varChild" select="j:varName($nameChild)"/>
 					if (value instanceof <xsl:value-of select="$nameChild"/>){
-					return <xsl:value-of select="$varChild"/>.remove<xsl:value-of select="$nameChild"/>((<xsl:value-of select="$nameChild"/>)value);
-					} else
+					return <xsl:value-of select="$varChild"/>.remove<xsl:value-of select="$nameChild"/>((<xsl:value-of select="$nameChild"/>)value, validate);
+					} else 
 				</xsl:for-each>
 				{
-				throw new ValidationException("Valor no soportado");
+				validate.addMessage("Valor no soportado");
+				validate.throwException();
 				}
 				}
 

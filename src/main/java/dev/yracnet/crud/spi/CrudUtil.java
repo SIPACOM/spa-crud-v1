@@ -134,6 +134,7 @@ public class CrudUtil {
 	}
 
 	public static boolean process(String name, List includeList, List excludeList) {
+		System.out.println("==========generate=====================" + name + " - " + includeList + " - " + excludeList);
 		if (name == null || name.endsWith("List")) {
 			return false;
 		}
@@ -213,10 +214,10 @@ public class CrudUtil {
 		String _class = elem.getAttribute("class");
 		String _abs = elem.getAttribute("abs");
 		String _superclassId = elem.getAttribute("superclassId");
-		//System.out.println("===============================" + name);
-		//System.out.println("class: " + _class);
-		//System.out.println("superclassId: " + _superclassId);
-		//System.out.println("abs: " + _abs);
+		System.out.println("===============================" + name);
+		System.out.println("class: " + _class);
+		System.out.println("superclassId: " + _superclassId);
+		System.out.println("abs: " + _abs);
 		switch (name) {
 			case "IMPL-ABS":
 			case "SERV-ABS":

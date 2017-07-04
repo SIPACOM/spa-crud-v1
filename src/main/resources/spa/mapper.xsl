@@ -17,7 +17,7 @@
  
 	<xsl:template match="/">
 		<x:files>
-			<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]">
+			<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]|jpa:entity-mappings/jpa:mapped-superclass[j:process(@class, $include, $exclude)]">
 				<xsl:variable name="name" select="j:className(@class)"/>
 				<x:file name="{$name}Mapper.java" dir="{j:packagePath($packageBase)}/mapper" layer="impl">
 					import java.util.List;

@@ -117,6 +117,7 @@
 			import bo.union.comp.FilterElement;
 			import bo.union.comp.filter.MapFilter;
 			import bo.union.comp.filter.ValueFilter;
+			import bo.union.lang.ValidationException;
 			import java.io.Serializable;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
@@ -144,6 +145,8 @@
 				<xsl:value-of select="$attr"/> = value;
 				}
 			</xsl:for-each>	
+			public void validate(ValidationException validate) throws ValidationException {
+			}
 			}
 		</x:file>
 	</xsl:template>
