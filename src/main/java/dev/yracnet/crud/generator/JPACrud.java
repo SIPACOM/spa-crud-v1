@@ -17,10 +17,10 @@ public class JPACrud {
 		crud.include("RptTask");
 		crud.setTemplate("spa");
 //		crud.addXSLT("serv.xsl");
-//		crud.addXSLT("dto.xsl");
+		crud.addXSLT("dto.xsl");
 //		crud.addXSLT("mapper.xsl");
 //		crud.addXSLT("impl.xsl");
-		crud.addXSLT("ctrl.xsl");
+//		crud.addXSLT("ctrl.xsl");
 //		crud.addXSLT("view.xsl");
 //		crud.addXSLT("part.xsl");
 //		crud.addXSLT("rest.xsl");

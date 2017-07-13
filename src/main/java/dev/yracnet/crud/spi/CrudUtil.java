@@ -76,6 +76,8 @@ public class CrudUtil {
 		}
 		if ("int".equals(name)) {
 			name = "Integer";
+		} else if ("java.util.Date".equals(name)) {
+			name = "Date";
 		} else if ("long".equals(name)) {
 			name = "Long";
 		} else if ("float".equals(name)) {
