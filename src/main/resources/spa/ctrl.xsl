@@ -67,20 +67,20 @@
 
 			var <xsl:value-of select="$var"/>List = $scope.L0 = {
 			select: function (value) {
-			if (<xsl:value-of select="$var"/>Data.select && <xsl:value-of select="$var"/>Data.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
+			if (<xsl:value-of select="$var"/>Data.select &amp;&amp; <xsl:value-of select="$var"/>Data.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
 			<xsl:value-of select="$var"/>Data.select = undefined;
 			} else {
 			<xsl:value-of select="$var"/>Data.select = angular.copy(value, {});
 			}
 			},
 			selected: function (value) {
-			return <xsl:value-of select="$var"/>Data.select && <xsl:value-of select="$var"/>Data.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>;
+			return <xsl:value-of select="$var"/>Data.select &amp;&amp; <xsl:value-of select="$var"/>Data.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>;
 			},
 			isOneSelect: function () {
-			return <xsl:value-of select="$var"/>Data.select && true;
+			return <xsl:value-of select="$var"/>Data.select &amp;&amp; true;
 			},
 			isMoreSelect: function () {
-			return <xsl:value-of select="$var"/>Data.select && true;
+			return <xsl:value-of select="$var"/>Data.select &amp;&amp; true;
 			}
 			};
 			var <xsl:value-of select="$var"/>Action = $scope.A0 = {
