@@ -37,16 +37,15 @@
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<x:file name="{$name}.java" dir="{j:packagePath($packageBase,'data')}" layer="serv">
+			import java.util.Date;
 			import java.io.Serializable;
-			import bo.union.lang.ValidationException;
-			import bo.union.police.PoliceBase;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
 			import javax.xml.bind.annotation.XmlElement;
 			import bo.union.comp.code.CodeString;
-			import bo.union.comp.adapter.DateAdapter;
-			import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+			import bo.union.lang.ValidationException;
+			import bo.union.police.PoliceBase;
 			@XmlRootElement
 			@XmlAccessorType(XmlAccessType.NONE)
 			public class <xsl:value-of select="j:classExtend($name, $superClass)"/>  implements Serializable {
@@ -55,12 +54,8 @@
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
-				@XmlElement
-				<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">
-					@XmlJavaTypeAdapter(DateAdapter.class)
-				</xsl:if>
-				private <xsl:value-of select="$type"/> 
-				<xsl:value-of select="$attr"/>;
+				@XmlElement<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">(type=Date.class)</xsl:if>
+				private <xsl:value-of select="$type"/> <xsl:value-of select="$attr"/>;
 			</xsl:for-each>	
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>

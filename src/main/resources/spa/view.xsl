@@ -26,106 +26,106 @@
 		<x:file name="{$var}.html" dir="." layer="view">		
 			<div ng-controller="{$mod}${$var}">
 				<div uni-pager="" 
-									config="wrap.filter.$config"
-									click-apply="event.apply()" 
-									click-clear="event.clear()">
+									config="D0.filter.$config"
+									click-apply="F0.apply()" 
+									click-clear="F0.clear()">
 					<div uni-part="part.filter">
-						<xsl:attribute name="replace">{_filter: 'wrap.filter'}</xsl:attribute>
+						<xsl:attribute name="replace">{_filter: 'D0.filter'}</xsl:attribute>
 					</div>
 				</div>
 				<div uni-action="">
-					<button ng-click="modal.open('new')">Nuevo</button>
-					<button ng-disabled="event.disabled()" 
-													ng-click="modal.open('edit')">Editar</button>
-					<button ng-disabled="event.disabled()" 
-													ng-click="modal.open('info')">Datos</button>
-					<button ng-disabled="event.disabled()"
-													ng-click="modal.open('delete')">Eliminar</button>
-					<button ng-disabled="event.disabled()"
+					<button ng-click="P0.open('create')">Nuevo</button>
+					<button ng-disabled="!L0.isOneSelect()" 
+													ng-click="P0.open('update')">Editar</button>
+					<button ng-disabled="!L0.isOneSelect()" 
+													ng-click="P0.open('info')">Datos</button>
+					<button ng-disabled="!L0.isOneSelect()"
+													ng-click="P0.open('delete')">Eliminar</button>
+					<button ng-disabled="!L0.isMoreSelect()"
 													uni-confirm="remove"
-													ng-click="action.remove()">Eliminar</button>
+													ng-click="A0.remove()">Eliminar</button>													
 				</div>
 				<div uni-part="part.table">
-					<xsl:attribute name="replace">{_list: 'wrap.list', _select: 'event.select', _selected: 'event.selected'}</xsl:attribute>
+					<xsl:attribute name="replace">{_list: 'D0.list', _select: 'L0.select', _selected: 'L0.selected'}</xsl:attribute>
 				</div>
-				<div ng-show="modal.show('new')">
+				<div ng-show="P0.show('create')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'primary'}</xsl:attribute>
 					<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
-					<form name="f1" uni-validator="">
+					<form name="F0New" uni-validator="">
 						<div uni-part="part.new">
-							<xsl:attribute name="replace">{_value: 'wrap.value'}</xsl:attribute>
+							<xsl:attribute name="replace">{_value: 'D0.value'}</xsl:attribute>
 						</div>
 					</form>
 					<footer>
 						<button uni-badge="" uni-confirm="create">
-							<xsl:attribute name="ng-click">f1.$validate() _AND_ action.create()</xsl:attribute>
+							<xsl:attribute name="ng-click">F0New.$validate() _AND_ A0.create()</xsl:attribute>
 							Guardar
 						</button>
 						<button uni-badge="" uni-confirm="cancel">
-							<xsl:attribute name="ng-click">action.cancel('new')</xsl:attribute>
+							<xsl:attribute name="ng-click">A0.cancel('create')</xsl:attribute>
 							Cancelar
 						</button>
 					</footer>
 				</div>
-				<div ng-show="modal.show('edit')">
+				<div ng-show="P0.show('update')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'success'}</xsl:attribute>
 					<header i18n="edit,{$var}">
 						Editar <xsl:value-of select="$name"/>
 						<xsl:for-each select="jpa:attributes/jpa:id">
-							<b>#{{wrap.select.<xsl:value-of select="@name"/>}} </b>
+							<b>#{{D0.select.<xsl:value-of select="@name"/>}} </b>
 						</xsl:for-each>
 					</header>
-					<form name="f2" uni-validator="">
+					<form name="F0Edit" uni-validator="">
 						<div uni-part="part.edit">
-							<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
+							<xsl:attribute name="replace">{_value: 'D0.select'}</xsl:attribute>
 						</div>
 					</form>
 					<footer>
 						<button uni-badge="" uni-confirm="update">
-							<xsl:attribute name="ng-click">f2.$validate() _AND_ action.update()</xsl:attribute>
+							<xsl:attribute name="ng-click">F0Edit.$validate() _AND_ A0.update()</xsl:attribute>
 							Actualizar
 						</button>
 						<button uni-badge="" uni-confirm="cancel">
-							<xsl:attribute name="ng-click">action.cancel('edit')</xsl:attribute>
+							<xsl:attribute name="ng-click">A0.cancel('update')</xsl:attribute>
 							Cancelar
 						</button>
 					</footer>
 				</div>
-				<div ng-show="modal.show('info')">
+				<div ng-show="P0.show('info')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'success'}</xsl:attribute>
 					<header i18n="info,{$var}">
 						Datos <xsl:value-of select="$name"/>
 						<xsl:for-each select="jpa:attributes/jpa:id">
-							<b>#{{wrap.select.<xsl:value-of select="@name"/>}} </b>
+							<b>#{{D0.select.<xsl:value-of select="@name"/>}} </b>
 						</xsl:for-each>
 					</header>
 					<div uni-part="part.info">
-						<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
+						<xsl:attribute name="replace">{_value: 'D0.select'}</xsl:attribute>
 					</div>
 					<footer>
 						<button uni-badge="">
-							<xsl:attribute name="ng-click">action.cancel('info')</xsl:attribute>
+							<xsl:attribute name="ng-click">A0.cancel('info')</xsl:attribute>
 							Cancelar
 						</button>
 					</footer>
 				</div>
-				<div ng-show="modal.show('delete')">
+				<div ng-show="P0.show('delete')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'danger'}</xsl:attribute>
 					<header i18n="info,{$var}">
 						Datos <xsl:value-of select="$name"/>
 						<xsl:for-each select="jpa:attributes/jpa:id">
-							<b>#{{wrap.select.<xsl:value-of select="@name"/>}} </b>
+							<b>#{{D0.select.<xsl:value-of select="@name"/>}} </b>
 						</xsl:for-each>
 					</header>
 					<div uni-part="part.info">
-						<xsl:attribute name="replace">{_value: 'wrap.select'}</xsl:attribute>
+						<xsl:attribute name="replace">{_value: 'D0.select'}</xsl:attribute>
 					</div>
 					<footer>
 						<button uni-badge=""
 														uni-confirm="remove"
-														ng-click="action.remove()">Eliminar</button>
+														ng-click="A0.remove()">Eliminar</button>
 						<button uni-badge="">
-							<xsl:attribute name="ng-click">action.cancel('delete')</xsl:attribute>
+							<xsl:attribute name="ng-click">A0.cancel('delete')</xsl:attribute>
 							Cancelar
 						</button>
 					</footer>

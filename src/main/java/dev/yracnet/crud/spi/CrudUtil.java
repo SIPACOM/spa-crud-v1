@@ -6,7 +6,9 @@
 package dev.yracnet.crud.spi;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.apache.xml.dtm.ref.DTMNodeIterator;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -118,6 +120,7 @@ public class CrudUtil {
 	}
 
 	public static String literal(String name) {
+		name = translate(name);
 		name = name.replaceAll("([A-Z][a-z]+)", " $1")
 										.replaceAll("([A-Z][A-Z]+)", " $1")
 										.replaceAll("([^A-Za-z ]+)", " $1")
@@ -233,4 +236,16 @@ public class CrudUtil {
 		return false;
 	}
 
+	private static String translate(String name) {
+		return translateMap.containsKey(name) ? translateMap.get(name) : name;
+	}
+	private static final Map<String, String> translateMap = new HashMap<>();
+
+	static {
+		translateMap.put("name", "nombre");
+		translateMap.put("description", "descripcion");
+		translateMap.put("value", "valor");
+		translateMap.put("type", "tipo");
+		translateMap.put("status", "estado");
+	}
 }
