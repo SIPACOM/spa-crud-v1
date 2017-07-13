@@ -26,7 +26,8 @@
 		<xsl:variable name="typeList" select="j:varType($name, 'List')"/>
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
-		<x:file name="{$var}_old.js" dir="." layer="ctrl">
+		<x:file name="{$var}.js" dir="." layer="ctrl">
+			/*Implementacion Base*/
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http) {
 			$scope.param = {
 			type<xsl:value-of select="$name"/>: [
@@ -120,7 +121,8 @@
 			};
 			});
 		</x:file>
-		<x:file name="{$var}.js" dir="." layer="ctrl">
+		<x:file name="{$var}_handler.js" dir="." layer="ctrl">
+			/*Implementacion Handler*/
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http) {
 			$scope.param = {};
 			$scope.part = new PartHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
