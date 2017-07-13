@@ -109,11 +109,12 @@
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<x:file name="{$name}Ftr.java" dir="{j:packagePath($packageBase,'filter')}" layer="serv">
+			import java.util.Date;
+			import java.io.Serializable;
+			import bo.union.lang.ValidationException;
 			import bo.union.comp.FilterElement;
 			import bo.union.comp.filter.MapFilter;
 			import bo.union.comp.filter.ValueFilter;
-			import bo.union.lang.ValidationException;
-			import java.io.Serializable;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
