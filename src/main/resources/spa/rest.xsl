@@ -92,9 +92,13 @@
 				}
 				@POST
 				@Path("create")
-				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
+				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) {
+				try{
 				value = serv.create<xsl:value-of select="$name"/>(value);
 				HTTPStatic.info("Se ha guardado el registro: " + value.getCodigo());
+				}catch(ServiceException e){
+				HTTPStatic.error("No se pudo guardar el registro: " + value.getCodigo(), e);
+				}
 				return value;
 				}
 				@POST

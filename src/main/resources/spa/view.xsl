@@ -34,26 +34,26 @@
 					</div>
 				</div>
 				<div uni-action="">
-					<button ng-click="P0.open('create')">Nuevo</button>
+					<button ng-click="A0.open('create')">Nuevo</button>
 					<button ng-disabled="!L0.isOneSelect()" 
-													ng-click="P0.open('update')">Editar</button>
+													ng-click="A0.open('update')">Editar</button>
 					<button ng-disabled="!L0.isOneSelect()" 
-													ng-click="P0.open('info')">Datos</button>
+													ng-click="A0.open('info')">Datos</button>
 					<button ng-disabled="!L0.isOneSelect()"
-													ng-click="P0.open('delete')">Eliminar</button>
+													ng-click="A0.open('delete')">Eliminar</button>
 					<button ng-disabled="!L0.isMoreSelect()"
 													uni-confirm="remove"
 													ng-click="A0.remove()">Eliminar</button>													
 				</div>
 				<div uni-part="part.table">
-					<xsl:attribute name="replace">{_list: 'D0.list', _select: 'L0.select', _selected: 'L0.selected'}</xsl:attribute>
+					<xsl:attribute name="replace">{_list: 'D0.list', _toggle: 'L0.toggle', _in: 'L0.in'}</xsl:attribute>
 				</div>
 				<div ng-show="P0.show('create')">
 					<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'primary'}</xsl:attribute>
 					<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
 					<form name="F0New" uni-validator="">
 						<div uni-part="part.new">
-							<xsl:attribute name="replace">{_value: 'D0.value'}</xsl:attribute>
+							<xsl:attribute name="replace">{_value: 'D0.current'}</xsl:attribute>
 						</div>
 					</form>
 					<footer>
@@ -77,7 +77,7 @@
 					</header>
 					<form name="F0Edit" uni-validator="">
 						<div uni-part="part.edit">
-							<xsl:attribute name="replace">{_value: 'D0.select'}</xsl:attribute>
+							<xsl:attribute name="replace">{_value: 'D0.current'}</xsl:attribute>
 						</div>
 					</form>
 					<footer>
@@ -100,7 +100,7 @@
 						</xsl:for-each>
 					</header>
 					<div uni-part="part.info">
-						<xsl:attribute name="replace">{_value: 'D0.select'}</xsl:attribute>
+						<xsl:attribute name="replace">{_value: 'D0.current'}</xsl:attribute>
 					</div>
 					<footer>
 						<button uni-badge="">
@@ -118,7 +118,7 @@
 						</xsl:for-each>
 					</header>
 					<div uni-part="part.info">
-						<xsl:attribute name="replace">{_value: 'D0.select'}</xsl:attribute>
+						<xsl:attribute name="replace">{_value: 'D0.current'}</xsl:attribute>
 					</div>
 					<footer>
 						<button uni-badge=""

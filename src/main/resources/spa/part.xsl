@@ -59,7 +59,7 @@
 		</x:file>
 		<x:file name="table.html" dir="{$var}" layer="part">
 			<table>
-				<xsl:attribute name="uni-table">{select: '_select', selected: '_selected'}</xsl:attribute>
+				<xsl:attribute name="uni-table">{select: '_toggle', selected: '_in'}</xsl:attribute>
 				<tr>
 					<xsl:for-each select="jpa:attributes/jpa:id">
 						<th i18n="{@name}" width="5%">
@@ -81,6 +81,50 @@
 					</xsl:for-each>
 				</tr>
 			</table>
+		</x:file>
+		<x:file name="lov.html" dir="{$var}" layer="part">
+			<div>	
+				<div click-apply="_clickApply()" click-clear="_clickClear()" config="_filter.$config" uni-pager="{open:true}">
+					<div>
+						<xsl:attribute name="uni-grid">{type:'table'}</xsl:attribute>
+						<xsl:for-each select="jpa:attributes/jpa:id">
+							<xsl:call-template name="filter"/>
+						</xsl:for-each>
+						<xsl:for-each select="jpa:attributes/jpa:basic">
+							<xsl:call-template name="filter"/>
+						</xsl:for-each>
+					</div>
+				</div>
+				<table>
+					<xsl:attribute name="uni-table">{}</xsl:attribute>
+					<tr>
+						<th width="5%">
+							<button ng-click="_clickCancel()" uni-badge="{}">Cancelar</button>
+						</th>
+						<xsl:for-each select="jpa:attributes/jpa:id">
+							<th i18n="{@name}" width="5%">
+								<xsl:value-of select="j:literal(@name)"/>
+							</th>
+						</xsl:for-each>
+						<xsl:for-each select="jpa:attributes/jpa:basic">
+							<th i18n="{@name}">
+								<xsl:value-of select="j:literal(@name)"/>
+							</th>
+						</xsl:for-each>
+					</tr>
+					<tr ng-repeat="row in _list">
+						<td>
+							<button ng-click="_clickSelect(row)" uni-badge="{}">Seleccionar</button>
+						</td>
+						<xsl:for-each select="jpa:attributes/jpa:id">
+							<td>{{row.<xsl:value-of select="@name"/>}}</td>
+						</xsl:for-each>
+						<xsl:for-each select="jpa:attributes/jpa:basic">
+							<td>{{row.<xsl:value-of select="@name"/>}}</td>
+						</xsl:for-each>
+					</tr>
+				</table>
+			</div>
 		</x:file>
 	</xsl:template>
 	<xsl:template name="form" mode="form" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
