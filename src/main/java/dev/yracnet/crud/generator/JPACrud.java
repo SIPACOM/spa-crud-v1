@@ -15,6 +15,8 @@ public class JPACrud {
 		crud.setPackageBase("bo.com.bancounion.manager.report");
 		CrudUtil.addRemovePrefix("Rpt");
 		crud.include("RptTask");
+		crud.include("RptTaskRepeat");
+		crud.include("RptTaskSchedule");
 		crud.setTemplate("spa");
 //		crud.addXSLT("serv.xsl");
 		crud.addXSLT("dto.xsl");

@@ -71,6 +71,11 @@ public class CrudUtil {
 	}
 
 	public static String varType(String name, String template, String enumType) {
+		return varType(name, template, enumType, null);
+	}
+
+	public static String varType(String name, String template, String enumType, String node) {
+		System.out.println("--->"+node+" - " + name);
 		if (name == null || name.isEmpty()) {
 			name = "String";
 		}
@@ -92,8 +97,10 @@ public class CrudUtil {
 				name = "String";
 			}
 			name = template + "<" + name + ">";
+		//} else if (embeddable != null && !embeddable.isEmpty()) {
+			//name = name;
 		} else if (enumType != null && !enumType.isEmpty()) {
-			name = "CodeString";
+			name = "OptionString";
 		}
 		return name + " ";
 	}

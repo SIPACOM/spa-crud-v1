@@ -84,7 +84,8 @@
 		</x:file>
 		<x:file name="lov.html" dir="{$var}" layer="part">
 			<div>	
-				<div click-apply="_clickApply()" click-clear="_clickClear()" config="_filter.$config" uni-pager="{open:true}">
+				<div click-apply="_clickApply()" click-clear="_clickClear()" config="_filter.$config">
+					<xsl:attribute name="uni-pager">{open:true}</xsl:attribute>
 					<div>
 						<xsl:attribute name="uni-grid">{type:'table'}</xsl:attribute>
 						<xsl:for-each select="jpa:attributes/jpa:id">
@@ -99,7 +100,10 @@
 					<xsl:attribute name="uni-table">{}</xsl:attribute>
 					<tr>
 						<th width="5%">
-							<button ng-click="_clickCancel()" uni-badge="{}">Cancelar</button>
+							<button ng-click="_clickCancel()">
+								<xsl:attribute name="uni-badge=">{}</xsl:attribute>
+								Cancelar
+							</button>
 						</th>
 						<xsl:for-each select="jpa:attributes/jpa:id">
 							<th i18n="{@name}" width="5%">
@@ -114,7 +118,10 @@
 					</tr>
 					<tr ng-repeat="row in _list">
 						<td>
-							<button ng-click="_clickSelect(row)" uni-badge="{}">Seleccionar</button>
+							<button ng-click="_clickSelect(row)">
+								<xsl:attribute name="uni-badge=">{}</xsl:attribute>
+								Seleccionar
+							</button>
 						</td>
 						<xsl:for-each select="jpa:attributes/jpa:id">
 							<td>{{row.<xsl:value-of select="@name"/>}}</td>
