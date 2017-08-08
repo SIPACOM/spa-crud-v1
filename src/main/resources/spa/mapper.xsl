@@ -14,6 +14,7 @@
 	<xsl:param name="mod">seg</xsl:param>
 	<xsl:param name="include"/>
 	<xsl:param name="exclude"/>
+	<xsl:key name="_embeddable" match="/jpa:entity-mappings/jpa:embeddable" use="@id" />
  
 	<xsl:template match="/">
 		<x:files>
@@ -23,8 +24,16 @@
 					import java.util.List;
 					import java.util.ArrayList;
 					import bo.union.persist.police.PoliceMapper;
-					import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
-					import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="@class"/>;
+					
+					<xsl:call-template name="importClass">
+						<xsl:with-param name="classFrom" select="@class"/>
+					</xsl:call-template>
+					<xsl:for-each select="jpa:attributes/jpa:embedded">
+						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+						<xsl:call-template name="importClass">
+							<xsl:with-param name="classFrom" select="$embedded/@class"/>
+						</xsl:call-template>
+					</xsl:for-each>
 					public final class <xsl:value-of select="$name"/>Mapper extends PoliceMapper {
 					
 					public static void mapperTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
@@ -43,6 +52,14 @@
 					<xsl:for-each select="jpa:attributes/jpa:many-to-many">
 						<xsl:variable name="name" select="j:accName(@name)"/>
 						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+					</xsl:for-each>
+					//mapper embedded
+					<xsl:for-each select="jpa:attributes/jpa:embedded">
+						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						<xsl:variable name="type" select="$embedded/@class"/>
+						<xsl:value-of select="$type"/> _<xsl:value-of select="@name"/> = mapperTo<xsl:value-of select="$type"/>( from.get<xsl:value-of select="$name"/>() );
+						to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
 					</xsl:for-each>
 					//mapperToAuditPartial(from, to);
 					mapperToAuditFull(from, to);
@@ -64,41 +81,102 @@
 						<xsl:variable name="name" select="j:accName(@name)"/>
 						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
 					</xsl:for-each>
+					//mapper embedded
+					<xsl:for-each select="jpa:attributes/jpa:embedded">
+						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+						<xsl:variable name="name" select="j:accName(@name)"/>
+						<xsl:variable name="type" select="j:accName($embedded/@class)"/>
+						<xsl:value-of select="$type"/> _<xsl:value-of select="@name"/> = mapperTo<xsl:value-of select="$type"/>( from.get<xsl:value-of select="$name"/>() );
+						to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
+					</xsl:for-each>
 					mapperToPoliceBase(from, to);
 					}
-					<xsl:variable name="name" select="j:className(@class)"/>
-					public static <xsl:value-of select="$name"/> mapperTo<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> from){
-					<xsl:value-of select="$name"/> to = new <xsl:value-of select="$name"/>();
-					mapperTo<xsl:value-of select="$name"/>(from, to);
-					return to;
-					}
-					public static <xsl:value-of select="@class"/> mapperTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from){
-					<xsl:value-of select="@class"/> to = new <xsl:value-of select="@class"/>();
-					mapperTo<xsl:value-of select="@class"/>(from, to);
-					return to;
-					}
-					<xsl:variable name="typeA" select="j:varType(@class, 'List')"/>
-					<xsl:variable name="typeB" select="j:varType($name, 'List')"/>
-					public static <xsl:value-of select="$typeA"/> mapperTo<xsl:value-of select="@class"/>List(<xsl:value-of select="$typeB"/> fromList){
-					<xsl:value-of select="$typeA"/> toList = new ArrayList();
-					fromList.stream().forEach(from -> {
-					<xsl:value-of select="@class"/> to = mapperTo<xsl:value-of select="@class"/>(from);
-					toList.add(to);
-					});
-					return toList;
-					}
-					public static <xsl:value-of select="$typeB"/> mapperTo<xsl:value-of select="$name"/>List(<xsl:value-of select="$typeA"/> fromList){
-					<xsl:value-of select="$typeB"/> toList = new ArrayList();
-					fromList.stream().forEach(from -> {
-					<xsl:value-of select="$name"/> to = mapperTo<xsl:value-of select="$name"/>(from);
-					toList.add(to);
-					});
-					return toList;
-					}
+					
+					<xsl:call-template name="methodMapperTo">
+						<xsl:with-param name="classFrom" select="@class"/>
+					</xsl:call-template>
+					<xsl:for-each select="jpa:attributes/jpa:embedded">
+						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+						<xsl:call-template name="methodMapperTo">
+							<xsl:with-param name="classFrom" select="$embedded/@class"/>
+						</xsl:call-template>
+					</xsl:for-each>
+					<xsl:for-each select="jpa:attributes/jpa:embedded">
+						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+						
+						
+						
+						
+						
+						
+					</xsl:for-each>
 					}
 				</x:file>
 			</xsl:for-each>
 		</x:files>
 	</xsl:template>
+	<xsl:template name="importClass">		
+		<xsl:param name="attributes" select="jpa:attributes"/>
+		
+		
+		
+	</xsl:template>
+	
+	
+	
+	
+	<xsl:template name="importClass">		
+		<xsl:param name="classFrom" select="@class"/>
+		<xsl:variable name="classTo" select="j:accName($classFrom)"/>		
+		import <xsl:value-of select="$packageBase"/>.entity.<xsl:value-of select="$classFrom"/>;
+		import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$classTo"/>;
+	</xsl:template>
+	
+	
+	
+	
+	
+	<xsl:template name="methodMapperTo">		
+		<xsl:param name="classFrom" select="@class"/>
+		<xsl:variable name="classTo" select="j:accName($classFrom)"/>		
+		<xsl:variable name="listFrom" select="j:varType($classFrom, 'List')"/>
+		<xsl:variable name="listTo" select="j:varType($classTo, 'List')"/>
+		<xsl:call-template name="_methodMapperTo">
+			<xsl:with-param name="classFrom" select="$classFrom"/>
+			<xsl:with-param name="classTo" select="$classTo"/>
+			<xsl:with-param name="listFrom" select="$listFrom"/>
+			<xsl:with-param name="listTo" select="$listTo"/>
+		</xsl:call-template>
+		<xsl:call-template name="_methodMapperTo">
+			<xsl:with-param name="classFrom" select="$classTo"/>
+			<xsl:with-param name="classTo" select="$classFrom"/>
+			<xsl:with-param name="listFrom" select="$listTo"/>
+			<xsl:with-param name="listTo" select="$listFrom"/>
+		</xsl:call-template>
+	</xsl:template>
+	<xsl:template name="_methodMapperTo">		
+		<xsl:param name="classFrom"/>
+		<xsl:param name="classTo"/>		
+		<xsl:param name="listFrom"/>
+		<xsl:param name="listTo"/>
+		
+		public static <xsl:value-of select="$listFrom"/> mapperTo<xsl:value-of select="$classFrom"/>List(<xsl:value-of select="$listTo"/> fromList){
+		<xsl:value-of select="$listFrom"/> toList = new ArrayList();
+		fromList.forEach(from -> {
+		<xsl:value-of select="$classFrom"/> to = mapperTo<xsl:value-of select="$classFrom"/>(from);
+		toList.add(to);
+		});
+		return toList;
+		}
+		public static <xsl:value-of select="$classTo"/> mapperTo<xsl:value-of select="$classTo"/>(<xsl:value-of select="$classFrom"/> from){
+		if (from == null) {
+		return null;
+		}
+		<xsl:value-of select="$classTo"/> to = new <xsl:value-of select="$classTo"/>();
+		mapperTo<xsl:value-of select="$classTo"/>(from, to);
+		return to;
+		}
+	</xsl:template>
+	
 	<xsl:template match="text()"/>
 </xsl:stylesheet>

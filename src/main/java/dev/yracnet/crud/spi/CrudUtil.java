@@ -53,11 +53,17 @@ public class CrudUtil {
 	}
 
 	public static String varName(String name) {
+		if (name == null || name.isEmpty()) {
+			return "NaN";
+		}
 		name = removePrefix(name);
 		return name.toLowerCase().charAt(0) + name.substring(1);
 	}
 
 	public static String accName(String name) {
+		if (name == null || name.isEmpty()) {
+			return "NaN";
+		}
 		name = removePrefix(name);
 		return name.toUpperCase().charAt(0) + name.substring(1);
 	}
@@ -75,7 +81,7 @@ public class CrudUtil {
 	}
 
 	public static String varType(String name, String template, String enumType, String node) {
-		System.out.println("--->"+node+" - " + name);
+		System.out.println("--->" + node + " - " + name);
 		if (name == null || name.isEmpty()) {
 			name = "String";
 		}
@@ -97,7 +103,7 @@ public class CrudUtil {
 				name = "String";
 			}
 			name = template + "<" + name + ">";
-		//} else if (embeddable != null && !embeddable.isEmpty()) {
+			//} else if (embeddable != null && !embeddable.isEmpty()) {
 			//name = name;
 		} else if (enumType != null && !enumType.isEmpty()) {
 			name = "OptionString";
