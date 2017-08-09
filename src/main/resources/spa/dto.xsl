@@ -14,6 +14,7 @@
 	<xsl:param name="mod">seg</xsl:param>
 	<xsl:param name="include"/>
 	<xsl:param name="exclude"/>
+	<xsl:key name="_embeddable" match="/jpa:entity-mappings/jpa:embeddable" use="@id" />
  
 	<xsl:template match="/">
 		<x:files>
@@ -59,6 +60,9 @@
 				@XmlElement<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">(type=Date.class)</xsl:if>
 				private <xsl:value-of select="$type"/> <xsl:value-of select="$attr"/>;
 			</xsl:for-each>	
+			
+			
+				<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated, name(.))"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		

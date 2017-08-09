@@ -36,61 +36,42 @@
 					</xsl:for-each>
 					public final class <xsl:value-of select="$name"/>Mapper extends PoliceMapper {
 					
+					
+					
+					
+					
 					public static void mapperTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:basic">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:one-to-many">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:many-to-many">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					//mapper embedded
-					<xsl:for-each select="jpa:attributes/jpa:embedded">
-						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						<xsl:variable name="type" select="$embedded/@class"/>
-						<xsl:value-of select="$type"/> _<xsl:value-of select="@name"/> = mapperTo<xsl:value-of select="$type"/>( from.get<xsl:value-of select="$name"/>() );
-						to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
-					</xsl:for-each>
-					//mapperToAuditPartial(from, to);
-					mapperToAuditFull(from, to);
+					<xsl:call-template name="mapperAttribute">
+						<xsl:with-param name="attributes" select="jpa:attributes"/>
+						<xsl:with-param name="acc" select="false()"/>
+						<xsl:with-param name="audit" select="true()"/>
+					</xsl:call-template>
 					}
 					public static void mapperTo<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> from, <xsl:value-of select="$name"/> to){
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:basic">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:one-to-many">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:many-to-many">
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
-					</xsl:for-each>
-					//mapper embedded
+					<xsl:call-template name="mapperAttribute">
+						<xsl:with-param name="attributes" select="jpa:attributes"/>
+						<xsl:with-param name="acc" select="true()"/>
+						<xsl:with-param name="police" select="true()"/>
+					</xsl:call-template>
+					}
 					<xsl:for-each select="jpa:attributes/jpa:embedded">
 						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
-						<xsl:variable name="name" select="j:accName(@name)"/>
-						<xsl:variable name="type" select="j:accName($embedded/@class)"/>
-						<xsl:value-of select="$type"/> _<xsl:value-of select="@name"/> = mapperTo<xsl:value-of select="$type"/>( from.get<xsl:value-of select="$name"/>() );
-						to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
+						<xsl:variable name="name" select="j:accName($embedded/@class)"/>
+						public static void mapperTo<xsl:value-of select="$embedded/@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="$embedded/@class"/> to){
+						<xsl:call-template name="mapperAttribute">
+							<xsl:with-param name="attributes" select="$embedded/jpa:attributes"/>
+							<xsl:with-param name="acc" select="false()"/>
+						</xsl:call-template>
+						}
+						public static void mapperTo<xsl:value-of select="$name"/>(<xsl:value-of select="$embedded/@class"/> from, <xsl:value-of select="$name"/> to){
+						<xsl:call-template name="mapperAttribute">
+							<xsl:with-param name="attributes" select="$embedded/jpa:attributes"/>
+							<xsl:with-param name="acc" select="true()"/>
+						</xsl:call-template>
+						}
 					</xsl:for-each>
-					mapperToPoliceBase(from, to);
-					}
+					
+					
 					
 					<xsl:call-template name="methodMapperTo">
 						<xsl:with-param name="classFrom" select="@class"/>
@@ -101,25 +82,53 @@
 							<xsl:with-param name="classFrom" select="$embedded/@class"/>
 						</xsl:call-template>
 					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:embedded">
-						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
-						
-						
-						
-						
-						
-						
-					</xsl:for-each>
 					}
 				</x:file>
 			</xsl:for-each>
 		</x:files>
 	</xsl:template>
-	<xsl:template name="importClass">		
+	<xsl:template name="mapperAttribute">		
 		<xsl:param name="attributes" select="jpa:attributes"/>
-		
-		
-		
+		<xsl:param name="acc" select="true()"/>
+		<xsl:param name="police" select="false()"/>
+		<xsl:param name="audit" select="false()"/>
+		<xsl:for-each select="$attributes/jpa:id">
+			<xsl:variable name="name" select="j:accName(@name)"/>
+			to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+		</xsl:for-each>
+		<xsl:for-each select="$attributes/jpa:basic">
+			<xsl:variable name="name" select="j:accName(@name)"/>
+			to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+		</xsl:for-each>
+		<xsl:for-each select="$attributes/jpa:one-to-many">
+			<xsl:variable name="name" select="j:accName(@name)"/>
+			//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+		</xsl:for-each>
+		<xsl:for-each select="$attributes/jpa:many-to-many">
+			<xsl:variable name="name" select="j:accName(@name)"/>
+			//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
+		</xsl:for-each>
+		<xsl:for-each select="$attributes/jpa:embedded">
+			<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+			<xsl:variable name="name" select="j:accName(@name)"/>
+			<xsl:if test="$acc = false()">
+				<xsl:variable name="type" select="$embedded/@class"/>
+				<xsl:value-of select="$type"/> _<xsl:value-of select="@name"/> = mapperTo<xsl:value-of select="$type"/>( from.get<xsl:value-of select="$name"/>() );
+				to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
+			</xsl:if>
+			<xsl:if test="$acc = true()">
+				<xsl:variable name="type" select="j:accName($embedded/@class)"/>
+				<xsl:value-of select="$type"/> _<xsl:value-of select="@name"/> = mapperTo<xsl:value-of select="$type"/>( from.get<xsl:value-of select="$name"/>() );
+				to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
+			</xsl:if>
+		</xsl:for-each>
+		<xsl:if test="$police = true()">
+			mapperToPoliceBase(from, to);
+		</xsl:if>
+		<xsl:if test="$audit = true()">
+			//mapperToAuditPartial(from, to);
+			mapperToAuditFull(from, to);
+		</xsl:if>
 	</xsl:template>
 	
 	

@@ -29,27 +29,21 @@
 		<x:file name="{$var}.js" dir="." layer="ctrl">
 			/*Implementacion Base*/
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http) {
-			$scope.param = {
-			type<xsl:value-of select="$name"/>: [
-			{code: 'A', value: 'MODE A'},
-			{code: 'B', value: 'MODE B'}
-			],
-			status<xsl:value-of select="$name"/>: [
-			{code: 'ACT', value: 'ACTIVO'},
-			{code: 'INAC', value: 'INACTIVO'}
-			]
-			};
+			var paramValue = new ParamHandler($http, [
+			'status:GLOBAL:STATUS',
+			'type:GLOBAL:TYPE'
+			]);
+			$scope.param = paramValue.internal();
 			$scope.part = new PartHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
 			var <xsl:value-of select="$var"/>Serv = new ServHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
-			var <xsl:value-of select="$var"/>Data = $scope.D0 = {
+			var <xsl:value-of select="$var"/>Data = $scope.data = {
 			filter: {},
 			list: [],
-			value: {},
-			select: undefined,
+			current: undefined,
 			parent: undefined
 			};
-			var <xsl:value-of select="$var"/>Panel = $scope.P0 = new PanelHandler();
-			var <xsl:value-of select="$var"/>Filter = $scope.F0 = {
+			var <xsl:value-of select="$var"/>Panel = $scope.panel = new PanelHandler();
+			var <xsl:value-of select="$var"/>Filter = $scope.filter = {
 			apply: function () {
 			console.log('filter--->', <xsl:value-of select="$var"/>Data.filter, '-->', <xsl:value-of select="$var"/>Serv.filter);
 			var call = $http.post(<xsl:value-of select="$var"/>Serv.filter, <xsl:value-of select="$var"/>Data.filter);
@@ -66,54 +60,59 @@
 			}
 			};
 
-			var <xsl:value-of select="$var"/>List = $scope.L0 = {
+			var <xsl:value-of select="$var"/>List = $scope.table = {
 			select: function (value) {
-			if (<xsl:value-of select="$var"/>Data.select &amp;&amp; <xsl:value-of select="$var"/>Data.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
-			<xsl:value-of select="$var"/>Data.select = undefined;
+			if (<xsl:value-of select="$var"/>Data.current &amp;&amp; <xsl:value-of select="$var"/>Data.current.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
+			<xsl:value-of select="$var"/>Data.current = undefined;
 			} else {
-			<xsl:value-of select="$var"/>Data.select = angular.copy(value, {});
+			<xsl:value-of select="$var"/>Data.current = angular.copy(value, {});
 			}
 			},
 			selected: function (value) {
-			return <xsl:value-of select="$var"/>Data.select &amp;&amp; <xsl:value-of select="$var"/>Data.select.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>;
+			return <xsl:value-of select="$var"/>Data.current &amp;&amp; <xsl:value-of select="$var"/>Data.current.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>;
 			},
 			isOneSelect: function () {
-			return <xsl:value-of select="$var"/>Data.select &amp;&amp; true;
+			return <xsl:value-of select="$var"/>Data.current &amp;&amp; true;
 			},
 			isMoreSelect: function () {
-			return <xsl:value-of select="$var"/>Data.select &amp;&amp; true;
+			return <xsl:value-of select="$var"/>Data.current &amp;&amp; true;
 			}
 			};
-			var <xsl:value-of select="$var"/>Action = $scope.A0 = {
+			var <xsl:value-of select="$var"/>Action = $scope.action = {
+			open: function (name) {
+			if (name === 'create') {
+			<xsl:value-of select="$var"/>Data.current = angular.copy(value, {});
+			}
+			<xsl:value-of select="$var"/>Panel.open(name);
+			},
 			cancel: function (name) {
-			console.log('cancel--->', <xsl:value-of select="$var"/>Data.value || <xsl:value-of select="$var"/>Data.select);
-			<xsl:value-of select="$var"/>Data.value = {};
-			<xsl:value-of select="$var"/>Data.select = undefined;
+			console.log('cancel--->', <xsl:value-of select="$var"/>Data.current || <xsl:value-of select="$var"/>Data.current);
+			<xsl:value-of select="$var"/>Data.current = undefined;
 			<xsl:value-of select="$var"/>Panel.close(name);
 			},
 			create: function () {
-			console.log('create--->', <xsl:value-of select="$var"/>Data.value, '-->', <xsl:value-of select="$var"/>Serv.create);
-			var call = $http.post(<xsl:value-of select="$var"/>Serv.create, <xsl:value-of select="$var"/>Data.value);
+			console.log('create--->', <xsl:value-of select="$var"/>Data.current, '-->', <xsl:value-of select="$var"/>Serv.create);
+			var call = $http.post(<xsl:value-of select="$var"/>Serv.create, <xsl:value-of select="$var"/>Data.current);
 			call.success(function () {
-			<xsl:value-of select="$var"/>Data.value = {};
+			<xsl:value-of select="$var"/>Data.current = {};
 			<xsl:value-of select="$var"/>Filter.apply();
 			<xsl:value-of select="$var"/>Panel.close('create');
 			});
 			},
 			update: function () {
-			console.log('update--->', <xsl:value-of select="$var"/>Data.select, '-->', <xsl:value-of select="$var"/>Serv.update);
-			var call = $http.post(<xsl:value-of select="$var"/>Serv.update, <xsl:value-of select="$var"/>Data.select);
+			console.log('update--->', <xsl:value-of select="$var"/>Data.current, '-->', <xsl:value-of select="$var"/>Serv.update);
+			var call = $http.post(<xsl:value-of select="$var"/>Serv.update, <xsl:value-of select="$var"/>Data.current);
 			call.success(function () {
-			<xsl:value-of select="$var"/>Data.select = undefined;
+			<xsl:value-of select="$var"/>Data.current = undefined;
 			<xsl:value-of select="$var"/>Filter.apply();
 			<xsl:value-of select="$var"/>Panel.close('update');
 			});
 			},
 			remove: function () {
-			console.log('remove--->', <xsl:value-of select="$var"/>Data.select, '-->', <xsl:value-of select="$var"/>Serv.remove);
-			var call = $http.post(<xsl:value-of select="$var"/>Serv.remove, <xsl:value-of select="$var"/>Data.select);
+			console.log('remove--->', <xsl:value-of select="$var"/>Data.current, '-->', <xsl:value-of select="$var"/>Serv.remove);
+			var call = $http.post(<xsl:value-of select="$var"/>Serv.remove, <xsl:value-of select="$var"/>Data.current);
 			call.success(function () {
-			<xsl:value-of select="$var"/>Data.select = undefined;
+			<xsl:value-of select="$var"/>Data.current = undefined;
 			<xsl:value-of select="$var"/>Filter.apply();
 			<xsl:value-of select="$var"/>Panel.close('delete');
 			});
@@ -124,24 +123,19 @@
 		<x:file name="{$var}_handler.js" dir="." layer="ctrl">
 			/*Implementacion Handler*/
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http) {
-			$scope.param = {
-			type<xsl:value-of select="$name"/>: [
-			{code: 'A', value: 'MODE A'},
-			{code: 'B', value: 'MODE B'}
-			],
-			status<xsl:value-of select="$name"/>: [
-			{code: 'ACT', value: 'ACTIVO'},
-			{code: 'INAC', value: 'INACTIVO'}
-			]
-			};
+			var paramValue = new ParamHandler($http, [
+			'status:GLOBAL:STATUS',
+			'type:GLOBAL:TYPE'
+			]);
+			$scope.param = paramValue.internal();
 			$scope.part = new PartHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
-			var <xsl:value-of select="$var"/>Panel = $scope.P0 = new PanelHandler();
+			var <xsl:value-of select="$var"/>Panel = $scope.panel = new PanelHandler();
 			var <xsl:value-of select="$var"/>Serv = new ServHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
 			var <xsl:value-of select="$var"/>Data = new DataHandler('id<xsl:value-of select="$name"/>');
-			$scope.D0 = <xsl:value-of select="$var"/>Data.internal();
-			var <xsl:value-of select="$var"/>Filter = $scope.F0 = new FilterHandler($http, <xsl:value-of select="$var"/>Serv.filter, <xsl:value-of select="$var"/>Data);
-			var <xsl:value-of select="$var"/>List = $scope.L0 = new ListHandler(<xsl:value-of select="$var"/>Data);
-			var <xsl:value-of select="$var"/>Action = $scope.A0 = new ActionHandler($http, <xsl:value-of select="$var"/>Data, <xsl:value-of select="$var"/>Serv, <xsl:value-of select="$var"/>Filter, <xsl:value-of select="$var"/>Panel);
+			var <xsl:value-of select="$var"/>Internal = $scope.data = <xsl:value-of select="$var"/>Data.internal();
+			var <xsl:value-of select="$var"/>Filter = $scope.filter = new FilterHandler($http, <xsl:value-of select="$var"/>Serv.filter, <xsl:value-of select="$var"/>Data);
+			var <xsl:value-of select="$var"/>List = $scope.table = new ListHandler(<xsl:value-of select="$var"/>Data);
+			var <xsl:value-of select="$var"/>Action = $scope.action = new ActionHandler($http, <xsl:value-of select="$var"/>Data, <xsl:value-of select="$var"/>Serv, <xsl:value-of select="$var"/>Filter, <xsl:value-of select="$var"/>Panel);
 			//Flag DEBUG - REMOVE THIS BLOCK
 			<xsl:value-of select="$var"/>Panel.debug = true;
 			<xsl:value-of select="$var"/>Serv.debug = true;

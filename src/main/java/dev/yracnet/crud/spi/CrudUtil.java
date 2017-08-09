@@ -111,6 +111,11 @@ public class CrudUtil {
 		return name + " ";
 	}
 
+	public static String varTypeNode(Object node) {
+		System.out.println("node--->" + node);
+		return "zz";
+	}
+
 	public static String template(String name) {
 		return "<" + name + ">";
 	}
