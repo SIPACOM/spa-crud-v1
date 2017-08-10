@@ -14,19 +14,23 @@
 	<xsl:param name="mod">seg</xsl:param>
 	<xsl:param name="include"/>
 	<xsl:param name="exclude"/>
+	<xsl:key name="_embeddable" match="/jpa:entity-mappings/jpa:embeddable" use="@id"/>
 	<xsl:template match="/">
 		<x:files>
 			<xsl:apply-templates/>
 		</x:files>
 	</xsl:template>
 	<xsl:template match="jpa:entity[j:process(@class, $include, $exclude)]">
-		<xsl:variable name="name" select="j:className(@class)"/>		
-		<xsl:variable name="var" select="j:varName($name)"/>	
+		<xsl:variable name="name" select="j:className(@class)"/>
+		<xsl:variable name="var" select="j:varName($name)"/>
+		<xsl:variable name="object" select="concat('_', $var)"/>
 		<x:file name="new.html" dir="{$var}" layer="part">
 			<div>
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="form"/>
+					<xsl:apply-templates mode="form">
+						<xsl:with-param name="object" select="concat($object, 'Item')"/>
+					</xsl:apply-templates>
 				</xsl:for-each>	
 			</div>
 		</x:file>
@@ -34,7 +38,19 @@
 			<div>
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="form"/>
+					<xsl:apply-templates mode="form">
+						<xsl:with-param name="object" select="concat($object, 'Item')"/>
+					</xsl:apply-templates>
+				</xsl:for-each>	
+			</div>
+		</x:file>
+		<x:file name="form.html" dir="{$var}" layer="part">
+			<div>
+				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
+				<xsl:for-each select="jpa:attributes">
+					<xsl:apply-templates mode="form">
+						<xsl:with-param name="object" select="concat($object, 'Item')"/>
+					</xsl:apply-templates>
 				</xsl:for-each>	
 			</div>
 		</x:file>
@@ -42,49 +58,30 @@
 			<div>
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="view"/>
+					<xsl:apply-templates mode="view">
+						<xsl:with-param name="object" select="concat($object, 'Item')"/>
+					</xsl:apply-templates>
 				</xsl:for-each>	
 			</div>
 		</x:file>
 		<x:file name="filter.html" dir="{$var}" layer="part">		
 			<div>
 				<xsl:attribute name="uni-grid">{type:'table'}</xsl:attribute>
-				<xsl:for-each select="jpa:attributes/jpa:id">
-					<xsl:call-template name="filter"/>
-				</xsl:for-each>
-				<xsl:for-each select="jpa:attributes/jpa:basic">
-					<xsl:call-template name="filter"/>
+				<xsl:for-each select="jpa:attributes">
+					<xsl:apply-templates mode="filter">
+						<xsl:with-param name="object" select="concat($object, 'Filter')"/>
+					</xsl:apply-templates>
 				</xsl:for-each>
 			</div>
 		</x:file>
 		<x:file name="table.html" dir="{$var}" layer="part">
-			<table>
-				<xsl:attribute name="uni-table">{select: '_toggle', selected: '_in'}</xsl:attribute>
-				<tr>
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<th i18n="{@name}" width="5%">
-							<xsl:value-of select="j:literal(@name)"/>
-						</th>
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:basic">
-						<th i18n="{@name}">
-							<xsl:value-of select="j:literal(@name)"/>
-						</th>
-					</xsl:for-each>
-				</tr>
-				<tr ng-repeat="row in _list">
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<td>{{row.<xsl:value-of select="@name"/>}}</td>
-					</xsl:for-each>
-					<xsl:for-each select="jpa:attributes/jpa:basic">
-						<td>{{row.<xsl:value-of select="@name"/>}}</td>
-					</xsl:for-each>
-				</tr>
-			</table>
+			<xsl:call-template name="table">
+				<xsl:with-param name="object" select="concat($object, 'List')"/>
+			</xsl:call-template>
 		</x:file>
 		<x:file name="lov.html" dir="{$var}" layer="part">
 			<div>	
-				<div click-apply="_clickApply()" click-clear="_clickClear()" config="_filter.$config">
+				<div click-apply="_clickApply()" click-clear="_clickClear()" config="{$object}.$config">
 					<xsl:attribute name="uni-pager">{open:true}</xsl:attribute>
 					<div>
 						<xsl:attribute name="uni-grid">{type:'table'}</xsl:attribute>
@@ -133,15 +130,80 @@
 				</table>
 			</div>
 		</x:file>
+		<xsl:for-each select="jpa:attributes/jpa:embedded">
+			<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+			<x:file name="form.html" dir="{$var}/{@name}" layer="part">
+				<div>
+					<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
+					<xsl:for-each select="$embedded/jpa:attributes">
+						<xsl:apply-templates mode="form">
+							<xsl:with-param name="object" select="concat($object, 'Item')"/>
+						</xsl:apply-templates>
+					</xsl:for-each>	
+				</div>
+			</x:file>
+			<x:file name="view.html" dir="{$var}/{@name}" layer="part">
+				<div>
+					<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
+					<xsl:for-each select="$embedded/jpa:attributes">
+						<xsl:apply-templates mode="view">
+							<xsl:with-param name="object" select="concat($object, 'Item')"/>
+						</xsl:apply-templates>
+					</xsl:for-each>	
+				</div>
+			</x:file>
+			<x:file name="table.html" dir="{$var}/{@name}" layer="part">
+				<xsl:call-template name="table">
+					<xsl:with-param name="object" select="concat($object, 'List')"/>
+					<xsl:with-param name="attributes" select="$embedded/jpa:attributes"/>
+				</xsl:call-template>
+			</x:file>
+		</xsl:for-each>
+	</xsl:template>
+	<xsl:template name="table">
+		<xsl:param name="object" select="'_list'"/>
+		<xsl:param name="attributes" select="jpa:attributes"/>
+		<table>
+			<xsl:attribute name="uni-table">{select: '_toggle', selected: '_in'}</xsl:attribute>
+			<tr>
+				<xsl:for-each select="$attributes/jpa:id">
+					<th i18n="{@name}" width="5%">
+						<xsl:value-of select="j:literal(@name)"/>
+					</th>
+				</xsl:for-each>
+				<xsl:for-each select="$attributes/jpa:basic">
+					<th i18n="{@name}">
+						<xsl:value-of select="j:literal(@name)"/>
+					</th>
+				</xsl:for-each>
+			</tr>
+			<tr ng-repeat="row in {$object}">
+				<xsl:for-each select="$attributes/jpa:id">
+					<td>{{row.<xsl:value-of select="@name"/>}}</td>
+				</xsl:for-each>
+				<xsl:for-each select="$attributes/jpa:basic">
+					<td>{{row.<xsl:value-of select="@name"/>}}</td>
+				</xsl:for-each>
+			</tr>
+		</table>
 	</xsl:template>
 	<xsl:template name="form" mode="form" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
+		<xsl:param name="object" select="'_value'"/>
 		<xsl:choose>
 			<xsl:when test="name(.) = 'jpa:basic'">
 				<xsl:choose>
+					<xsl:when test="j:isSelect(@name)">
+						<xsl:call-template name="label"/>
+						<select ng-model="{$object}.{@name}" uni-option="param.{j:varParam(@name)}">
+							<xsl:if test="jpa:column/@nullable='false'">
+								<xsl:attribute name="required">true</xsl:attribute>
+							</xsl:if>
+						</select>
+					</xsl:when>
 					<xsl:when test="jpa:column/@length > 99">
 						<br/>
 						<xsl:call-template name="label"/>
-						<textarea col="10" ng-model="_value.{@name}" maxlength="{jpa:column/@length}">
+						<textarea col="10" ng-model="{$object}.{@name}" maxlength="{jpa:column/@length}">
 							<xsl:if test="jpa:column/@nullable='false'">
 								<xsl:attribute name="required">true</xsl:attribute>
 							</xsl:if>
@@ -150,7 +212,7 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:call-template name="label"/>
-						<input ng-model="_value.{@name}" maxlength="{jpa:column/@length}">
+						<input ng-model="{$object}.{@name}" maxlength="{jpa:column/@length}">
 							<xsl:if test="jpa:column/@nullable='false'">
 								<xsl:attribute name="required">true</xsl:attribute>
 							</xsl:if>
@@ -163,7 +225,6 @@
 						</input>
 					</xsl:otherwise>
 				</xsl:choose>
-				
 			</xsl:when>
 			<xsl:otherwise>
 				_COMMENT_START_
@@ -171,7 +232,7 @@
 				_COMMENT_END_
 				_COMMENT_START_
 				<xsl:call-template name="label"/>
-				<input ng-model="_value.{@name}">
+				<input ng-model="{$object}.{@name}">
 					<xsl:if test="jpa:column/@nullable='false'">
 						<xsl:attribute name="required">true</xsl:attribute>
 					</xsl:if>
@@ -181,14 +242,15 @@
 		</xsl:choose> 
 	</xsl:template>
 	<xsl:template name="view" mode="view" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
+		<xsl:param name="object" select="'_value'"/>
 		<xsl:choose>
 			<xsl:when test="name(.) = 'jpa:basic' and jpa:column/@length > 99">
 				<xsl:call-template name="label"/>
-				<textarea ng-value="_filter.{@name}" readonly="true"></textarea>
+				<textarea ng-value="{$object}.{@name}" readonly="true"></textarea>
 			</xsl:when>
 			<xsl:when test="name(.) = 'jpa:basic'">
 				<xsl:call-template name="label"/>
-				<input ng-value="_filter.{@name}" readonly="true"/>
+				<input ng-value="{$object}.{@name}" readonly="true"/>
 			</xsl:when>
 			<xsl:otherwise>
 				_COMMENT_START_
@@ -196,16 +258,17 @@
 				_COMMENT_END_
 				_COMMENT_START_
 				<xsl:call-template name="label"/>
-				<input ng-value="_filter.{@name}" readonly="true"/>
+				<input ng-value="{$object}.{@name}" readonly="true"/>
 				_COMMENT_END_
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
 	<xsl:template name="filter" mode="filter" match="jpa:id|jpa:basic|jpa:one-to-many|jpa:many-to-many">
+		<xsl:param name="object" select="'_filter'"/>
 		<xsl:choose>
 			<xsl:when test="name(.) = 'jpa:basic' or name(.) = 'jpa:id'">
 				<xsl:call-template name="label"/>
-				<input uni-filter="" ng-model="_filter.{@name}"/>
+				<input uni-filter="" ng-model="{$object}.{@name}"/>
 			</xsl:when>
 			<xsl:otherwise>
 				_COMMENT_START_
@@ -213,7 +276,7 @@
 				_COMMENT_END_
 				_COMMENT_START_
 				<xsl:call-template name="label"/>
-				<input uni-filter="" ng-model="_filter.{@name}"/>
+				<input uni-filter="" ng-model="{$object}.{@name}"/>
 				_COMMENT_END_
 			</xsl:otherwise>
 		</xsl:choose>

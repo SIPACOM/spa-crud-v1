@@ -14,6 +14,9 @@ public class JPACrud {
 		crud.addJPAModel("../manager-model/manager-model-report/src/main/design/report-v2.jpa");
 		crud.setPackageBase("bo.union.plataform.manager.report");
 		CrudUtil.addRemovePrefix("Rpt");
+		//crud.include("RptParam");
+		//crud.include("RptData");
+		//crud.include("RptOutput");
 		crud.include("RptReport");
 		//crud.include("RptReportOut");
 		//crud.include("RptReportParam");
@@ -22,12 +25,13 @@ public class JPACrud {
 		//crud.addXSLT("dto.xsl");
 		//crud.addXSLT("mapper.xsl");
 //		crud.addXSLT("impl.xsl");
-//		crud.addXSLT("ctrl.xsl");
-//		crud.addXSLT("view.xsl");
+		crud.addXSLT("ctrl.xsl");
+		crud.addXSLT("view.xsl");
 		crud.addXSLT("part.xsl");
 //		crud.addXSLT("rest.xsl");
 //		crud.addXSLT("conf.xsl");
 		crud.setForceOverwriter(true);
+		crud.setTemploral(true);
 		CrudProcess process = new CrudProcess();
 		process.process(crud);
 	}

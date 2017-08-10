@@ -35,6 +35,7 @@
 			]);
 			$scope.param = paramValue.internal();
 			$scope.part = new PartHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
+			$scope.view = new ViewHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
 			var <xsl:value-of select="$var"/>Serv = new ServHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
 			var <xsl:value-of select="$var"/>Data = $scope.data = {
 			filter: {},

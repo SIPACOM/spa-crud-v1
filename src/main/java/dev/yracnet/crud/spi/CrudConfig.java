@@ -18,6 +18,7 @@ public class CrudConfig {
 	private final File root;
 	private String template = "entel";
 	private boolean forceOverwriter = false;
+	private boolean temporal = false;
 	private String packageBase = "dev.yracnet.entel";
 	private final List<String> include = new ArrayList<>();
 	private final List<String> exclude = new ArrayList<>();
@@ -138,7 +139,16 @@ public class CrudConfig {
 		} else if ("entity".endsWith(layer)) {
 			mask = "$path/$project/$project-impl/src/main/java/$dir/$name";
 		}
-		return mask.replace("$path", path).replace("$project", project).replace("$dir", dir).replace("$name", name);
+		mask = mask.replace("$path", path);
+		mask = mask.replace("$project", project);
+		mask = mask.replace("$dir", dir);
+		if (temporal) {
+			mask = mask.replace("$name", "temp/" + name);
+		} else {
+			mask = mask.replace("$name", name);
+		}
+		mask = mask.replace("//", "/");
+		return mask;
 	}
 
 	public File createTempFile(String fileName) {
@@ -172,6 +182,14 @@ public class CrudConfig {
 
 	public List<String> getExclude() {
 		return exclude;
+	}
+
+	public void setTemploral(boolean b) {
+		temporal = b;
+	}
+
+	public boolean getTemploral() {
+		return temporal;
 	}
 
 }

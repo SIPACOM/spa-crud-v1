@@ -51,6 +51,13 @@ public class CrudUtil {
 	public static String className(String name, String sufix) {
 		return removePrefix(name) + sufix;
 	}
+	
+	public static String varParam(String name){
+		if(name.startsWith("id")){
+			name = name.substring(2);
+		}
+		return varName(name);
+	}
 
 	public static String varName(String name) {
 		if (name == null || name.isEmpty()) {
@@ -78,6 +85,14 @@ public class CrudUtil {
 
 	public static String varType(String name, String template, String enumType) {
 		return varType(name, template, enumType, null);
+	}
+
+	public static boolean isSelect(String name) {
+		return isSelect(name, "jpa:basic");
+	}
+
+	public static boolean isSelect(String name, String type) {
+		return !"jpa:id".equals(type) && name.startsWith("id");
 	}
 
 	public static String varType(String name, String template, String enumType, String node) {
