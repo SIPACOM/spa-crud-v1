@@ -24,7 +24,7 @@
 				<x:file name="{$name}Mapper.java" dir="{j:packagePath($packageBase)}/mapper" layer="impl">
 					import java.util.List;
 					import java.util.ArrayList;
-			  import <xsl:value-of select="$packageLib"/>.mapper.PoliceMapper;
+					import <xsl:value-of select="$packageLib"/>.mapper.PoliceMapper;
 					
 					<xsl:call-template name="importClass">
 						<xsl:with-param name="classFrom" select="@class"/>
@@ -38,42 +38,86 @@
 					public final class <xsl:value-of select="$name"/>Mapper extends PoliceMapper {
 					
 					
+					//Basic Return
+					public static <xsl:value-of select="@class"/> mapperTo<xsl:value-of select="$name"/>Entity(<xsl:value-of select="$name"/> from){
+					<xsl:value-of select="@class"/> to = new <xsl:value-of select="@class"/>();
+					mapperTo<xsl:value-of select="$name"/>Entity(from, to);
+					return to;
+					}
+					public static <xsl:value-of select="$name"/> mapperTo<xsl:value-of select="$name"/>Model(<xsl:value-of select="@class"/> from){
+					<xsl:value-of select="$name"/> to = new <xsl:value-of select="$name"/>();
+					mapperTo<xsl:value-of select="$name"/>Model(from, to);
+					return to;
+					}
 					
+					//List Return
+					public static List &lt;<xsl:value-of select="@class"/>&gt; mapperTo<xsl:value-of select="$name"/>EntityList(List &lt;<xsl:value-of select="$name"/>&gt; fromList){
+					List &lt;<xsl:value-of select="@class"/>&gt; toList = new ArrayList();
+					mapperTo<xsl:value-of select="$name"/>EntityList(fromList, toList);
+					return toList;
+					}
+					public static List &lt;<xsl:value-of select="$name"/>&gt; mapperTo<xsl:value-of select="@name"/>ModelList(List &lt;<xsl:value-of select="@class"/>&gt; fromList){
+					List &lt;<xsl:value-of select="$name"/>&gt; toList = new ArrayList();
+					mapperTo<xsl:value-of select="$name"/>ModelList(fromList, toList);
+					return toList;
+					}
 					
+					//List
+					public static void mapperTo<xsl:value-of select="$name"/>EntityList(List &lt;<xsl:value-of select="$name"/>&gt; fromList, List &lt;<xsl:value-of select="@class"/>&gt; toList){
+					fromList.forEach(from -> {
+					<xsl:value-of select="@class"/> to = mapperTo<xsl:value-of select="$name"/>Entity(from);
+					toList.add(to);
+					});
+					}
+					public static void mapperTo<xsl:value-of select="$name"/>ModelList(List &lt;<xsl:value-of select="@class"/>&gt; fromList, List &lt;<xsl:value-of select="$name"/>&gt; toList){
+					fromList.forEach(from -> {
+					<xsl:value-of select="$name"/> to = mapperTo<xsl:value-of select="$name"/>Model(from);
+					toList.add(to);
+					});
+					}
 					
-					public static void mapperTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
-					<xsl:call-template name="mapperAttribute">
+					//Basic
+					public static void mapperTo<xsl:value-of select="$name"/>Entity(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
+					<xsl:call-template name="mapperBasicAttribute">
 						<xsl:with-param name="attributes" select="jpa:attributes"/>
-						<xsl:with-param name="acc" select="false()"/>
-						<xsl:with-param name="audit" select="true()"/>
+						<xsl:with-param name="policeEntity" select="true()"/>
 					</xsl:call-template>
 					}
-					public static void mapperTo<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> from, <xsl:value-of select="$name"/> to){
-					<xsl:call-template name="mapperAttribute">
+					public static void mapperTo<xsl:value-of select="$name"/>Model(<xsl:value-of select="@class"/> from, <xsl:value-of select="$name"/> to){
+					<xsl:call-template name="mapperBasicAttribute">
 						<xsl:with-param name="attributes" select="jpa:attributes"/>
-						<xsl:with-param name="acc" select="true()"/>
-						<xsl:with-param name="police" select="true()"/>
+						<xsl:with-param name="policeModel" select="true()"/>
 					</xsl:call-template>
 					}
+					
+					//Object
+					public static void mapperTo<xsl:value-of select="$name"/>Subentity(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
+					<xsl:call-template name="mapperObjectAttribute">
+						<xsl:with-param name="attributes" select="jpa:attributes"/>
+					</xsl:call-template>
+					}
+					public static void mapperTo<xsl:value-of select="$name"/>Submodel(<xsl:value-of select="@class"/> from, <xsl:value-of select="$name"/> to){
+					<xsl:call-template name="mapperObjectAttribute">
+						<xsl:with-param name="attributes" select="jpa:attributes"/>
+					</xsl:call-template>
+					}
+					<!--
 					<xsl:for-each select="jpa:attributes/jpa:embedded">
 						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
 						<xsl:variable name="name" select="j:accName($embedded/@class)"/>
-						public static void mapperTo<xsl:value-of select="$embedded/@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="$embedded/@class"/> to){
+						public static void mapperTo<xsl:value-of select="$name"/>Entity(<xsl:value-of select="$name"/> from, <xsl:value-of select="$embedded/@class"/> to){
 						<xsl:call-template name="mapperAttribute">
 							<xsl:with-param name="attributes" select="$embedded/jpa:attributes"/>
 							<xsl:with-param name="acc" select="false()"/>
 						</xsl:call-template>
 						}
-						public static void mapperTo<xsl:value-of select="$name"/>(<xsl:value-of select="$embedded/@class"/> from, <xsl:value-of select="$name"/> to){
+						public static void mapperTo<xsl:value-of select="$name"/>Model(<xsl:value-of select="$embedded/@class"/> from, <xsl:value-of select="$name"/> to){
 						<xsl:call-template name="mapperAttribute">
 							<xsl:with-param name="attributes" select="$embedded/jpa:attributes"/>
 							<xsl:with-param name="acc" select="true()"/>
 						</xsl:call-template>
 						}
 					</xsl:for-each>
-					
-					
-					
 					<xsl:call-template name="methodMapperTo">
 						<xsl:with-param name="classFrom" select="@class"/>
 					</xsl:call-template>
@@ -83,16 +127,17 @@
 							<xsl:with-param name="classFrom" select="$embedded/@class"/>
 						</xsl:call-template>
 					</xsl:for-each>
+					-->
 					}
 				</x:file>
 			</xsl:for-each>
 		</x:files>
 	</xsl:template>
-	<xsl:template name="mapperAttribute">		
+	
+	<xsl:template name="mapperBasicAttribute">		
 		<xsl:param name="attributes" select="jpa:attributes"/>
-		<xsl:param name="acc" select="true()"/>
-		<xsl:param name="police" select="false()"/>
-		<xsl:param name="audit" select="false()"/>
+		<xsl:param name="policeEntity" select="false()"/>
+		<xsl:param name="policeModel" select="false()"/>
 		<xsl:for-each select="$attributes/jpa:id">
 			<xsl:variable name="name" select="j:accName(@name)"/>
 			to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
@@ -101,6 +146,16 @@
 			<xsl:variable name="name" select="j:accName(@name)"/>
 			to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
 		</xsl:for-each>
+		<xsl:if test="$policeModel = true()">
+			mapperToPoliceModel(from, to);
+		</xsl:if>
+		<xsl:if test="$policeEntity = true()">
+			mapperToPoliceEntity(from, to);
+		</xsl:if>
+	</xsl:template>
+	
+	<xsl:template name="mapperObjectAttribute">		
+		<xsl:param name="attributes" select="jpa:attributes"/>
 		<xsl:for-each select="$attributes/jpa:one-to-many">
 			<xsl:variable name="name" select="j:accName(@name)"/>
 			//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
@@ -109,6 +164,7 @@
 			<xsl:variable name="name" select="j:accName(@name)"/>
 			//to.set<xsl:value-of select="$name"/>(from.get<xsl:value-of select="$name"/>());
 		</xsl:for-each>
+		<!--
 		<xsl:for-each select="$attributes/jpa:embedded">
 			<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
 			<xsl:variable name="name" select="j:accName(@name)"/>
@@ -123,12 +179,7 @@
 				to.set<xsl:value-of select="$name"/>( _<xsl:value-of select="@name"/> );
 			</xsl:if>
 		</xsl:for-each>
-		<xsl:if test="$police = true()">
-			mapperToPoliceModel(from, to);
-		</xsl:if>
-		<xsl:if test="$audit = true()">
-			mapperToPoliceEntity(from, to);
-		</xsl:if>
+		-->
 	</xsl:template>
 	
 	

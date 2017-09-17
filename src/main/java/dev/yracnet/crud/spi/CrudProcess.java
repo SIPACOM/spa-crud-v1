@@ -122,6 +122,8 @@ public class CrudProcess {
 		content = content.replaceAll("_AND_", "&&");
 		content = content.replaceAll("_COMMENT_START_", "<!--");
 		content = content.replaceAll("_COMMENT_END_", "-->");
+		content = content.replaceAll("_COMMENT_START_", "<");
+		content = content.replaceAll("_COMMENT_END_", ">");
 
 		content = format.doFormat(content, name);
 
