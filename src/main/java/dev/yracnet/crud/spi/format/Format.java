@@ -15,5 +15,5 @@ public interface Format {
 
 	public String doFormat(String code, String name) throws CrudException;
 
-	public String doFormatJava(String code) throws CrudException;
+	public String doFormatJava(String code) throws Exception;
 }

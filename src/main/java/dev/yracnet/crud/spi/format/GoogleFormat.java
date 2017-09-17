@@ -6,7 +6,6 @@
 package dev.yracnet.crud.spi.format;
 
 import com.google.googlejavaformat.java.Formatter;
-import com.google.googlejavaformat.java.FormatterException;
 import com.google.googlejavaformat.java.JavaFormatterOptions;
 import dev.yracnet.crud.spi.CrudException;
 
@@ -18,21 +17,23 @@ public class GoogleFormat implements Format {
 
 	@Override
 	public String doFormat(String code, String name) throws CrudException {
-		if (name.endsWith(".java")) {
-			code = doFormatJava(code);
+		try {
+			if (name.endsWith(".java")) {
+				code = doFormatJava(code);
+			}
+		} catch (CrudException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new CrudException(e.getLocalizedMessage(), e);
 		}
 		return code;
 	}
 
 	@Override
-	public String doFormatJava(String code) {
+	public String doFormatJava(String code) throws Exception {
 		JavaFormatterOptions options = JavaFormatterOptions.builder().style(JavaFormatterOptions.Style.AOSP).build();
 		Formatter formatter = new Formatter(options);
-		try {
-			code = formatter.formatSource(code);
-		} catch (FormatterException e) {
-			System.out.println("Error: " + e.getLocalizedMessage());
-		}
+		code = formatter.formatSource(code);
 		return code;
 	}
 

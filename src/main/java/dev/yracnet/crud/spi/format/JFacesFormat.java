@@ -11,10 +11,9 @@ import java.util.Map;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.ToolFactory;
 import org.eclipse.jdt.core.formatter.CodeFormatter;
-import org.eclipse.jface.text.BadLocationException;
+import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
-import org.eclipse.text.edits.MalformedTreeException;
 import org.eclipse.text.edits.TextEdit;
 
 /**
@@ -30,7 +29,12 @@ public class JFacesFormat implements Format {
 		options.put(JavaCore.COMPILER_SOURCE, "1.8");
 		options.put(JavaCore.COMPILER_COMPLIANCE, "1.8");
 		options.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, "1.8");
-		options.put("org.eclipse.jdt.core.formatter.indentation.size", "10");
+		options.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_IMPORTS, "1");
+		options.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_AFTER_IMPORTS, "1");
+		options.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_FIRST_CLASS_BODY_DECLARATION, "1");
+		options.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_METHOD, "1");
+		options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "1");
+		options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
 
 		//super.initCfg(cfg);
 		this.formatter = ToolFactory.createCodeFormatter(options);
@@ -38,13 +42,21 @@ public class JFacesFormat implements Format {
 
 	@Override
 	public String doFormat(String code, String name) throws CrudException {
-		if (name.endsWith(".java")) {
-			code = doFormatJava(code);
+		try {
+			if (name.endsWith(".java")) {
+				code = doFormatJava(code);
+			}
+		} catch (CrudException e) {
+			throw e;
+		} catch (Exception e) {
+			System.out.println("Error Format: " + e.getLocalizedMessage());
+			throw new CrudException(e.getLocalizedMessage(), e);
 		}
 		return code;
 	}
 
-	public String doFormatJava(String code) throws CrudException {
+	@Override
+	public String doFormatJava(String code) throws Exception {
 		TextEdit te;
 		try {
 			te = this.formatter.format(CodeFormatter.K_COMPILATION_UNIT, code, 0, code.length(), 0, "\n");
@@ -55,11 +67,7 @@ public class JFacesFormat implements Format {
 			return null;
 		}
 		IDocument doc = new Document(code);
-		try {
-			te.apply(doc);
-		} catch (BadLocationException | MalformedTreeException e) {
-			throw new CrudException(e.getLocalizedMessage(), e);
-		}
+		te.apply(doc);
 		String formattedCode = doc.get();
 		if (code.equals(formattedCode)) {
 			return null;
