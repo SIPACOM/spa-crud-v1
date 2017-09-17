@@ -20,6 +20,7 @@ public class CrudConfig {
 	private boolean forceOverwriter = false;
 	private boolean temporal = false;
 	private String packageBase = "dev.yracnet.entel";
+	private String packageLib = "dev.yracnet";
 	private final List<String> include = new ArrayList<>();
 	private final List<String> exclude = new ArrayList<>();
 	private final List<File> jpaModel = new ArrayList<>();
@@ -30,6 +31,15 @@ public class CrudConfig {
 		this.app = app;
 		this.mod = mod;
 		this.project = app + "-" + mod;
+		this.basePath = this.path + "/" + this.project;
+		root = new File(this.basePath);
+	}
+
+	public CrudConfig(String path, String project) {
+		this.path = path;
+		this.app = "";
+		this.mod = project;
+		this.project = project;
 		this.basePath = this.path + "/" + this.project;
 		root = new File(this.basePath);
 	}
@@ -190,6 +200,14 @@ public class CrudConfig {
 
 	public boolean getTemploral() {
 		return temporal;
+	}
+
+	public String getPackageLib() {
+		return packageLib;
+	}
+
+	public void setPackageLib(String packageLib) {
+		this.packageLib = packageLib;
 	}
 
 }

@@ -11,6 +11,24 @@
 			<artifactId>xalan</artifactId>
 			<version>2.7.2</version>
 		</dependency>
+		<dependency>
+			<groupId>net.revelc.code.formatter</groupId>
+			<artifactId>jdt-core</artifactId>
+			<type>jar</type>
+			<version>2.0.1</version>
+		</dependency>
+		<!--
+		<dependency>
+			<groupId>net.revelc.code.formatter</groupId>
+			<artifactId>formatter-maven-plugin</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+		-->
+		<dependency>
+			<groupId>com.google.googlejavaformat</groupId>
+			<artifactId>google-java-format</artifactId>
+			<version>1.4</version>
+		</dependency>
 	</dependencies>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

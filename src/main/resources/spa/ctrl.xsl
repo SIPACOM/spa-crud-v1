@@ -82,7 +82,7 @@
 			var <xsl:value-of select="$var"/>Action = $scope.action = {
 			open: function (name) {
 			if (name === 'create') {
-			<xsl:value-of select="$var"/>Data.current = angular.copy(value, {});
+			<xsl:value-of select="$var"/>Data.current = {};
 			}
 			<xsl:value-of select="$var"/>Panel.open(name);
 			},

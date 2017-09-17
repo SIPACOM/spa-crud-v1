@@ -1,5 +1,7 @@
 package dev.yracnet.crud.spi;
 
+import dev.yracnet.crud.spi.format.Format;
+import dev.yracnet.crud.spi.format.JFacesFormat;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -7,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Map;
@@ -14,9 +17,6 @@ import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-//import javax.xml.parsers.DocumentBuilderFactory;
-//import javax.xml.parsers.DocumentBuilder;
-//import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -60,6 +60,7 @@ public class CrudProcess {
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			transformer.setParameter("packageBase", crud.getPackageBase());
+			transformer.setParameter("packageLib", crud.getPackageLib());
 			transformer.setParameter("project", crud.getProject());
 			transformer.setParameter("path", crud.getPath());
 			transformer.setParameter("app", crud.getApp());
@@ -83,16 +84,17 @@ public class CrudProcess {
 			Document document = documentBuilder.parse(xml);
 			Element element = document.getDocumentElement();
 			NodeList fileList = element.getChildNodes();
+			Format format = new JFacesFormat();
 			int len = fileList.getLength();
 			for (int i = 0; i < len; i++) {
-				processResult(crud, fileList.item(i));
+				processResult(crud, fileList.item(i), format);
 			}
 		} catch (IOException | ParserConfigurationException | SAXException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void processResult(CrudConfig crud, Node xml) {
+	private void processResult(CrudConfig crud, Node xml, Format format) {
 		if (xml.getNodeType() != 1) {
 			return;
 		}
@@ -120,20 +122,23 @@ public class CrudProcess {
 		content = content.replaceAll("_AND_", "&&");
 		content = content.replaceAll("_COMMENT_START_", "<!--");
 		content = content.replaceAll("_COMMENT_END_", "-->");
-		
+
+		content = format.doFormat(content, name);
+
 		try {
 			File file = new File(realPath);
 			File parent = file.getParentFile();
 			if (!parent.exists()) {
 				parent.mkdirs();
 			}
+			Path pathFile = Paths.get(realPath);
 			if (file.exists() == false) {
 				System.out.println("WRITE--->" + realPath);
-				Files.write(Paths.get(realPath), content.getBytes("UTF-8"), StandardOpenOption.CREATE);
+				Files.write(pathFile, content.getBytes("UTF-8"), StandardOpenOption.CREATE);
 			} else if (crud.getForceOverwriter() == true) {
 				System.out.println("OVER WRITE--->" + realPath);
 				file.delete();
-				Files.write(Paths.get(realPath), content.getBytes("UTF-8"), StandardOpenOption.CREATE);
+				Files.write(pathFile, content.getBytes("UTF-8"), StandardOpenOption.CREATE);
 			} else {
 				System.out.println("WRITE STOP--->" + realPath);
 			}
