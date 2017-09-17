@@ -51,7 +51,7 @@
 								click-apply="filter.apply()" 
 								click-clear="filter.clear()">
 				<div ng-include="part.filter" ng-replace="context">
-					<xsl:attribute name="ng-replace">{_filter: 'data.filter'}</xsl:attribute>
+					Load Filter Part
 				</div>
 				<header>
 					<div uni-action="">
@@ -68,8 +68,8 @@
 					</div>
 				</header>
 			</div>
-			<div ng-include="part.table">
-				<xsl:attribute name="ng-replace">{_list: 'data.list', _toggle: 'table.toggle', _in: 'table.in'}</xsl:attribute>
+			<div ng-include="part.table" ng-replace="context">
+				Load Table Part
 			</div>
 		</x:file>
 		<x:file name="{$var}/create.html" dir="." layer="view">		
@@ -77,8 +77,8 @@
 				<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'primary'}</xsl:attribute>
 				<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
 				<form name="filterNew" uni-validator="">
-					<div ng-include="part.new">
-						<xsl:attribute name="ng-replace">{_value: 'data.current'}</xsl:attribute>
+					<div ng-include="part.form" ng-replace="context">
+						Load Form Part
 					</div>
 				</form>
 				<footer>
@@ -103,8 +103,8 @@
 					</xsl:for-each>
 				</header>
 				<form name="filterEdit" uni-validator="">
-					<div ng-include="part.edit">
-						<xsl:attribute name="ng-replace">{_value: 'data.current'}</xsl:attribute>
+					<div ng-include="part.form" ng-replace="context">
+						Load Form Part
 					</div>
 				</form>
 				<footer>
@@ -128,8 +128,8 @@
 						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
 					</xsl:for-each>
 				</header>
-				<div ng-include="part.info">
-					<xsl:attribute name="ng-replace">{_value: 'data.current'}</xsl:attribute>
+				<div ng-include="part.info" ng-replace="context">
+					Load Info Part
 				</div>
 				<footer>
 					<button uni-badge=""
@@ -151,8 +151,8 @@
 						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
 					</xsl:for-each>
 				</header>
-				<div ng-include="part.info">
-					<xsl:attribute name="ng-replace">{_value: 'data.current'}</xsl:attribute>
+				<div ng-include="part.info" ng-replace="context">
+					Load Info Part
 				</div>
 				<footer>
 					<button uni-badge="">
@@ -171,8 +171,8 @@
 						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
 					</xsl:for-each>
 				</header>
-				<div ng-include="part.police">
-					<xsl:attribute name="ng-replace">{_value: 'data.current'}</xsl:attribute>
+				<div ng-include="part.police" ng-replace="context">
+					Load Police Part
 				</div>
 				<footer>
 					<button uni-badge="">

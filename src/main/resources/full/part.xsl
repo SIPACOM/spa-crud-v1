@@ -29,7 +29,7 @@
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
 					<xsl:apply-templates mode="form">
-						<xsl:with-param name="object" select="concat($object, 'Item')"/>
+						<xsl:with-param name="object" select="concat($object, 'Object')"/>
 					</xsl:apply-templates>
 				</xsl:for-each>	
 			</div>
@@ -39,7 +39,7 @@
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 				<xsl:for-each select="jpa:attributes">
 					<xsl:apply-templates mode="view">
-						<xsl:with-param name="object" select="concat($object, 'Item')"/>
+						<xsl:with-param name="object" select="concat($object, 'Object')"/>
 					</xsl:apply-templates>
 				</xsl:for-each>	
 			</div>
@@ -47,6 +47,19 @@
 		<x:file name="filter.html" dir="{$var}" layer="part">		
 			<div>
 				<xsl:attribute name="uni-grid">{type:'table'}</xsl:attribute>
+				<!--
+				<xsl:for-each select="jpa:attributes/jpa:id">
+					<xsl:apply-templates mode="filter">
+						<xsl:with-param name="object" select="concat($object, 'Filter')"/>
+					</xsl:apply-templates>
+				</xsl:for-each>
+				<xsl:for-each select="jpa:attributes/jpa:basic">
+					<xsl:apply-templates mode="filter">
+						<xsl:with-param name="object" select="concat($object, 'Filter')"/>
+					</xsl:apply-templates>
+				</xsl:for-each>
+				-->
+				
 				<xsl:for-each select="jpa:attributes">
 					<xsl:apply-templates mode="filter">
 						<xsl:with-param name="object" select="concat($object, 'Filter')"/>
@@ -66,7 +79,7 @@
 					<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 					<xsl:for-each select="$embedded/jpa:attributes">
 						<xsl:apply-templates mode="form">
-							<xsl:with-param name="object" select="concat($object, 'Item')"/>
+							<xsl:with-param name="object" select="concat($object, 'Object')"/>
 						</xsl:apply-templates>
 					</xsl:for-each>	
 				</div>
@@ -76,7 +89,7 @@
 					<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
 					<xsl:for-each select="$embedded/jpa:attributes">
 						<xsl:apply-templates mode="view">
-							<xsl:with-param name="object" select="concat($object, 'Item')"/>
+							<xsl:with-param name="object" select="concat($object, 'Object')"/>
 						</xsl:apply-templates>
 					</xsl:for-each>	
 				</div>
@@ -97,7 +110,7 @@
 			<tr>
 				<xsl:for-each select="$attributes/jpa:id">
 					<th i18n="{@name}" width="5%">
-						<xsl:value-of select="j:literal(@name)"/>
+						Id
 					</th>
 				</xsl:for-each>
 				<xsl:for-each select="$attributes/jpa:basic">
@@ -129,7 +142,7 @@
 							</xsl:if>
 						</select>
 					</xsl:when>
-					<xsl:when test="jpa:column/@length > 99">
+					<xsl:when test="jpa:column/@length > 100">
 						<br/>
 						<xsl:call-template name="label"/>
 						<textarea col="10" ng-model="{$object}.{@name}" maxlength="{jpa:column/@length}">
@@ -173,7 +186,7 @@
 	<xsl:template name="view" mode="view" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
 		<xsl:param name="object" select="'_value'"/>
 		<xsl:choose>
-			<xsl:when test="name(.) = 'jpa:basic' and jpa:column/@length > 99">
+			<xsl:when test="name(.) = 'jpa:basic' and jpa:column/@length > 100">
 				<xsl:call-template name="label"/>
 				<textarea ng-value="{$object}.{@name}" readonly="true"></textarea>
 			</xsl:when>
