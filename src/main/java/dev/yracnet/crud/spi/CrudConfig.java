@@ -125,19 +125,19 @@ public class CrudConfig {
 	public String getRealPath(String layer, String dir, String name) {
 		String mask = "$path/$project/error/$name";
 		if ("ctrl".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/ctrl/$name";
+			mask = "$path/$project/$project-view/src/main/webapp/ctrl/$name";
 		} else if ("view".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/view/$name";
+			mask = "$path/$project/$project-view/src/main/webapp/view/$name";
 		} else if ("conf".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$name";
+			mask = "$path/$project/$project-view/src/main/webapp/WEB-INF/$name";
 		} else if ("web-inf".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$dir/$name";
+			mask = "$path/$project/$project-view/src/main/webapp/WEB-INF/$dir/$name";
 		} else if ("meta-inf".endsWith(layer)) {
 			mask = "$path/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
 		} else if ("part".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/part/$dir/$name";
+			mask = "$path/$project/$project-view/src/main/webapp/part/$dir/$name";
 		} else if ("rest".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/java/$dir/$name";
+			mask = "$path/$project/$project-view/src/main/java/$dir/$name";
 		} else if ("serv".endsWith(layer)) {
 			mask = "$path/$project/$project-serv/src/main/java/$dir/$name";
 		} else if ("data".endsWith(layer)) {

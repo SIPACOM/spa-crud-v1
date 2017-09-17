@@ -59,11 +59,10 @@
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated, name(.))"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				@XmlElement<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">(type=Date.class)</xsl:if>
-				private <xsl:value-of select="$type"/> <xsl:value-of select="$attr"/>;
+				private <xsl:value-of select="$type"/> 
+				<xsl:value-of select="$attr"/>;
 			</xsl:for-each>	
-			
-			
-				<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
+			<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated, name(.))"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
@@ -73,38 +72,42 @@
 				public void set<xsl:value-of select="j:accName(@name)"/>(<xsl:value-of select="$type"/> value){
 				<xsl:value-of select="$attr"/> = value;
 				}
-			</xsl:for-each>	
-			public void validateNew(ValidationException validate) throws ValidationException {
+			</xsl:for-each>
+			public void validateForSelected(ValidationException validate) {
+			<xsl:for-each select="jpa:attributes/jpa:id">
+				validate.isNullOrEmpty(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
+			</xsl:for-each>
+			//validate(validate);
+			}	
+			public void validateForCreated(ValidationException validate) {
 			<xsl:for-each select="jpa:attributes/jpa:id">
 				validate.isNotNull(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
 			</xsl:for-each>
 			validate(validate);
 			}
-			public void validateEdit(ValidationException validate) throws ValidationException {
+			public void validateForUpdated(ValidationException validate) {
 			<xsl:for-each select="jpa:attributes/jpa:id">
 				validate.isNullOrEmpty(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
 			</xsl:for-each>
 			validate(validate);
 			}
-			public void validate(ValidationException validate) throws ValidationException {
+			public void validate(ValidationException validate) {
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
 				<xsl:variable name="column" select="./jpa:column"/>
-				<xsl:if test="$column/@nullable='false'">
-					<xsl:choose>
-						<xsl:when test="name(.) = 'jpa:id'">
-						</xsl:when>
-						<xsl:when test="@attribute-type = 'String'">
-							validate.isNullOrNotTextOrLength(<xsl:value-of select="$attr"/>, <xsl:value-of select="j:eval($column/@min, 3)"/>, <xsl:value-of select="j:eval($column/@length, $column/@max, 50)"/>, "<xsl:value-of select="j:literal($attr)"/>");
-						</xsl:when>
-						<xsl:otherwise>
-							validate.isNullOrEmpty(<xsl:value-of select="$attr"/>, "<xsl:value-of select="j:literal($attr)"/>");
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
+				
+				<xsl:choose>
+					<xsl:when test="name(.) = 'jpa:id'">
+					</xsl:when>
+					<xsl:when test="@attribute-type = 'String'">
+						<xsl:if test="$column/@nullable='true'">//</xsl:if>validate.isNullOrNotTextOrLength(<xsl:value-of select="$attr"/>, <xsl:value-of select="j:eval($column/@min, 3)"/>, <xsl:value-of select="j:eval($column/@length, $column/@max, 50)"/>, "<xsl:value-of select="j:literal($attr)"/>");
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:if test="$column/@nullable='true'">//</xsl:if>validate.isNullOrEmpty(<xsl:value-of select="$attr"/>, "<xsl:value-of select="j:literal($attr)"/>");
+					</xsl:otherwise>
+				</xsl:choose>
 			</xsl:for-each>
-			validate.throwException();
 			}
 			}
 		</x:file>
@@ -147,8 +150,12 @@
 				public void set<xsl:value-of select="j:accName(@name)"/>(<xsl:value-of select="$type"/> value){
 				<xsl:value-of select="$attr"/> = value;
 				}
-			</xsl:for-each>	
-			public void validate(ValidationException validate) throws ValidationException {
+			</xsl:for-each>
+			public void validateForList(ValidationException validate) throws ValidationException {
+			<xsl:for-each select="jpa:attributes/jpa:basic[j:process(@name)]">
+				<xsl:variable name="attr" select="j:varName(@name)"/>		
+				//validate.isNullOrEmpty(<xsl:value-of select="$attr"/>, "<xsl:value-of select="j:literal($attr)"/>");
+			</xsl:for-each>
 			}
 			}
 		</x:file>

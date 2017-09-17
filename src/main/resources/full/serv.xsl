@@ -39,6 +39,7 @@
 				<xsl:variable name="type" select="j:varType($name, 'List')"/>
 				public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter) throws ServiceException;
 				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException;
+				public <xsl:value-of select="$name"/> refresh<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException;
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException;
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException;
 				}
