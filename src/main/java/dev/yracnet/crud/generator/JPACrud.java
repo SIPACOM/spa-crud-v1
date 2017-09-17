@@ -15,13 +15,13 @@ public class JPACrud {
 		crud.addJPAModel("par-store/src/main/java/design/v0.jpa");
 		crud.setPackageLib("bo.gob.minsalud");
 		crud.setPackageBase("bo.gob.minsalud.param");
-		CrudUtil.addRemovePrefix("Par");
+		//CrudUtil.addRemovePrefix("Par");
 		//crud.include("RptParam");
 		//crud.include("RptData");
 		//crud.include("RptOutput");
 		crud.include("ParDomain");
-		//crud.include("RptReportOut");
-		//crud.include("RptReportParam");
+		crud.include("ParParam");
+		crud.include("ParValue");
 		crud.setTemplate("full");
 		crud.addXSLT("serv.xsl");
 		crud.addXSLT("dto.xsl");

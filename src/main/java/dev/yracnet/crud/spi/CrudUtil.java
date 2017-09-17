@@ -34,8 +34,9 @@ public class CrudUtil {
 	public static String removePrefix(String name) {
 		if (name != null) {
 			for (String prefix : prefixList) {
+				System.out.println(prefix + "-->" + name + " - " + name.matches("^" + prefix + "[A-Z].*"));
 				if (name.matches("^" + prefix + "[A-Z].*")) {
-					name = name.replace(prefix, "");
+					name = name.replaceAll("^" + prefix, "");
 					break;
 				}
 			}
@@ -50,9 +51,9 @@ public class CrudUtil {
 	public static String className(String name, String sufix) {
 		return removePrefix(name) + sufix;
 	}
-	
-	public static String varParam(String name){
-		if(name.startsWith("id")){
+
+	public static String varParam(String name) {
+		if (name.startsWith("id")) {
 			name = name.substring(2);
 		}
 		return varName(name);
@@ -281,5 +282,12 @@ public class CrudUtil {
 		translateMap.put("value", "valor");
 		translateMap.put("type", "tipo");
 		translateMap.put("status", "estado");
+	}
+
+	public static void main(String arg[]) {
+		String names[] = {"ParParam", "Param", "param"};
+		for (String name : names) {
+			System.out.println("-->" + removePrefix(name));
+		}
 	}
 }

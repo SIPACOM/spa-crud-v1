@@ -24,7 +24,7 @@ public class JFacesFormat implements Format {
 
 	private final CodeFormatter formatter;
 
-	public JFacesFormat() { //, ConfigurationSource cfg
+	public JFacesFormat() {
 		Map<String, String> options = new HashMap<>();
 		options.put(JavaCore.COMPILER_SOURCE, "1.8");
 		options.put(JavaCore.COMPILER_COMPLIANCE, "1.8");
@@ -35,8 +35,6 @@ public class JFacesFormat implements Format {
 		options.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_METHOD, "1");
 		options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "1");
 		options.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
-
-		//super.initCfg(cfg);
 		this.formatter = ToolFactory.createCodeFormatter(options);
 	}
 
