@@ -24,26 +24,6 @@
 		<xsl:variable name="name" select="j:className(@class)"/>
 		<xsl:variable name="var" select="j:varName($name)"/>
 		<xsl:variable name="object" select="concat('_', $var)"/>
-		<x:file name="new.html" dir="{$var}" layer="part">
-			<div>
-				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
-				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="form">
-						<xsl:with-param name="object" select="concat($object, 'Item')"/>
-					</xsl:apply-templates>
-				</xsl:for-each>	
-			</div>
-		</x:file>
-		<x:file name="edit.html" dir="{$var}" layer="part">
-			<div>
-				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>
-				<xsl:for-each select="jpa:attributes">
-					<xsl:apply-templates mode="form">
-						<xsl:with-param name="object" select="concat($object, 'Item')"/>
-					</xsl:apply-templates>
-				</xsl:for-each>	
-			</div>
-		</x:file>
 		<x:file name="form.html" dir="{$var}" layer="part">
 			<div>
 				<xsl:attribute name="uni-grid">{cols:[2,4]}</xsl:attribute>

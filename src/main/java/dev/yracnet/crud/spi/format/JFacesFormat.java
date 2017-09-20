@@ -15,6 +15,7 @@ import org.eclipse.jdt.core.formatter.DefaultCodeFormatterConstants;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.text.edits.TextEdit;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 /**
  *
@@ -47,10 +48,13 @@ public class JFacesFormat implements Format {
 	@Override
 	public String doFormat(String code, String name) throws CrudException {
 		try {
+			System.out.println("--->" + name);
 			if (name.endsWith(".java")) {
 				code = doFormatJava(code);
 			} else if (name.endsWith(".js")) {
 				code = doFormatJS(code);
+			} else if (name.endsWith(".html")) {
+				code = doFormatHTML(code);
 			}
 		} catch (CrudException e) {
 			throw e;
@@ -95,6 +99,15 @@ public class JFacesFormat implements Format {
 		te.apply(doc);
 		String formattedCode = doc.get();
 		return formattedCode;
+	}
+
+	public String doFormatHTML(String code) throws Exception {
+		try {
+			code = FormatXML.format(code, Boolean.TRUE);
+		} catch (Exception e) {
+			return "//ERROR: " + e.getLocalizedMessage() + "\n" + code;
+		}
+		return code;
 	}
 
 }

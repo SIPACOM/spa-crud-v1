@@ -76,14 +76,14 @@
 			<div>
 				<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'primary'}</xsl:attribute>
 				<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
-				<form name="filterNew" uni-validator="">
-					<div uni-part="part.new">
+				<form name="formNew" uni-validator="">
+					<div uni-part="part.form">
 						<xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute>
 					</div>
 				</form>
 				<footer>
 					<button uni-badge="" uni-confirm="create">
-						<xsl:attribute name="ng-click">filterNew.$validate() _AND_ action.create()</xsl:attribute>
+						<xsl:attribute name="ng-click">formNew.$validate() _AND_ action.create()</xsl:attribute>
 						Guardar
 					</button>
 					<button uni-badge="" uni-confirm="cancel">
@@ -102,14 +102,14 @@
 						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
 					</xsl:for-each>
 				</header>
-				<form name="filterEdit" uni-validator="">
-					<div uni-part="part.edit">
+				<form name="formEdit" uni-validator="">
+					<div uni-part="part.form">
 						<xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute>
 					</div>
 				</form>
 				<footer>
 					<button uni-badge="" uni-confirm="update">
-						<xsl:attribute name="ng-click">filterEdit.$validate() _AND_ action.update()</xsl:attribute>
+						<xsl:attribute name="ng-click">formEdit.$validate() _AND_ action.update()</xsl:attribute>
 						Actualizar
 					</button>
 					<button uni-badge="" uni-confirm="cancel">
