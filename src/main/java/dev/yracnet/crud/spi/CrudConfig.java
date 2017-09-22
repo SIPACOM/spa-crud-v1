@@ -136,6 +136,8 @@ public class CrudConfig {
 			mask = "$path/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
 		} else if ("part".endsWith(layer)) {
 			mask = "$path/$project/$project-web/src/main/webapp/part/$dir/$name";
+		} else if ("test".endsWith(layer)) {
+			mask = "$path/$project/$project-web/src/test/java/$dir/$name";
 		} else if ("rest".endsWith(layer)) {
 			mask = "$path/$project/$project-web/src/main/java/$dir/$name";
 		} else if ("serv".endsWith(layer)) {
