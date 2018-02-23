@@ -14,7 +14,6 @@ public class CrudConfig {
 	private final String app;
 	private final String mod;
 	private final String project;
-	private final String basePath;
 	private final File root;
 	private String template = "entel";
 	private boolean forceOverwriter = false;
@@ -26,6 +25,14 @@ public class CrudConfig {
 	private final List<File> jpaModel = new ArrayList<>();
 	private final List<File> xsltFile = new ArrayList<>();
 
+	public CrudConfig(String path, String name) {
+		this.path = path;
+		this.app = "????APP???";
+		this.mod = "???MOD????";
+		this.project = name;
+		root = new File(this.path);
+	}
+/*
 	public CrudConfig(String path, String app, String mod) {
 		this.path = path;
 		this.app = app;
@@ -43,7 +50,7 @@ public class CrudConfig {
 		this.basePath = this.path + "/" + this.project;
 		root = new File(this.basePath);
 	}
-
+*/
 	public String getPath() {
 		return path;
 	}
@@ -62,7 +69,7 @@ public class CrudConfig {
 
 	public void addJPAModel(String jpaName) {
 		if (!jpaName.startsWith("file:/")) {
-			jpaName = "file://" + basePath + "/" + jpaName;
+			jpaName = "file://" + path + "/" + jpaName;
 		}
 		System.out.println("addJPAModel: " + jpaName);
 		try {
@@ -125,32 +132,36 @@ public class CrudConfig {
 	public String getRealPath(String layer, String dir, String name) {
 		String mask = "$path/$project/error/$name";
 		if ("ctrl".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/ctrl/$name";
+			mask = "$path/$project-view/src/main/webapp/ctrl/$name";
 		} else if ("view".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/view/$name";
+			mask = "$path/$project-view/src/main/webapp/view/$name";
 		} else if ("conf".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$name";
+			mask = "$path/$project-view/src/main/webapp/WEB-INF/$name";
 		} else if ("web-inf".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/WEB-INF/$dir/$name";
+			mask = "$path/$project-view/src/main/webapp/WEB-INF/$dir/$name";
 		} else if ("meta-inf".endsWith(layer)) {
-			mask = "$path/$project/$project-impl/src/main/resources/META-INF/$dir/$name";
+			mask = "$path/$project-impl/src/main/resources/META-INF/$dir/$name";
 		} else if ("part".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/webapp/part/$dir/$name";
+			mask = "$path/$project-view/src/main/webapp/part/$dir/$name";
 		} else if ("test".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/test/java/$dir/$name";
+			mask = "$path/$project-view/src/test/java/$dir/$name";
 		} else if ("rest".endsWith(layer)) {
-			mask = "$path/$project/$project-web/src/main/java/$dir/$name";
+			mask = "$path/$project-view/src/main/java/$dir/$name";
 		} else if ("serv".endsWith(layer)) {
-			mask = "$path/$project/$project-serv/src/main/java/$dir/$name";
+			mask = "$path/$project-serv/src/main/java/$dir/$name";
 		} else if ("data".endsWith(layer)) {
-			mask = "$path/$project/$project-serv/src/main/java/$dir/data/$name";
+			mask = "$path/$project-serv/src/main/java/$dir/data/$name";
 		} else if ("filter".endsWith(layer)) {
-			mask = "$path/$project/$project-serv/src/main/java/$dir/filter/$name";
+			mask = "$path/$project-serv/src/main/java/$dir/filter/$name";
 		} else if ("impl".endsWith(layer)) {
-			mask = "$path/$project/$project-impl/src/main/java/$dir/$name";
+			mask = "$path/$project-impl/src/main/java/$dir/$name";
 		} else if ("entity".endsWith(layer)) {
-			mask = "$path/$project/$project-impl/src/main/java/$dir/$name";
+			//mask = "$path/$project-impl/src/main/java/$dir/$name";
+			mask = "$path/$project-local/src/main/java/$dir/$name";
+		} else if ("local".endsWith(layer)) {
+			mask = "$path/$project-local/src/main/java/$dir/$name";
 		}
+		
 		mask = mask.replace("$path", path);
 		mask = mask.replace("$project", project);
 		mask = mask.replace("$dir", dir);
@@ -211,5 +222,4 @@ public class CrudConfig {
 	public void setPackageLib(String packageLib) {
 		this.packageLib = packageLib;
 	}
-
 }
