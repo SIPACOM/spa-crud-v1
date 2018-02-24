@@ -41,12 +41,15 @@
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<x:file name="{$name}.java" dir="{j:packagePath($packageBase,'data')}" layer="serv">
+			import java.util.Date;
 			import java.io.Serializable;
 			import bo.union.police.PoliceBase;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
 			import javax.xml.bind.annotation.XmlElement;
+			import bo.union.lang.ValidationException;
+			import bo.union.police.PoliceBase;
 			@XmlRootElement
 			@XmlAccessorType(XmlAccessType.NONE)
 			public class <xsl:value-of select="j:classExtend($name, $superClass)"/>  implements Serializable {
@@ -55,8 +58,8 @@
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated, name(.))"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
-				@XmlElement
-				private <xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">java.util.</xsl:if><xsl:value-of select="$type"/> <xsl:value-of select="$attr"/>;
+				@XmlElement<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">(type=Date.class)</xsl:if>
+				private <xsl:value-of select="$type"/> <xsl:value-of select="$attr"/>;
 			</xsl:for-each>	
 			
 			
@@ -64,13 +67,45 @@
 			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
 				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated, name(.))"/>
 				<xsl:variable name="attr" select="j:varName(@name)"/>		
-				public <xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">java.util.</xsl:if><xsl:value-of select="$type"/> get<xsl:value-of select="j:accName(@name)"/>(){
+				public <xsl:value-of select="$type"/> get<xsl:value-of select="j:accName(@name)"/>(){
 				return <xsl:value-of select="$attr"/>;
 				}
-				public void set<xsl:value-of select="j:accName(@name)"/>(<xsl:if test="@attribute-type = 'java.util.Date' or @attribute-type = 'Date'">java.util.</xsl:if><xsl:value-of select="$type"/> value){
+				public void set<xsl:value-of select="j:accName(@name)"/>(<xsl:value-of select="$type"/> value){
 				<xsl:value-of select="$attr"/> = value;
 				}
 			</xsl:for-each>	
+			public void validateNew(ValidationException validate) throws ValidationException {
+			<xsl:for-each select="jpa:attributes/jpa:id">
+				validate.isNotNull(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
+			</xsl:for-each>
+			validate(validate);
+			}
+			public void validateEdit(ValidationException validate) throws ValidationException {
+			<xsl:for-each select="jpa:attributes/jpa:id">
+				validate.isNullOrEmpty(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
+			</xsl:for-each>
+			validate(validate);
+			}
+			public void validate(ValidationException validate) throws ValidationException {
+			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
+				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
+				<xsl:variable name="attr" select="j:varName(@name)"/>		
+				<xsl:variable name="column" select="./jpa:column"/>
+				<xsl:if test="$column/@nullable='false'">
+					<xsl:choose>
+						<xsl:when test="name(.) = 'jpa:id'">
+						</xsl:when>
+						<xsl:when test="@attribute-type = 'String'">
+							validate.isNullOrNotTextOrLength(<xsl:value-of select="$attr"/>, <xsl:value-of select="j:eval($column/@min, 3)"/>, <xsl:value-of select="j:eval($column/@length, $column/@max, 50)"/>, "<xsl:value-of select="j:literal($attr)"/>");
+						</xsl:when>
+						<xsl:otherwise>
+							validate.isNullOrEmpty(<xsl:value-of select="$attr"/>, "<xsl:value-of select="j:literal($attr)"/>");
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:if>
+			</xsl:for-each>
+			validate.throwException();
+			}
 			}
 		</x:file>
 		
@@ -81,10 +116,12 @@
 		<xsl:variable name="superClassId" select="@superclassId"/>
 		<xsl:variable name="superClass" select="../jpa:mapped-superclass[@id = $superClassId]/@class"/>
 		<x:file name="{$name}Ftr.java" dir="{j:packagePath($packageBase,'filter')}" layer="serv">
+			import java.util.Date;
+			import java.io.Serializable;
+			import bo.union.lang.ValidationException;
 			import bo.union.comp.FilterElement;
 			import bo.union.comp.filter.MapFilter;
 			import bo.union.comp.filter.ValueFilter;
-			import java.io.Serializable;
 			import javax.xml.bind.annotation.XmlAccessType;
 			import javax.xml.bind.annotation.XmlAccessorType;
 			import javax.xml.bind.annotation.XmlRootElement;
@@ -111,6 +148,9 @@
 				<xsl:value-of select="$attr"/> = value;
 				}
 			</xsl:for-each>	
+			public void validate(ValidationException validate) throws ValidationException {
+			}
+			}
 		</x:file>
 	</xsl:template>
 	

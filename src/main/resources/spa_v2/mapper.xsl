@@ -54,7 +54,6 @@
 						<xsl:with-param name="police" select="true()"/>
 					</xsl:call-template>
 					}
-					
 					<xsl:for-each select="jpa:attributes/jpa:embedded">
 						<xsl:variable name="embedded" select="key('_embeddable', @connected-class-id)" />
 						<xsl:variable name="name" select="j:accName($embedded/@class)"/>
@@ -71,6 +70,8 @@
 						</xsl:call-template>
 						}
 					</xsl:for-each>
+					
+					
 					
 					<xsl:call-template name="methodMapperTo">
 						<xsl:with-param name="classFrom" select="@class"/>
