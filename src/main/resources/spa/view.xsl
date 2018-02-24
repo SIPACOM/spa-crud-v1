@@ -51,7 +51,8 @@
 								click-apply="filter.apply()" 
 								click-clear="filter.clear()">
 				<div uni-part="part.filter">
-					<xsl:attribute name="replace">{_filter: 'data.filter'}</xsl:attribute>
+					<!--xsl:attribute name="replace">{_filter: 'data.filter'}</xsl:attribute-->
+					<xsl:attribute name="replace">{_<xsl:value-of select="$var"/>Filter: 'data.filter'}</xsl:attribute>
 				</div>
 				<header>
 					<div uni-action="">
@@ -69,7 +70,9 @@
 				</header>
 			</div>
 			<div uni-part="part.table">
-				<xsl:attribute name="replace">{_list: 'data.list', _toggle: 'table.toggle', _in: 'table.in'}</xsl:attribute>
+				<!--xsl:attribute name="replace">{_list: 'data.list', _toggle: 'table.toggle', _in: 'table.in'}</xsl:attribute-->
+				<xsl:attribute name="replace">{_<xsl:value-of select="$var"/>List: 'data.list', _toggle: 'table.toggle', _in: 'table.selected'}</xsl:attribute>
+				
 			</div>
 		</x:file>
 		<x:file name="{$var}/create.html" dir="." layer="view">		
@@ -78,7 +81,8 @@
 				<header i18n="new,{$var}">Nuevo <xsl:value-of select="$name"/></header>
 				<form name="formNew" uni-validator="">
 					<div uni-part="part.form">
-						<xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute>
+						<!--xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute-->
+						<xsl:attribute name="replace">{_<xsl:value-of select="$var"/>Item: 'data.current'}</xsl:attribute>
 					</div>
 				</form>
 				<footer>
@@ -104,7 +108,8 @@
 				</header>
 				<form name="formEdit" uni-validator="">
 					<div uni-part="part.form">
-						<xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute>
+						<!--xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute-->
+      <xsl:attribute name="replace">{_<xsl:value-of select="$var"/>Item: 'data.current'}</xsl:attribute>
 					</div>
 				</form>
 				<footer>
@@ -129,7 +134,8 @@
 					</xsl:for-each>
 				</header>
 				<div uni-part="part.info">
-					<xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute>
+					<!--xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute-->
+     <xsl:attribute name="replace">{_<xsl:value-of select="$var"/>Item: 'data.current'}</xsl:attribute>
 				</div>
 				<footer>
 					<button uni-badge="">
@@ -149,7 +155,8 @@
 					</xsl:for-each>
 				</header>
 				<div uni-part="part.info">
-					<xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute>
+					<!--xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute-->
+     <xsl:attribute name="replace">{_<xsl:value-of select="$var"/>Item: 'data.current'}</xsl:attribute>
 				</div>
 				<footer>
 					<button uni-badge=""
