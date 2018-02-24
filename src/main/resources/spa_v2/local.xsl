@@ -48,44 +48,40 @@
 				public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(MapFilter filter) throws ServiceException{
 				return QFilter.filter(em, <xsl:value-of select="@class"/>.class, filter);
 				}
-				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
+				public <xsl:value-of select="@class"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> value) throws ServiceException{
+				ValidationException validate = new ValidationException("Registro <xsl:value-of select="$name"/>");
 				validateCreate<xsl:value-of select="$name"/>(value, validate);
-				<xsl:value-of select="@class"/> entity = mapperTo<xsl:value-of select="@class"/>(value);
-				em.persist(entity);
-				mapperTo<xsl:value-of select="$name"/>(entity, value);
+				em.persist(value);
 				return value;
 				}
-				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
-				validateUpdate<xsl:value-of select="$name"/>(value, validate);
-				<xsl:value-of select="@class"/> entity = em.getReference(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
-				mapperTo<xsl:value-of select="@class"/>(value, entity);
+				public <xsl:value-of select="@class"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> entity) throws ServiceException{
+				ValidationException validate = new ValidationException("Actualizar <xsl:value-of select="$name"/>");
+				validateUpdate<xsl:value-of select="$name"/>(entity, validate);
 				em.merge(entity);
-				mapperTo<xsl:value-of select="$name"/>(entity, value);
-				return value;
+				return entity;
 				}
-				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
-				validateRemove<xsl:value-of select="$name"/>(value, validate);
-				<xsl:value-of select="@class"/> entity = em.find(<xsl:value-of select="@class"/>.class, value.getId<xsl:value-of select="$name"/>());
+				public <xsl:value-of select="@class"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> entity) throws ServiceException{
+				ValidationException validate = new ValidationException("Eliminar <xsl:value-of select="$name"/>");
+				validateRemove<xsl:value-of select="$name"/>(entity, validate);
 				em.remove(entity);
-				mapperTo<xsl:value-of select="$name"/>(entity, value);
-				return value;
+				return entity;
 				}
-				public void validateCreate<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
+				public void validateCreate<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> value, ValidationException validate) throws ServiceException{
 				validate.isNull(value, "<xsl:value-of select="j:literal($name)"/>");
 				validate.throwException();
-				value.validateNew(validate);
+				validate.isNotNull(value.getId<xsl:value-of select="$name"/>(), "id<xsl:value-of select="$name"/>");
 				validate.throwException();
 				}
-				public void validateUpdate<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
+				public void validateUpdate<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> value, ValidationException validate) throws ServiceException{
 				validate.isNull(value, "<xsl:value-of select="j:literal($name)"/>");
 				validate.throwException();
-				value.validateEdit(validate);
+				validate.isNullOrEmpty(value.getId<xsl:value-of select="$name"/>(), "id<xsl:value-of select="$name"/>");
 				validate.throwException();
 				}
-				public void validateRemove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value, ValidationException validate) throws ServiceException{
+				public void validateRemove<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> value, ValidationException validate) throws ServiceException{
 				validate.isNull(value, "<xsl:value-of select="j:literal($name)"/>");
 				validate.throwException();
-				validate.isNullOrEmpty(value.getId<xsl:value-of select="$name"/>(), "Id");
+				validate.isNullOrEmpty(value.getId<xsl:value-of select="$name"/>(), "id<xsl:value-of select="$name"/>");
 				validate.throwException();
 				}
 				}

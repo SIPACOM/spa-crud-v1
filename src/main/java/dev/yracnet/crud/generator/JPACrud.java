@@ -14,7 +14,7 @@ public class JPACrud {
 		//String mod = "app";
 		String app = "app";
 		String mod = "manager";
-		CrudConfig crud = new CrudConfig(path, "app-manager");
+		CrudConfig crud = new CrudConfig(path, "app-manager", app, mod);
 		//crud.addJPAModel("laika-app-impl/src/main/java/design/v01.jpa");
 		//crud.setPackageLib("dev.laika.app");
 		//crud.setPackageBase("dev.laika.app");

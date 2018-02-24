@@ -25,10 +25,10 @@ public class CrudConfig {
 	private final List<File> jpaModel = new ArrayList<>();
 	private final List<File> xsltFile = new ArrayList<>();
 
-	public CrudConfig(String path, String name) {
+	public CrudConfig(String path, String name, String app, String mod) {
 		this.path = path;
-		this.app = "????APP???";
-		this.mod = "???MOD????";
+		this.app = app;//"????APP???";
+		this.mod = mod;//"???MOD????";
 		this.project = name;
 		root = new File(this.path);
 	}

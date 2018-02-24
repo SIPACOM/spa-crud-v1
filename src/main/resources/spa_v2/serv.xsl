@@ -33,7 +33,6 @@
 				import java.util.List;
 				import bo.union.lang.ServiceException;
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
-				//import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>Ftr;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 				public interface <xsl:value-of select="$name"/>Serv {
 				<xsl:variable name="type" select="j:varType($name, 'List')"/>

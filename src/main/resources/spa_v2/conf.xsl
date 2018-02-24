@@ -27,6 +27,7 @@
 						<view>
 							<id><xsl:value-of select="$var"/></id>
 							<page>/view/<xsl:value-of select="$var"/>.html</page>
+							<java><xsl:value-of select="$packageBase"/>.<xsl:value-of select="$name"/>Rest.java</java>
 							<ctrl>/ctrl/<xsl:value-of select="$var"/>.js</ctrl>
 						</view>
 					</xsl:for-each>
