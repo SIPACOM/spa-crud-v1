@@ -36,10 +36,6 @@
 					</xsl:for-each>
 					public final class <xsl:value-of select="$name"/>Mapper extends PoliceMapper {
 					
-					
-					
-					
-					
 					private static void mapperTo<xsl:value-of select="@class"/>(<xsl:value-of select="$name"/> from, <xsl:value-of select="@class"/> to){
 					<xsl:call-template name="mapperAttribute">
 						<xsl:with-param name="attributes" select="jpa:attributes"/>
@@ -178,7 +174,10 @@
 		return to;
 		}
 		public static <xsl:value-of select="$listFrom"/> mapperTo<xsl:value-of select="$classFrom"/>List(<xsl:value-of select="$listTo"/> fromList){
-		<xsl:value-of select="$listFrom"/> toList = new ArrayList();
+		if (fromList == null) {
+		return null;
+		}
+  <xsl:value-of select="$listFrom"/> toList = new ArrayList();
 		fromList.stream().forEach(from -> {
 		<xsl:value-of select="$classFrom"/> to = mapperTo<xsl:value-of select="$classFrom"/>(from);
 		toList.add(to);

@@ -73,39 +73,7 @@
 				public void set<xsl:value-of select="j:accName(@name)"/>(<xsl:value-of select="$type"/> value){
 				<xsl:value-of select="$attr"/> = value;
 				}
-			</xsl:for-each>	
-			public void validateNew(ValidationException validate) throws ValidationException {
-			<xsl:for-each select="jpa:attributes/jpa:id">
-				validate.isNotNull(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
 			</xsl:for-each>
-			validate(validate);
-			}
-			public void validateEdit(ValidationException validate) throws ValidationException {
-			<xsl:for-each select="jpa:attributes/jpa:id">
-				validate.isNullOrEmpty(<xsl:value-of select="j:varName(@name)"/>, "<xsl:value-of select="j:varName(@name)"/>");
-			</xsl:for-each>
-			validate(validate);
-			}
-			public void validate(ValidationException validate) throws ValidationException {
-			<xsl:for-each select="jpa:attributes/*[j:process(@name)]">
-				<xsl:variable name="type" select="j:varType(@attribute-type, null, ./jpa:enumerated)"/>
-				<xsl:variable name="attr" select="j:varName(@name)"/>		
-				<xsl:variable name="column" select="./jpa:column"/>
-				<xsl:if test="$column/@nullable='false'">
-					<xsl:choose>
-						<xsl:when test="name(.) = 'jpa:id'">
-						</xsl:when>
-						<xsl:when test="@attribute-type = 'String'">
-							validate.isNullOrNotTextOrLength(<xsl:value-of select="$attr"/>, <xsl:value-of select="j:eval($column/@min, 3)"/>, <xsl:value-of select="j:eval($column/@length, $column/@max, 50)"/>, "<xsl:value-of select="j:literal($attr)"/>");
-						</xsl:when>
-						<xsl:otherwise>
-							validate.isNullOrEmpty(<xsl:value-of select="$attr"/>, "<xsl:value-of select="j:literal($attr)"/>");
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:if>
-			</xsl:for-each>
-			validate.throwException();
-			}
 			}
 		</x:file>
 		
