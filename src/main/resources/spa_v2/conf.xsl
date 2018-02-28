@@ -24,26 +24,52 @@
 					<xsl:for-each select="jpa:entity-mappings/jpa:entity">
 						<xsl:variable name="name" select="j:className(@class)"/>		
 						<xsl:variable name="var" select="j:varName($name)"/>
-						<view>
+						<view id="{$var}">
 							<id><xsl:value-of select="$var"/></id>
 							<page>/view/<xsl:value-of select="$var"/>.html</page>
-							<java><xsl:value-of select="$packageBase"/>.<xsl:value-of select="$name"/>Rest.java</java>
+							<java><xsl:value-of select="$packageBase"/>.<xsl:value-of select="$name"/>Rest</java>
 							<ctrl>/ctrl/<xsl:value-of select="$var"/>.js</ctrl>
 						</view>
 					</xsl:for-each>
 					<menu type="GROUP" id="0">
-						<label><xsl:value-of select="j:upper($mod)"/>::<xsl:value-of select="j:upper($mod)"/></label>
+						<label>
+							<xsl:value-of select="j:upper($mod)"/>::<xsl:value-of select="j:upper($mod)"/>
+						</label>
 						<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]">
 							<xsl:variable name="i" select="position()"/>
 							<xsl:variable name="name" select="j:className(@class)"/>		
 							<xsl:variable name="var" select="j:varName($name)"/>
 							<menu type="LINK" mode="TAB" id="{$i}">
-								<label><xsl:value-of select="$name"/></label>
-								<viewId><xsl:value-of select="$var"/></viewId>
+								<label>
+									<xsl:value-of select="$name"/>
+								</label>
+								<viewId>
+									<xsl:value-of select="$var"/>
+								</viewId>
 							</menu>
 						</xsl:for-each>
 					</menu>
 				</module>
+			</x:file>
+			<x:file name="menu.xml" dir="union" layer="web-inf">
+				<menu type="GROUP" id="0">
+					<label>
+						<xsl:value-of select="j:upper($mod)"/>::<xsl:value-of select="j:upper($mod)"/>
+					</label>
+					<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]">
+						<xsl:variable name="i" select="position()"/>
+						<xsl:variable name="name" select="j:className(@class)"/>		
+						<xsl:variable name="var" select="j:varName($name)"/>
+						<menu type="LINK" mode="TAB" id="{$i}">
+							<label>
+								<xsl:value-of select="$name"/>
+							</label>
+							<viewId>
+								<xsl:value-of select="$var"/>
+							</viewId>
+						</menu>
+					</xsl:for-each>
+				</menu>
 			</x:file>
 			<xsl:apply-templates/>
 		</x:files>

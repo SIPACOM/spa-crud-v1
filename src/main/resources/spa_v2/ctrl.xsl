@@ -29,14 +29,15 @@
 		<x:file name="{$var}.js" dir="." layer="ctrl">
 			/*Implementacion Base*/
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http) {
+			const PATH="/manager/<xsl:value-of select="$mod"/>";
 			var paramValue = new ParamHandler($http, [
 			'status:GLOBAL:STATUS',
 			'type:GLOBAL:TYPE'
 			]);
 			$scope.param = paramValue.internal();
-			$scope.part = new PartHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
-			$scope.view = new ViewHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
-			var <xsl:value-of select="$var"/>Serv = new ServHandler('<xsl:value-of select="$mod"/>', '<xsl:value-of select="$var"/>');
+			$scope.part = new PartHandler(PATH, '<xsl:value-of select="$var"/>');
+			$scope.view = new ViewHandler(PATH, '<xsl:value-of select="$var"/>');
+			var <xsl:value-of select="$var"/>Serv = new ServHandler(PATH, '<xsl:value-of select="$var"/>');
 			var <xsl:value-of select="$var"/>Data = $scope.data = {
 			filter: {},
 			list: [],
@@ -121,7 +122,7 @@
 			};
 			});
 		</x:file>
-		<x:file name="{$var}_handler.js" dir="." layer="ctrl">
+		<x:file name="{$var}_handler.js" dir="." layer="ctrl" ignore="true">
 			/*Implementacion Handler*/
 			__app.controller("<xsl:value-of select="$mod"/>$<xsl:value-of select="$var"/>", function ($scope, $http) {
 			var paramValue = new ParamHandler($http, [
