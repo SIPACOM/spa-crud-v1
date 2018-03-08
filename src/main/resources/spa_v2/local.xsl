@@ -48,6 +48,9 @@
     public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(MapFilter filter) throws ServiceException{
     return QFilter.filter(em, <xsl:value-of select="@class"/>.class, filter);
     }
+    public <xsl:value-of select="@class"/> find<xsl:value-of select="$name"/>(<xsl:value-of select="jpa:attributes/jpa:id/@attribute-type"/> id) throws ServiceException{
+    return em.find(<xsl:value-of select="@class"/>.class, id);
+    }
     public <xsl:value-of select="@class"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="@class"/> value) throws ServiceException{
     ValidationException validate = new ValidationException("Registro <xsl:value-of select="$name"/>");
     validateCreate<xsl:value-of select="$name"/>(value, validate);

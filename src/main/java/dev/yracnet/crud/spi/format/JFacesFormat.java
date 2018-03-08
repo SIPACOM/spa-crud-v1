@@ -31,13 +31,33 @@ public class JFacesFormat implements Format {
 		optionsJAVA.put(JavaCore.COMPILER_SOURCE, "1.8");
 		optionsJAVA.put(JavaCore.COMPILER_COMPLIANCE, "1.8");
 		optionsJAVA.put(JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, "1.8");
-		optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_IMPORTS, "1");
-		optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_AFTER_IMPORTS, "1");
-		optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_FIRST_CLASS_BODY_DECLARATION, "1");
-		optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_METHOD, "1");
-		optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "1");
-		optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
+		//optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_IMPORTS, "1");
+		//optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_AFTER_IMPORTS, "1");
+		//optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_FIRST_CLASS_BODY_DECLARATION, "1");
+		//optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_BLANK_LINES_BEFORE_METHOD, "1");
+		//optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "3");
+		//optionsJAVA.put(DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, JavaCore.SPACE);
+
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_before_package", "0");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_after_package", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_before_first_class_body_declaration", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.lineSplit", "150");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.comment.line_length", "100");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.indentation.size", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.tabulation.size", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.continuation_indentation", "2");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.insert_space_after_at_in_annotation", "do not insert");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.compact_else_if", "true");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.number_of_empty_lines_to_preserve", "0");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.comment.format_html", "true");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_before_method", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_between_type_declarations", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_before_imports", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_after_imports", "1");
+		optionsJAVA.put("org.eclipse.jdt.core.formatter.blank_lines_between_import_groups", "1");
+
 		formatterJAVA = ToolFactory.createCodeFormatter(optionsJAVA);
+		
 		Map<String, String> optionsJS = new HashMap<>();
 		//optionsJS.put(org.eclipse.wst.jsdt.core.formatter.DefaultCodeFormatterConstants.FORMATTER_TAB_CHAR, " ");
 		optionsJS.put(org.eclipse.wst.jsdt.core.formatter.DefaultCodeFormatterConstants.FORMATTER_TAB_SIZE, "1");

@@ -21,7 +21,7 @@
 					<name>
 						<xsl:value-of select="j:upper($app)"/>::<xsl:value-of select="j:upper($mod)"/>
 					</name>
-					<xsl:for-each select="jpa:entity-mappings/jpa:entity">
+					<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]">
 						<xsl:variable name="name" select="j:className(@class)"/>		
 						<xsl:variable name="var" select="j:varName($name)"/>
 						<view id="{$var}">
@@ -31,28 +31,10 @@
 							<ctrl>/ctrl/<xsl:value-of select="$var"/>.js</ctrl>
 						</view>
 					</xsl:for-each>
-					<menu type="GROUP" id="0">
-						<label>
-							<xsl:value-of select="j:upper($mod)"/>::<xsl:value-of select="j:upper($mod)"/>
-						</label>
-						<xsl:for-each select="jpa:entity-mappings/jpa:entity[j:process(@class, $include, $exclude)]">
-							<xsl:variable name="i" select="position()"/>
-							<xsl:variable name="name" select="j:className(@class)"/>		
-							<xsl:variable name="var" select="j:varName($name)"/>
-							<menu type="LINK" mode="TAB" id="{$i}">
-								<label>
-									<xsl:value-of select="$name"/>
-								</label>
-								<viewId>
-									<xsl:value-of select="$var"/>
-								</viewId>
-							</menu>
-						</xsl:for-each>
-					</menu>
 				</module>
 			</x:file>
 			<x:file name="menu.xml" dir="union" layer="web-inf">
-				<menu type="GROUP" id="0">
+				<menu type="GROUP" id="ROOT">
 					<label>
 						<xsl:value-of select="j:upper($mod)"/>::<xsl:value-of select="j:upper($mod)"/>
 					</label>

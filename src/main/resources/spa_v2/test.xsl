@@ -7,6 +7,7 @@
 																xmlns:x="http://github.com/yracnet/xml/crud"
 																xmlns="http://www.w3.org/1999/xhtml"
 																xmlns:j="dev.yracnet.crud.spi.CrudUtil">
+	<xsl:param name="packageLib">dev.yracnet</xsl:param>
 	<xsl:param name="packageBase">dev.yracnet.crud</xsl:param>
 	<xsl:param name="project">tangram-seg</xsl:param>
 	<xsl:param name="path">/opt/out/</xsl:param>
@@ -33,7 +34,7 @@
 			
 
 			import bo.union.lang.ServiceException;
-			import com.mycompany.laika.lib.SPATest;
+			import <xsl:value-of select="$packageLib"/>.shrinkwrap.spa.ContextModule;
 			import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 			import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 			import java.util.List;
@@ -48,12 +49,13 @@
 			
 			
 			@RunWith(Arquillian.class)
+			//@org.junit.Ignore
 			public class <xsl:value-of select="$name"/>Test {
 
 
 			@Deployment
 			public static WebArchive createDeployment() {
-			WebArchive war = SPATest.createSPADeploy("<xsl:value-of select="$app"/>-<xsl:value-of select="$mod"/>.war", "SERV-TEST");
+			WebArchive war = ContextModule.createSPADeploy("<xsl:value-of select="$app"/>-<xsl:value-of select="$mod"/>.war", "SERV-TEST");
 			System.out.println("--->" + war);
 			return war;
 			}			

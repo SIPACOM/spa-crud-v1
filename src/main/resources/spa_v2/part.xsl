@@ -78,7 +78,7 @@
 					<tr>
 						<th width="5%">
 							<button ng-click="_clickCancel()">
-								<xsl:attribute name="uni-badge=">{}</xsl:attribute>
+								<xsl:attribute name="uni-badge">{}</xsl:attribute>
 								Cancelar
 							</button>
 						</th>
@@ -96,7 +96,7 @@
 					<tr ng-repeat="row in _list">
 						<td>
 							<button ng-click="_clickSelect(row)">
-								<xsl:attribute name="uni-badge=">{}</xsl:attribute>
+								<xsl:attribute name="uni-badge">{}</xsl:attribute>
 								Seleccionar
 							</button>
 						</td>

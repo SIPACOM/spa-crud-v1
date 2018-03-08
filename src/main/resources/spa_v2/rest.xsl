@@ -95,7 +95,7 @@
 				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
 				try{
 				value = serv.create<xsl:value-of select="$name"/>(value);
-				HTTPStatic.info("Se ha guardado el registro: " + value.getCodigo());
+				HTTPStatic.info("Se ha guardado el registro: " + value.get<xsl:value-of select="j:accName(jpa:attributes/jpa:id/@name)"/>());
 				return value;
 				}catch(ServiceException e){
 				HTTPStatic.error("No se pudo guardar el registro: " + value);
@@ -107,7 +107,7 @@
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
 				try{
 				value = serv.update<xsl:value-of select="$name"/>(value);
-				HTTPStatic.info("Se ha actualizado el registro: " + value.getCodigo());
+				HTTPStatic.info("Se ha actualizado el registro: " + value.get<xsl:value-of select="j:accName(jpa:attributes/jpa:id/@name)"/>());
 				return value;
 				}catch(ServiceException e){
 				HTTPStatic.error("No se pudo actualizar el registro: " + value);
@@ -119,7 +119,7 @@
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
 				try{
 				value = serv.remove<xsl:value-of select="$name"/>(value);
-				HTTPStatic.info("Se ha eliminado el registro: " + value.getCodigo());
+				HTTPStatic.info("Se ha eliminado el registro: " + value.get<xsl:value-of select="j:accName(jpa:attributes/jpa:id/@name)"/>());
 				return value;
 				}catch(ServiceException e){
 				HTTPStatic.error("No se pudo eliminar el registro: " + value);

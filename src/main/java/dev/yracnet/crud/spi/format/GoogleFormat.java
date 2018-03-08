@@ -31,7 +31,7 @@ public class GoogleFormat implements Format {
 
 	@Override
 	public String doFormatJava(String code) throws Exception {
-		JavaFormatterOptions options = JavaFormatterOptions.builder().style(JavaFormatterOptions.Style.AOSP).build();
+		JavaFormatterOptions options = JavaFormatterOptions.builder().style(JavaFormatterOptions.Style.AOSP).build();		
 		Formatter formatter = new Formatter(options);
 		code = formatter.formatSource(code);
 		return code;
