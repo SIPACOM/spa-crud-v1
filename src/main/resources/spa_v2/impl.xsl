@@ -68,7 +68,7 @@
 				}
 				@Override
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
-				<xsl:value-of select="@class"/> entity = <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="@class"/>(value);
+				<xsl:value-of select="@class"/> entity = local.find<xsl:value-of select="$name"/>(value.get<xsl:value-of select="j:accName(jpa:attributes/jpa:id/@name)"/>());
 				entity = local.remove<xsl:value-of select="$name"/>(entity);
 				return <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="$name"/>(entity);
 				}

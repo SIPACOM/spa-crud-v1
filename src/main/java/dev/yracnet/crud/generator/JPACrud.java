@@ -14,8 +14,8 @@ public class JPACrud {
 		crud.setPackageBase("bo.union.platform.i16d.manager");
 		CrudUtil.addRemovePrefix("I16d");
 		//crud.include("I16dGrupo");
-		//crud.include("I16dValor");
-		crud.include("I16dValorCredential");
+		crud.include("I16dValor");
+		//crud.include("I16dValorCredential");
 		//crud.include("I16dValorProceso");
 		//crud.include("I16dTipoArchivo");
 		//crud.include("I16dArchivoConfig");
@@ -26,10 +26,10 @@ public class JPACrud {
 		//crud.addXSLT("dto.xsl");
 		//crud.addXSLT("mapper.xsl");
 		//crud.addXSLT("local.xsl");
-		//crud.addXSLT("impl.xsl");
+		crud.addXSLT("impl.xsl");
 		//crud.addXSLT("ctrl.xsl");
 		//crud.addXSLT("view.xsl");
-		crud.addXSLT("part.xsl");
+		//crud.addXSLT("part.xsl");
 		//crud.addXSLT("test.xsl");
 		//crud.addXSLT("rest.xsl");
 		//crud.addXSLT("conf.xsl");
