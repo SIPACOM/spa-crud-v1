@@ -63,14 +63,14 @@
 			};
 
 			var <xsl:value-of select="$var"/>List = $scope.table = {
-			select: function (value) {
+			toggle: function (value) {
 			if (<xsl:value-of select="$var"/>Data.current &amp;&amp; <xsl:value-of select="$var"/>Data.current.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>) {
 			<xsl:value-of select="$var"/>Data.current = undefined;
 			} else {
 			<xsl:value-of select="$var"/>Data.current = angular.copy(value, {});
 			}
 			},
-			selected: function (value) {
+			in: function (value) {
 			return <xsl:value-of select="$var"/>Data.current &amp;&amp; <xsl:value-of select="$var"/>Data.current.id<xsl:value-of select="$name"/> === value.id<xsl:value-of select="$name"/>;
 			},
 			isOneSelect: function () {

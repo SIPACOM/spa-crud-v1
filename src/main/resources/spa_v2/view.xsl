@@ -70,9 +70,7 @@
 				</header>
 			</div>
 			<div uni-part="part.table">
-				<!--xsl:attribute name="replace">{_list: 'data.list', _toggle: 'table.toggle', _in: 'table.in'}</xsl:attribute-->
-				<xsl:attribute name="replace">{_<xsl:value-of select="$var"/>List: 'data.list', _toggle: 'table.toggle', _in: 'table.selected'}</xsl:attribute>
-				
+				<xsl:attribute name="replace">{_<xsl:value-of select="$var"/>List: 'data.list', _toggle: 'table.toggle', _in: 'table.in'}</xsl:attribute>
 			</div>
 		</x:file>
 		<x:file name="{$var}/create.html" dir="." layer="view">		
