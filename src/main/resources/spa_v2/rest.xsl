@@ -1,12 +1,12 @@
 <xsl:stylesheet version="2.0" 
-																xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-																xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-																xmlns:java="http://jcp.org/en/jsr/detail?id=270" 
-																xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-																xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
-																xmlns:x="http://github.com/yracnet/xml/crud"
-																xmlns="http://www.w3.org/1999/xhtml"
-																xmlns:j="dev.yracnet.crud.spi.CrudUtil">
+					 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+					 xmlns:java="http://jcp.org/en/jsr/detail?id=270" 
+					 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+					 xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
+					 xmlns:x="http://github.com/yracnet/xml/crud"
+					 xmlns="http://www.w3.org/1999/xhtml"
+					 xmlns:j="dev.yracnet.crud.spi.CrudUtil">
 	<xsl:param name="packageBase">dev.yracnet.crud</xsl:param>
 	<xsl:param name="project">tangram-seg</xsl:param>
 	<xsl:param name="path">/opt/out/</xsl:param>
@@ -51,6 +51,7 @@
 	</xsl:template>
 	<xsl:template match="jpa:entity[j:process(@class, $include, $exclude)]">
 		<xsl:variable name="name" select="j:className(@class)"/>
+		<xsl:variable name="literal" select="j:literal($name)"/>
 		<xsl:variable name="var" select="j:varName($name)"/>
 		<xsl:variable name="typeList" select="j:varType($name, 'List')"/>
 		<xsl:variable name="id" select="@id"/>
@@ -71,6 +72,9 @@
 				import javax.ws.rs.core.MediaType;
 				import bo.union.web.HTTPStatic;
 				import bo.union.lang.ServiceException;
+				/**
+				* Publicacion REST para la interface: <xsl:value-of select="$name"/>Serv
+				*/
 				@Path("<xsl:value-of select="$var"/>")
 				@Consumes(MediaType.APPLICATION_JSON)
 				@Produces(MediaType.APPLICATION_JSON)
@@ -79,17 +83,37 @@
 				@EJB
 				private <xsl:value-of select="$name"/>Serv serv;
 
+				/**
+				* Informacion de la instancia
+				*
+				* @return String informacion
+				* @throws ServiceException
+				*/
 				@GET
 				@Path("info")
 				public String info() throws ServiceException {
 				return "Info Service: " + this + " by " + serv;
 				}
 
+				/**
+				* Listado de <xsl:value-of select="$literal"/>'s
+				*
+				* @param filter
+				* @return
+				* @throws ServiceException
+				*/
 				@POST
 				@Path("filter")
 				public <xsl:value-of select="$typeList"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter) throws ServiceException {
 				return serv.filter<xsl:value-of select="$name"/>(filter);
 				}
+				/**
+				* Creacion <xsl:value-of select="$literal"/>
+				*
+				* @param value
+				* @return
+				* @throws ServiceException
+				*/
 				@POST
 				@Path("create")
 				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
@@ -102,6 +126,13 @@
 				throw e;
 				}
 				}
+				/**
+				* Actualizar <xsl:value-of select="$literal"/>
+				*
+				* @param value
+				* @return
+				* @throws ServiceException
+				*/
 				@POST
 				@Path("update")
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
@@ -114,6 +145,13 @@
 				throw e;
 				}
 				}
+				/**
+				* Eliminacion <xsl:value-of select="$literal"/>
+				*
+				* @param value
+				* @return
+				* @throws ServiceException
+				*/
 				@POST
 				@Path("remove")
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException {
