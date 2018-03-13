@@ -1,12 +1,12 @@
 <xsl:stylesheet version="2.0" 
-																xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-																xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-																xmlns:java="http://jcp.org/en/jsr/detail?id=270" 
-																xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-																xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
-																xmlns:x="http://github.com/yracnet/xml/crud"
-																xmlns="http://www.w3.org/1999/xhtml"
-																xmlns:j="dev.yracnet.crud.spi.CrudUtil">
+					 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+					 xmlns:java="http://jcp.org/en/jsr/detail?id=270" 
+					 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+					 xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
+					 xmlns:x="http://github.com/yracnet/xml/crud"
+					 xmlns="http://www.w3.org/1999/xhtml"
+					 xmlns:j="dev.yracnet.crud.spi.CrudUtil">
 	<xsl:param name="packageBase">dev.yracnet.crud</xsl:param>
 	<xsl:param name="project">tangram-seg</xsl:param>
 	<xsl:param name="path">/opt/out/</xsl:param>
@@ -145,26 +145,30 @@
 		<xsl:param name="attributes" select="jpa:attributes"/>
 		<table>
 			<xsl:attribute name="uni-table">{select: '_toggle', selected: '_in'}</xsl:attribute>
-			<tr>
-				<xsl:for-each select="$attributes/jpa:id">
-					<th i18n="{@name}" width="5%">
-						<xsl:value-of select="j:literal(@name)"/>
-					</th>
-				</xsl:for-each>
-				<xsl:for-each select="$attributes/jpa:basic">
-					<th i18n="{@name}">
-						<xsl:value-of select="j:literal(@name)"/>
-					</th>
-				</xsl:for-each>
-			</tr>
-			<tr ng-repeat="row in {$object}">
-				<xsl:for-each select="$attributes/jpa:id">
-					<td>{{row.<xsl:value-of select="@name"/>}}</td>
-				</xsl:for-each>
-				<xsl:for-each select="$attributes/jpa:basic">
-					<td>{{row.<xsl:value-of select="@name"/>}}</td>
-				</xsl:for-each>
-			</tr>
+			<thead>
+				<tr>
+					<xsl:for-each select="$attributes/jpa:id">
+						<th i18n="{@name}" width="5%">
+							<xsl:value-of select="j:literal(@name)"/>
+						</th>
+					</xsl:for-each>
+					<xsl:for-each select="$attributes/jpa:basic">
+						<th i18n="{@name}">
+							<xsl:value-of select="j:literal(@name)"/>
+						</th>
+					</xsl:for-each>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="row in {$object}">
+					<xsl:for-each select="$attributes/jpa:id">
+						<td>{{row.<xsl:value-of select="@name"/>}}</td>
+					</xsl:for-each>
+					<xsl:for-each select="$attributes/jpa:basic">
+						<td>{{row.<xsl:value-of select="@name"/>}}</td>
+					</xsl:for-each>
+				</tr>
+			</tbody>
 		</table>
 	</xsl:template>
 	<xsl:template name="form" mode="form" match="jpa:basic|jpa:one-to-many|jpa:many-to-many">
