@@ -100,9 +100,7 @@
 				<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'success'}</xsl:attribute>
 				<header i18n="edit,{$var}">
 					Editar <xsl:value-of select="$name"/>
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
-					</xsl:for-each>
+					<b uni-badge="{level:'danger'}">#{{data.current.<xsl:value-of select="jpa:attributes/jpa:id/@name"/>}}</b>
 				</header>
 				<form name="formEdit" uni-validator="">
 					<div uni-part="part.form">
@@ -127,9 +125,7 @@
 				<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'success'}</xsl:attribute>
 				<header i18n="info,{$var}">
 					Datos <xsl:value-of select="$name"/>
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
-					</xsl:for-each>
+					<b uni-badge="{level:'danger'}">#{{data.current.<xsl:value-of select="jpa:attributes/jpa:id/@name"/>}}</b>
 				</header>
 				<div uni-part="part.info">
 					<!--xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute-->
@@ -148,9 +144,7 @@
 				<xsl:attribute name="uni-panel">{type:'modal', size:'lg', level:'danger'}</xsl:attribute>
 				<header i18n="info,{$var}">
 					Datos <xsl:value-of select="$name"/>
-					<xsl:for-each select="jpa:attributes/jpa:id">
-						<b>#{{data.select.<xsl:value-of select="@name"/>}} </b>
-					</xsl:for-each>
+					<b uni-badge="{level:'danger'}">#{{data.current.<xsl:value-of select="jpa:attributes/jpa:id/@name"/>}}</b>
 				</header>
 				<div uni-part="part.info">
 					<!--xsl:attribute name="replace">{_value: 'data.current'}</xsl:attribute-->

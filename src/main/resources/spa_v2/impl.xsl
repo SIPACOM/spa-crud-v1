@@ -1,12 +1,12 @@
 <xsl:stylesheet version="2.0" 
-																xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-																xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-																xmlns:java="http://jcp.org/en/jsr/detail?id=270" 
-																xmlns:xs="http://www.w3.org/2001/XMLSchema" 
-																xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
-																xmlns:x="http://github.com/yracnet/xml/crud"
-																xmlns="http://www.w3.org/1999/xhtml"
-																xmlns:j="dev.yracnet.crud.spi.CrudUtil">
+					 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+					 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+					 xmlns:java="http://jcp.org/en/jsr/detail?id=270" 
+					 xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+					 xmlns:jpa="http://java.sun.com/xml/ns/persistence/orm"
+					 xmlns:x="http://github.com/yracnet/xml/crud"
+					 xmlns="http://www.w3.org/1999/xhtml"
+					 xmlns:j="dev.yracnet.crud.spi.CrudUtil">
 	<xsl:param name="packageBase">dev.yracnet.crud</xsl:param>
 	<xsl:param name="project">tangram-seg</xsl:param>
 	<xsl:param name="path">/opt/out/</xsl:param>
@@ -51,26 +51,50 @@
 				<xsl:variable name="type" select="j:varType($name, 'List')"/>
 				@Override
 				public <xsl:value-of select="$type"/> filter<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/>Ftr filter) throws ServiceException{
+				try{
 				List<xsl:value-of select="j:template(@class)"/> result = local.filter<xsl:value-of select="$name"/>(filter);
 				return <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="$name"/>List(result);
+				} catch (ServiceException e) {
+				throw e;
+				} catch (Exception e) {
+				throw new ServiceException("Error no controlado", e);
+				}
 				}
 				@Override
-				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{				
+				public <xsl:value-of select="$name"/> create<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
+				try{
 				<xsl:value-of select="@class"/> entity = <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="@class"/>(value);
 				entity = local.create<xsl:value-of select="$name"/>(entity);
 				return <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="$name"/>(entity);
+				} catch (ServiceException e) {
+				throw e;
+				} catch (Exception e) {
+				throw new ServiceException("Error no controlado", e);
+				}
 				}
 				@Override
 				public <xsl:value-of select="$name"/> update<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
+				try{
 				<xsl:value-of select="@class"/> entity = <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="@class"/>(value);
 				entity = local.update<xsl:value-of select="$name"/>(entity);
 				return <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="$name"/>(entity);
+				} catch (ServiceException e) {
+				throw e;
+				} catch (Exception e) {
+				throw new ServiceException("Error no controlado", e);
+				}
 				}
 				@Override
 				public <xsl:value-of select="$name"/> remove<xsl:value-of select="$name"/>(<xsl:value-of select="$name"/> value) throws ServiceException{
+				try{
 				<xsl:value-of select="@class"/> entity = local.find<xsl:value-of select="$name"/>(value.get<xsl:value-of select="j:accName(jpa:attributes/jpa:id/@name)"/>());
 				entity = local.remove<xsl:value-of select="$name"/>(entity);
 				return <xsl:value-of select="$name"/>Mapper.mapperTo<xsl:value-of select="$name"/>(entity);
+				} catch (ServiceException e) {
+				throw e;
+				} catch (Exception e) {
+				throw new ServiceException("Error no controlado", e);
+				}
 				}
 				}
 			</x:file>		
