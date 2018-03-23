@@ -16,9 +16,11 @@ public class JPACrud {
 		//crud.include("I16dGrupo");
 		//crud.include("I16dValor");
 		//crud.include("I16dValorCredencial");
+		crud.include("I16dValorCertificado");
 		//crud.include("I16dValorToken");
-		crud.include("I16dValorArchivo");
-		crud.include("I16dArchivoTipo");
+		//crud.include("I16dContenido");
+		//crud.include("I16dValorArchivo");
+		//crud.include("I16dArchivoTipo");
 		//crud.include("I16dArchivoConfig");
 		//crud.include("I16dArchivoMapeo");
 		//crud.include("I16dError");
@@ -33,7 +35,7 @@ public class JPACrud {
 		crud.addXSLT("part.xsl");
 		//crud.addXSLT("test.xsl");
 		crud.addXSLT("rest.xsl");
-		//crud.addXSLT("conf.xsl");
+		crud.addXSLT("conf.xsl");
 		crud.setForceOverwriter(true);
 		crud.setTemploral(false);
 		CrudProcess process = new CrudProcess();
