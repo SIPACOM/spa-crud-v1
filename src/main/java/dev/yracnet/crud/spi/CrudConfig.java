@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 public class CrudConfig {
-
+	
 	private final String path;
 	private final String app;
 	private final String mod;
@@ -24,15 +24,27 @@ public class CrudConfig {
 	private final List<String> exclude = new ArrayList<>();
 	private final List<File> jpaModel = new ArrayList<>();
 	private final List<File> xsltFile = new ArrayList<>();
-
-	public CrudConfig(String path, String name, String instance, String contextpath) {
+	
+	public CrudConfig(String path, String project, String instance) {
 		this.path = path;
+		this.project = project;
 		this.app = instance;
-		this.mod = contextpath;
-		this.project = name;
-		root = new File(this.path);
+		int i = project.indexOf("-");
+		this.mod = project.substring(0, i);
+		root = new File(this.path + "/" + project);
+		
 	}
-/*
+
+	public CrudConfig(String path, String project, String instance, String mod) {
+		this.path = path;
+		this.project = project;
+		this.app = instance;
+		this.mod = mod;
+		System.out.println("--------------------->" + this.path + "/" + this.project);
+		root = new File(this.path + "/" + this.project);
+	}
+
+	/*
 	public CrudConfig(String path, String app, String mod) {
 		this.path = path;
 		this.app = app;
@@ -50,26 +62,26 @@ public class CrudConfig {
 		this.basePath = this.path + "/" + this.project;
 		root = new File(this.basePath);
 	}
-*/
+	 */
 	public String getPath() {
 		return path;
 	}
-
+	
 	public String getApp() {
 		return app;
 	}
-
+	
 	public String getMod() {
 		return mod;
 	}
-
+	
 	public String getProject() {
 		return project;
 	}
-
+	
 	public void addJPAModel(String jpaName) {
 		if (!jpaName.startsWith("file:/")) {
-			jpaName = "file://" + path + "/" + jpaName;
+			jpaName = "file://" + path  + "/" + this.project + "/" + jpaName;
 		}
 		System.out.println("addJPAModel: " + jpaName);
 		try {
@@ -82,27 +94,27 @@ public class CrudConfig {
 			throw new CrudException("Error al adicionar el archivo JPA: " + jpaName, ex);
 		}
 	}
-
+	
 	public String getPackageBase() {
 		return packageBase;
 	}
-
+	
 	public void setPackageBase(String packageBase) {
 		this.packageBase = packageBase;
 	}
-
+	
 	public String getTemplate() {
 		return template;
 	}
-
+	
 	public void setTemplate(String template) {
 		this.template = template;
 	}
-
+	
 	public List<File> getXsltFile() {
 		return xsltFile;
 	}
-
+	
 	public void addXSLT(String xslName) throws CrudException {
 		try {
 			if (!xslName.startsWith("/")) {
@@ -120,15 +132,15 @@ public class CrudConfig {
 			throw new CrudException("Error al adicionar el archivo XSLT: " + xslName, ex);
 		}
 	}
-
+	
 	public Stream<File> streamXSLT() {
 		return xsltFile.stream();
 	}
-
+	
 	public Stream<File> streamJPA() {
 		return jpaModel.stream();
 	}
-
+	
 	public String getRealPath(String layer, String dir, String name) {
 		String mask = "$path/$project/error/$name";
 		if ("ctrl".endsWith(layer)) {
@@ -173,7 +185,7 @@ public class CrudConfig {
 		mask = mask.replace("//", "/");
 		return mask;
 	}
-
+	
 	public File createTempFile(String fileName) {
 		File file = new File(root, "/target/" + fileName + ".xml");
 		File parent = file.getParentFile();
@@ -182,43 +194,43 @@ public class CrudConfig {
 		}
 		return file;
 	}
-
+	
 	public void setForceOverwriter(boolean b) {
 		forceOverwriter = b;
 	}
-
+	
 	public boolean getForceOverwriter() {
 		return forceOverwriter;
 	}
-
+	
 	public void include(String name) {
 		include.add(name);
 	}
-
+	
 	public void exclude(String name) {
 		exclude.add(name);
 	}
-
+	
 	public List<String> getInclude() {
 		return include;
 	}
-
+	
 	public List<String> getExclude() {
 		return exclude;
 	}
-
+	
 	public void setTemploral(boolean b) {
 		temporal = b;
 	}
-
+	
 	public boolean getTemploral() {
 		return temporal;
 	}
-
+	
 	public String getPackageLib() {
 		return packageLib;
 	}
-
+	
 	public void setPackageLib(String packageLib) {
 		this.packageLib = packageLib;
 	}

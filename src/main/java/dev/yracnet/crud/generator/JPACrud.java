@@ -7,7 +7,7 @@ import dev.yracnet.crud.spi.CrudUtil;
 public class JPACrud {
 
 	public static void main(String[] args) {
-		String path = "/mnt/D/work/dev/CORE-02/platform/i16d/i16d-manager/";
+		String path = "/mnt/D/work/dev/CORE-02/platform/i16d/";
 		CrudConfig crud = new CrudConfig(path, "i16d-manager", "laika", "i16d");
 		crud.addJPAModel("i16d-manager-local/src/main/java/design/v01.jpa");
 		crud.setPackageLib("bo.union");
@@ -25,17 +25,17 @@ public class JPACrud {
 		//crud.include("I16dArchivoMapeo");
 		//crud.include("I16dError");
 		crud.setTemplate("spa_v2");
-		crud.addXSLT("serv.xsl");
-		crud.addXSLT("dto.xsl");
-		crud.addXSLT("mapper.xsl");
-		crud.addXSLT("local.xsl");
-		crud.addXSLT("impl.xsl");
-		crud.addXSLT("ctrl.xsl");
-		crud.addXSLT("view.xsl");
-		crud.addXSLT("part.xsl");
-		//crud.addXSLT("test.xsl");
-		crud.addXSLT("rest.xsl");
-		crud.addXSLT("conf.xsl");
+		//crud.addXSLT("serv.xsl");
+		//crud.addXSLT("dto.xsl");
+		//crud.addXSLT("mapper.xsl");
+		//crud.addXSLT("local.xsl");
+		//crud.addXSLT("impl.xsl");
+		//crud.addXSLT("ctrl.xsl");
+		//crud.addXSLT("view.xsl");
+		//crud.addXSLT("part.xsl");
+		crud.addXSLT("test.xsl");
+		//crud.addXSLT("rest.xsl");
+		//crud.addXSLT("conf.xsl");
 		crud.setForceOverwriter(true);
 		crud.setTemploral(false);
 		CrudProcess process = new CrudProcess();
