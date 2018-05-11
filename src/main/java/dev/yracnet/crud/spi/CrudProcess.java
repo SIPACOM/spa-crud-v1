@@ -119,11 +119,16 @@ public class CrudProcess {
 			content = content.replace("<?xml version=\"1.0\" encoding=\"UTF-8\"?>", "");
 			content = content.replaceAll("\n([\\s]+)", "\n").replaceAll("\n\n", "\n").trim();
 		}
-		content = content.replaceAll("_AND_", "&&");
-		content = content.replaceAll("_COMMENT_START_", "<!--");
-		content = content.replaceAll("_COMMENT_END_", "-->");
-		content = content.replaceAll("_COMMENT_START_", "<");
-		content = content.replaceAll("_COMMENT_END_", ">");
+		content = content.replace("_AND_", "&&");
+		content = content.replace("_COMMENT_START_", "<!--");
+		content = content.replace("_COMMENT_END_", "-->");
+		content = content.replace("_COMMENT_START_", "<");
+		content = content.replace("_COMMENT_END_", ">");
+		content = content.replace("[CODE]", "<code>");
+		content = content.replace("[/CODE]", "</code>");
+		content = content.replace("[P]", "<p>");
+		content = content.replace("[/P]", "</p>");
+		content = content.replaceAll("\\s\\$", "");
 
 		content = format.doFormat(content, name);
 

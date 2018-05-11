@@ -35,7 +35,7 @@
 				import <xsl:value-of select="$packageBase"/>.data.<xsl:value-of select="$name"/>;
 				import <xsl:value-of select="$packageBase"/>.filter.<xsl:value-of select="$name"/>Ftr;
 				/**
-				*Interface Used to interact with a <xsl:value-of select="$name"/> object.
+				*Interface Used to interact with the [CODE]<xsl:value-of select="$name"/>[/CODE] object.
 				*
 				*[P]An instance of [CODE]<xsl:value-of select="$name"/>Serv[/CODE] (as an EJB service or another container) is associated with a persistence and independent transaction context. From this instance you can create / modify / delete or list persistent instances of the [CODE]<xsl:value-of select="$name"/>[/CODE] object in the service.[/P]
 				*
@@ -65,7 +65,7 @@
 				*
 				* [P] Returns another instance of the [CODE]<xsl:value-of select="$name"/>[/CODE] object with complementary values. [/P]
 				*
-				* @param value Instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with value.
+				* @param value Instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with values.
 				* @return other instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with complementary values.
 				* @throws ServiceException When the method applies integrity and process controls.
 				*/
@@ -75,7 +75,7 @@
 				*
 				* [P] Returns another instance of the [CODE]<xsl:value-of select="$name"/>[/CODE] object with complementary values. [/P]
 				*
-				* @param value Instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with value.
+				* @param value Instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with values.
 				* @return other instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with complementary values.
 				* @throws ServiceException When the method applies integrity and process controls.
 				*/
@@ -85,7 +85,7 @@
 				*
 				* [P] Returns another instance of the [CODE]<xsl:value-of select="$name"/>[/CODE] object with complementary values. [/P]
 				*
-				* @param value Instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with value.
+				* @param value Instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with values.
 				* @return other instance of [CODE]<xsl:value-of select="$name"/>[/CODE] with complementary values.
 				* @throws ServiceException When the method applies integrity and process controls.
 				*/
